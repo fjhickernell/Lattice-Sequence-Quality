@@ -1,0 +1,232 @@
+\documentclass{amsart}
+\usepackage{mathtools,upref,siunitx,upquote,fancyvrb,bbm,xspace,color}
+\usepackage[hyphens]{url}
+\usepackage[utf8]{inputenc}
+\usepackage{esdiff}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\input{FJHDef.tex}
+
+
+\usepackage{algpseudocode}
+\usepackage{algorithm, algorithmicx}
+\algnewcommand\algorithmicparam{\textbf{Parameters:}}
+\algnewcommand\PARAM{\item[\algorithmicparam]}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\RETURN{\State \textbf{Return }}
+
+\newcommand{\tr}{\widetilde{r}}
+\newcommand{\appxintn}{\appxint_n}
+\DeclareMathOperator{\appxint}{\hat{I}}
+\DeclareMathOperator{\trun}{trunc}
+
+\newcommand{\FredNote}[1]{{\color{blue}#1}}
+
+\newcommand{\LarysaNote}[1]{{\color{violet}#1}}
+
+
+
+\begin{document}
+\title{The Quality of Lattice Sequences}
+\author{Larysa Matiukha}
+\author{Yuhan Ding}
+\author{Fred J. Hickernell}
+\begin{abstract}This project is where all of the files and commands go that are needed elsewhere
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+Lattices are a popular choice of nodes $\{\vz_i\}_{i=0}^{n-1} \in [0,1)^s$ for approximating multidimensional integrals by a sample mean,
+\[ 
+\int_{[0,1)^s} f(\vx) \, \dif \vx \approx \frac{1}{n} \sum_{i=0}^{n-1} f(\vz_i) =:\appxint(f),
+\]
+\cite{DicEtal22a,Nie92,SloJoe94}.  
+Historically, lattice points were initially constructed as sets with fixed cardinality, $n$, and took the form
+\begin{equation} \label{eq:lat}
+    \{\vz_i = i \vh/n \pmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s,
+\end{equation}
+where $\vh \in \{1, \ldots, n-1\}^s$ is the \emph{generating vector}.  A (random) shift, $\vDelta \in [0,1)^s$, is often added:
+\begin{equation} \label{eq:shlat}
+    \{\vz_i = i \vh/n + \vDelta \pmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s.
+\end{equation}
+\FredNote{Larysa, please add a figure here.}
+
+\begin{figure}[h]
+\includegraphics[width=5cm]{shifted-lattice}
+\end{figure}
+
+Extensible lattice sequences were proposed by \cite{HicEtal00,Mai81a} and take the form
+\begin{equation} \label{eq:extlat}
+    \{\vz_i = \vh\phi(i)+ \vDelta \pmod{\vone} : i=0,1, \ldots \} \in [0,1)^s.
+\end{equation}
+where $\{\phi(\cdot)\}_{i=0}^\infty$ is the van der Corput sequence (in base 2 for now).  In this case $\vh$ must be a generalized integer as defined in \cite[Section 2]{HicNie03a}.
+
+For the van der Corput sequence
+\[
+\phi((\cdots i_2 i_1 i_0)_2) = {}_20.i_0 i_1 i_2 \cdots.
+\]
+For example,
+\[
+\phi(6) = \phi(110_2) = {}_20.011 = \frac 38.
+\]
+Note that
+\begin{equation} \label{eq:phipropone}
+\{ \phi(i) : i = 0, \ldots, 2^m-1 \} = \{0, 2^{-m}, 2\times 2^{-m}, \ldots, 1 - 2^{-m} \}.
+\end{equation}
+Also note that 
+\begin{multline} \label{eq:phiproptwo}
+\{ \phi(i) : i = \lambda \times 2^m , \ldots, (\lambda+1)2^m-1 \} \\
+= \{\phi(\lambda \times 2^m) + 0, \phi(\lambda \times 2^m) + 2^{-m}, \ldots, \phi(\lambda \times 2^m) + 1 - 2^{-m} \} , \\
+\lambda \in \natzero.
+\end{multline}
+
+
+Hickernell and Niederreiter \cite{HicNie03a} established the existence of extensible lattices with good generating vectors for the preferred values $n = 2, 4, 8, \ldots$.  The purpose here is to extend these results to all $n>1$, recognizing that the upper bounds on the figures of merit will be somewhat worse.
+
+We will fix $s$ and ignore $\vgamma$ for now.
+
+\subsection{Worst case error analysis}
+We first consider integrands, $f$, that have an absolutely summable Fourier series:
+\begin{equation} \label{eq:fseries}
+    f(\vx) = \sum_{\vk \in \integers^s} \tf(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vx}, \qquad \tf(\vk) = \int_{[0,1)^s} f(\vx) \me^{-2 \pi \sqrt{-1} \vk^T \vx}\, \dif \vx
+\end{equation}
+Define the weights 
+\begin{equation}
+\tr(\vk) = \prod_{j=1}^{s} r(k_{j}),
+\qquad \text{where} \qquad r(k_{j})=\begin{cases} 1, &
+k_{j}=0, \\ \abs{k_{j}}, & k_{j} \ne 0.  \end{cases}
+\end{equation}
+Define a Banach
+space of functions:
+$$
+\cf_{\alpha} = \{ f \in \cl_2[0,1)^s : 
+\norm[\cf{\alpha}]{f} < \infty \}, \qquad
+\norm[\cf{\alpha}]{f} := \sup_{\vk \in \integers^{s}}
+\left(\tr(\vk)^{\alpha} \abs{\tilde{f}(\vk)} \right).
+$$
+It then follows that the error in approximating the integral by the sample mean is
+\begin{align}
+\abs{\int_{[0,1)^s} f(\vx) \, \dif \vx - \appxint_n(f)} & 
+= \abs{\sum_{\vk \in \integers^s} \tf(\vk) \left[\int_{[0,1)^s} \me^{2 \pi \sqrt{-1} \vk^T \vx} \, \dif \vx - \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
+\nonumber
+& = \abs{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \tf(\vk) \left[ \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
+\nonumber
+& \le \norm[\cf{\alpha}]{f} \underbrace{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha}}_{=: P_\alpha(\vh,n) = \text{quality of the lattice nodes}} \\
+\nonumber
+\end{align}
+
+For $n = 2^m$, the quality measure $P_\alpha(\vh,n)$ takes on a simple form.  Note that 
+\begin{align*}
+    \appxint_{2^m}(\me^{2 \pi \sqrt{-1} \vk^T \cdot}) 
+    &= \frac 1{2^m} \sum_{i=0}^{2^m-1} \me^{2 \pi \sqrt{-1} \vk^T (\vh\phi(i) + \vDelta \pmod{\vone})} \\
+    \nonumber
+    &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{2^m} \sum_{i=0}^{2^m-1} \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \\
+    \nonumber
+    &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{2^m} \sum_{i=0}^{2^m-1} \me^{2 \pi \sqrt{-1} \vk^T \vh i/2^m} \qquad \text{by \eqref{eq:phipropone}}\\
+    \nonumber
+    &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{2^m} \times
+    \begin{cases} 
+    \frac{\me^{2 \pi \sqrt{-1} \vk^T \vh} - 1}{\me^{2 \pi \sqrt{-1} \vk^T \vh/2^m} - 1} = 0, & \vk^T \vh \pmod{2^m} \ne 0\\
+    2^m, & \vk^T \vh \pmod{2^m} = 0
+    \end{cases} \\
+    \nonumber
+    & = \me^{2 \pi \sqrt{-1} \vk^T \vDelta} \bbone_{B(\vh,m)}(\vk)
+\end{align*}
+Thus it follows that
+\begin{equation*}
+    P_\alpha(\vh,2^m) = \sum_{\vk \in B(\vh,m)} \tr(\vk)^{-\alpha},
+\end{equation*}
+where $B(\vh,m) : = \{\vk \in \integers^s \setminus \{\vzero\} : \vk^T \vh \pmod{2^m} = 0\}$ is called the \emph{dual lattice}.  This corresponds to \cite[Equation (3)]{HicNie03a}, and we know by \cite[Theorem 5]{HicNie03a} that  there exists $\vh$ with
+\[
+    P_{\alpha}(\vh,2^m) \le C_{R}(\alpha,\epsilon,s)
+    2^{-m\alpha} \log(2^{m\alpha(s+1)}) [\log \log (
+    2^m+1)]^{\alpha(1+\epsilon)}, \ m = 1, 2,\ldots.
+\]
+
+Note that
+\begin{align*}
+    P_{\alpha}(\vh,1) & = \sum_{\vk \ne \vzero} \tr(\vk)^{-\alpha} = -1 + \sum_{\vk \in \integers^s} \tr(\vk)^{-\alpha} \\
+    & = -1 + \sum_{k_1 =-\infty}^{\infty} \cdots \sum_{k_s  =-\infty}^{\infty} \frac{1}{\prod_{j=1}^s[\max(1,\abs{k_j})]^\alpha} \\
+    & = -1 + \sum_{k_1 =-\infty}^{\infty} \frac{1}{[\max(1,\abs{k_1})]^\alpha} \cdots \sum_{k_s  =-\infty}^{\infty} \frac{1}{[\max(1,\abs{k_s})]^\alpha} \\
+    & = -1 + \left[\sum_{k =-\infty}^{\infty} \frac{1}{[\max(1,\abs{k})]^\alpha} \right]^d \\
+    & = -1 + \left[1 + 2 \sum_{k =1}^{\infty} \frac{1}{k^\alpha} \right]^d \\
+    & = -1 + \left[1 + 2 \zeta(\alpha) \right]^d
+\end{align*}
+
+\subsection{Randomized Error Analysis}
+Another approach is to assume that $f$ in \eqref{eq:fseries} is a random function (stochastic process) where 
+\begin{equation}
+    \abs{\tf(\vk)} \IIDsim \cn(0,\tr(\vk)^{-2\alpha}).
+\end{equation}
+Then it follows that 
+\begin{align*}
+    \MoveEqLeft{\Ex_f\left[\left(\int_{[0,1)^d} f(\vx) \, \dif \vx - \appxintn(f) \right)^2\right]} \\
+    & = 
+    \Ex_f\left[\left(\sum_{\vk \in \integers^s \setminus\{\vzero\}} \tf(\vk) \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right)^2\right] \\
+     & = 
+    \Ex_f\left[\sum_{\vk,\vl \in \integers^s \setminus\{\vzero\}} \tf(\vk) \tf^*(\vl) \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot}) \appxintn(\me^{-2 \pi \sqrt{-1} \vl^T \cdot})\right] \\
+    & = \underbrace{\sum_{\vk\in \integers^s \setminus\{\vzero\}} \tr(\vk)^{-2\alpha} \abs{\appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}^2}_{Q_{2\alpha}(\vh,n) = \text{another measure of quality of the lattice nodes}}  \\
+\end{align*}
+
+\textbf{Research Question}  May we extend this result to all $n$ with perhaps some extra $\log(n)$ terms?
+
+E.g.,  $n =6 = 0\cdot 1 + 1 \cdot 2 + 1 \cdot 4$, $m = 2$ $\vDelta = \vzero$.
+\begin{align*}
+    \appxint_{6}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})
+    &= \frac 1{6} \sum_{i=0}^{5} \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \\
+    &= \frac {1}{6} \left\{ \sum_{i=0}^3 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + \sum_{i=4}^5 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + \sum_{i=6}^5 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}  \right\} \\
+    &= \frac {1}{6} \left\{ 1 \cdot 4 P_\alpha(\vh,4) + \sum_{i=0}^1 \me^{2 \pi \sqrt{-1} \vk^T \vh[\phi(i)+\phi(4)]} + \sum_{i=0}^{-1} \me^{2 \pi \sqrt{-1} \vk^T \vh[\phi(i)+\vphi(6)]}  \right\} \\
+    &= \frac {1}{6} \left\{ 1\cdot 4 P_\alpha(\vh,4) + 1 \cdot 2  P_\alpha(\vh,2)\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(4)} + 0 \cdot 1 P_\alpha(\vh,1) \me^{2 \pi \sqrt{-1} \vk^T \vh\vphi(6)}  \right\}
+\end{align*}
+ 
+ Then,
+\begin{align*}
+    P_\alpha(\vh,6) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}}
+    \abs{\appxint_6(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha}
+    \\
+    & \le \frac {1}{6} \sum_{\ell = 0}^{2} 2^{2-\ell} n_{2 - \ell}
+    \sum_{\vk \in B(\vh,2-\ell)} \tr(\vk)^{-\alpha} \\
+    & = \frac {1}{6} \sum_{\ell = 0}^{2} 2^{2-\ell} n_{2 - \ell}
+    P_\alpha(\vh,2^{2-\ell}) \\
+    & = \frac {1}{6} \left\{ 2^2 \cdot n_2 \cdot P_\alpha(\vh,2^2)+ 2^1 \cdot n_1 \cdot P_\alpha(\vh,2^1)+2^0 \cdot n_0 \cdot P_\alpha(\vh,2^0) \right\} \\
+    & =  \frac {1}{6} \left\{ 4 \cdot 1 \cdot P_\alpha(\vh,4) + 2 \cdot 1 \cdot P_\alpha(\vh,2) + 0 \cdot 1 \cdot P_\alpha(\vh,1) \right\}
+\end{align*}
+\\ We know that and $P_\alpha(\vh,2^2) \le C_{R}(\alpha,\epsilon,s)
+    2^{-2\alpha}$ and $P_\alpha(\vh,2^1) \le C_{R}(\alpha,\epsilon,s)
+    2^{-\alpha} $ . Then,
+    \begin{align*}
+        P_\alpha(\vh,6) & \le \frac {1}{6} \left\{ 4 \cdot 1 \cdot P_\alpha(\vh,4) + 2 \cdot 1 \cdot P_\alpha(\vh,2) \right\} \\
+         & \le \frac {1}{6} \left\{C_{R}(\alpha,\epsilon,s)
+         2^{2-2\alpha} + C_{R}(\alpha,\epsilon,s)
+         2^{1-\alpha} \right\}\\
+    \end{align*}
+For any non-negative integer $n$, express as  $n = n_0 + 2n_1 + \cdots + 2^m n_m$, where $n_0, n_1, \ldots$ are the binary digits of $n$.  Let $\trun(n,\ell) = n_0 + \cdots + 2^{\ell} n_{\ell}$ for $\ell = 0, \ldots, m$ and $\trun(n,-1) = 0$, then 
+
+\begin{align*}
+    \MoveEqLeft{\appxint_{n}(\me^{2 \pi \sqrt{-1} \vk^T \cdot}) } \\
+    &= \frac 1{n} \sum_{i=0}^{n-1} \me^{2 \pi \sqrt{-1} \vk^T (\vh\phi(i) + \vDelta \pmod{\vone})} \\
+    \nonumber
+    &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} \, 
+    \sum_{i=n - \trun(n,m-\ell) }^{n - \trun(n,m-\ell-1)  -1} \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \\
+    &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} \, n_{m-\ell}
+    \sum_{i=0 }^{2^{m-\ell}  -1} \me^{2 \pi \sqrt{-1} \vk^T \vh[i/2^m + \phi(n - \trun(n,m-\ell))]} \\
+    & \hspace{30ex} \text{by \eqref{eq:phiproptwo}} \\
+    & = \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_\ell \bbone_{B(\vh,m-\ell)}(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(n - \trun(n,m-\ell))} \\
+      P_\alpha(\vh,n) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha} \\
+      & \le \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} \sum_{\vk \in B(\vh,m-\ell)} \tr(\vk)^{-\alpha} \\
+      & = \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell}) \\
+      & =  \frac {1}{n} \left\{ 2^m n_m P_\alpha(\vh,2^m) + 2^{m-1} n_{m-1} P_\alpha(\vh,2^{m-1}) + \cdots + 2^0 n_0 P_\alpha(\vh,2^0)  \right\} \\
+      & \le \frac {1}{n} \left\{ C_{R}(\alpha,\epsilon,s) 2^{m(1-\alpha)} + C_{R}(\alpha,\epsilon,s) 2^{m-1-m\alpha} + \cdots +  C_{R}(\alpha,\epsilon,s) 2^{-m\alpha}\right\}
+\end{align*}
+
+
+Next try $n = \lambda 2^m$, where $\lambda \in \integers$
+\FredNote{Let's carry on}
+
+\bibliographystyle{amsplain}
+\bibliography{FJH23,FJHown23}
+
+\end{document}

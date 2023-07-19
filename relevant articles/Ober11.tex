@@ -1,0 +1,1075 @@
+
+%% First Draft March 2002
+
+
+%\documentclass[jcom]{apjrnl}
+\documentclass{article}
+\usepackage{amsmath,amsfonts,graphicx}
+
+
+\renewcommand{\vec}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\vecsym}[1]{\ensuremath{\boldsymbol{#1}}}
+\def\bbl{\text{\boldmath$\{$}}
+\def\bbr{\text{\boldmath$\}$}}
+\newcommand{\bbrace}[1]{\bbl #1 \bbr}
+\newcommand{\bbbrace}[1]{\mathopen{\pmb{\bigg\{}}#1\mathclose{\pmb{\bigg\}}}}
+%\def\bbl{\boldsymbol{\left \{}}
+%\def\bbr{\boldsymbol{\right \}}}
+\def\betahat{\hat\beta}
+\def\e{\text{e}}
+\def\E{\text{E}}
+
+\newlength{\overwdth}
+\def\overstrike#1{ 
+\settowidth{\overwdth}{#1}\makebox[0pt][l]{\rule[0.5ex]{\overwdth}{0.1ex}}#1}
+
+\def\abs#1{\ensuremath{\left \lvert #1 \right \rvert}}
+\def\norm#1{\ensuremath{\left \lVert #1 \right \rVert}}
+
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\cond}{cond}
+%\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\disc}{disc}
+\DeclareMathOperator{\nullspace}{null}
+\DeclareMathOperator{\Order}{O}
+%\DeclareMathOperator{\rank}{rank}
+
+\newcommand{\bfgam}{\vecsym \gamma}
+
+\newcommand{\base}{\text{base}}
+%\DeclareMathOperator{\base}{base}
+\DeclareMathOperator*{\rms}{rms}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\esssup}{esssup}
+
+\newcommand{\til}[1]{\tilde{#1}}
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+\newcommand{\lfrf}[1]{\lfloor{#1}\rfloor}
+\newcommand{\crno}{\cr\noalign{\vskip3mm}}
+\newcommand{\ld}{\ldots}
+\newcommand{\comb}[2]{{#1}\choose{#2}}
+
+\newcommand{\one}{\vecsym 1}
+\newcommand{\bfinfty}{\vecsym \infty}
+\newcommand{\bfDelta}{\vecsym \Delta}
+\newcommand{\bba}{\vec a}
+\newcommand{\bbc}{\vec c}
+\newcommand{\bbd}{\vec d}
+\newcommand{\bfe}{\vec e}
+\newcommand{\bfi}{\vec i}
+\newcommand{\bbj}{\vec j}
+\newcommand{\bbx}{\vec x}
+\newcommand{\bfeta}{\vecsym \eta}
+\newcommand{\bfsigma}{\vecsym \sigma}
+\newcommand{\bftau}{\vecsym \tau}
+\newcommand{\bfpsi}{\vecsym \psi}
+\newcommand{\bfphi}{\vecsym \phi}
+\newcommand{\bfPhi}{\vecsym \Phi}
+\newcommand{\bfxi}{\vecsym \xi}
+\newcommand{\bby}{\vec y}
+\newcommand{\bbz}{\vec z}
+\newcommand{\bbC}{\vec C}
+\newcommand{\Linf}{{\mathcal L}_{\infty}}
+\newcommand{\Ltwo}{{\mathcal L}_{2}}
+\newcommand{\Lp}{{\mathcal L}_{p}}
+\newcommand{\Lq}{{\mathcal L}_{q}}
+\newcommand{\calF}{\mathcal F}
+\newcommand{\calH}{\cal H}
+\newcommand{\calW}{\mathcal W}
+\newcommand{\Fb}{F_{b}}
+\newcommand{\bfL}{\vec L}
+\newcommand{\bfI}{\vec I}
+\newcommand{\zero}{{\bf 0}}
+\newcommand{\Cinf}{[0,1)^{\infty}}
+\newcommand{\Cs}{[0,1)^{s}}
+\newcommand{\Ctwos}{[0,1)^{2s}}
+\newcommand{\ewo}{\text{err}^{w}}
+\newcommand{\era}{\text{err}^{r}}
+\newcommand{\Ksc}{K_{\Oscr}}
+\newcommand{\tKsc}{\Tilde{K}_{\Oscr}}
+
+\newcommand{\scr}{\text{sc}}
+\newcommand{\Oscr}{\text{O}}
+\newcommand{\OFTscr}{\text{OFT}}
+\newcommand{\FTscr}{\text{FT}}
+\newcommand{\g}{\vec g}
+\newcommand{\B}{\text{B}}
+\newcommand{\T}{\mbox{\scriptsize T}}
+\newcommand{\bbell}{\vecsym \ell}
+%\newcommand{\bbg}{\vec g}
+\renewcommand{\k}{\vec k}
+\newcommand{\h}{\vec h}
+\renewcommand{\l}{\vec l}
+\newcommand{\x}{\vec x}
+\newcommand{\y}{\vec y}
+\newcommand{\z}{\vec z}
+\newcommand{\bfnu}{\vecsym \nu}
+\newcommand{\bflam}{\vecsym \lambda}
+\newcommand{\A}{\vec A}
+\newcommand{\Zb}{\mathbb{Z}_{b}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Zinf}{\mathbb{Z}^{\infty}}
+\newcommand{\tZs}{\tilde{\Z}^{s}}
+\newcommand{\tZsn}{\tilde{\Z}^{s}_{n}}
+\newcommand{\tZu}{\tilde{\Z}^{u}}
+\newcommand{\tZun}{\tilde{\Z}^{u}_{n}}
+\newcommand{\R}{\mathbb{R}}
+
+
+\newcommand{\dkv}{{\bbd}(\kappa,v)}
+
+%%********************************************************
+
+%%%Define theorem environments %%%%%%%%%%%%
+%   %%%----Theorem type environments
+%   Authors: customize as desired but please do not change theoremstyle commands.
+%   Please see comments regarding numbering schemes for each environment
+%
+%   %%%h4a heads - Environments usually associated with proofs.
+% {\theoremstyle{plain}%
+  % \newtheorem{theorem}{Theorem}[]%           %theorem numbers will
+%                                                     %include section numbers
+% %
+%   \newtheorem{corollary}[theorem]{Corollary}%       %Corollaries will number
+%                                                     %with theorem numbers
+% %
+%   \newtheorem{proposition}[theorem]{Proposition}%    %Proposition numbers will include
+%                                                         %subsection numbers
+% %
+%   \newtheorem{lemma}[theorem]{Lemma}%                    %Lemmas will number in a single
+%                                                 %sequence throughout the article.
+% }
+% %   %%%h4 heads - Environments not associated with proofs
+% {\theoremstyle{remark}
+% \newtheorem{fact}{Fact}
+% \newtheorem{remark}{Remark}
+% }
+% %   %%%h4b heads - Definitions and examples
+% {\theoremstyle{definition}
+% \newtheorem{definition}[theorem]{Definition}
+% \newtheorem{example}{Example}
+% }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+                          
+\title{The Existence of Good Extensible \\  Rank-1 Lattices
+\thanks{This work was partially
+supported by a Hong Kong Research Grants Council grant HKBU/2030/99P.}} 
+
+\ifruninauthors
+\else
+%%Stacked style author template
+\author{Fred J. Hickernell \\
+Department of Mathematics, Hong Kong Baptist University \\ Kowloon
+Tong, Hong Kong SAR, China
+\\ E-mail: fred@hkbu.edu.hk
+\and         % please use the \and command between authors
+ Harald Niederreiter \\
+Department of Mathematics,
+National University of Singapore \\ 
+2 Science Drive 2,
+Singapore 117543,
+Republic of Singapore\\
+E-mail: nied@math.nus.edu.sg
+}
+\fi
+
+
+
+\date{April 2, 2002}
+
+\maketitle
+
+\begin{abstract}
+{Extensible integration lattices have the attractive property that the
+number of points in the node set may be increased while retaining the
+existing points.  It is shown here that there exist generating
+vectors, $\h$, for extensible rank-1 lattices such that for
+$n=b, b^{2}, \ldots$ points and dimensions $s=1, 2, \ldots$ the
+figures of merit $R_{\alpha}$, $P_{\alpha}$ and discrepancy are all
+small.  The upper bounds obtained on these figures of merit for
+extensible lattices are some power of $\log n$ worse than the best
+upper bounds for lattices where $\h$ is allowed to vary with $n$ and
+$s$.}
+\end{abstract}
+
+\keywords{discrepancy, figures of merit, extensible lattices, lattice
+rules, quasi-Monte Carlo integration}
+
+%\begin{article}
+
+
+\section{Introduction}
+
+Multidimensional integrals over the unit cube are often approximated 
+by taking the average over a well-chosen set of points:
+$$
+\int_{\Cs} f(\x) \ d\x \approx \frac 1n \sum_{i=0}^{n-1} f(\z_{i}).
+$$
+Quasi-Monte Carlo methods \cite{Nie92} choose the set $\{\z_{i}\}$ to
+be evenly distributed over the unit cube.  One popular choice of
+points are the node sets of rank-1 integration lattices (see
+\cite{HuaWan81}, \cite[Chapter 5]{Nie92}, and \cite{SloJoe94}).  Such
+sets may be expressed as 
+\begin{equation} \label{shlat}
+    \{\bbrace{i \h/n + \bfDelta} : i=0,1, \ldots, n-1 \},
+\end{equation}
+where $\h$ is an $s$-dimensional integer generating vector, $\bfDelta$
+is an $s$-dimensional shift, and $\bbrace{\cdot}$ denotes the
+fractional part, i.e., $\bbrace{\x} = \x \pmod 1$.  The quality of the
+set defined in \eqref{shlat} depends mainly on the choice of $\h$ and
+somewhat on the choice of $\bfDelta$.  There are several quality
+measures, including $R_{\alpha}$, $P_{\alpha}$, and the discrepancy, which will
+be defined and discussed later in this article.
+
+One disadvantage of lattice rules for numerical integration has been that the
+generating vector depends on $n$ and $s$.  If one changes either of
+these, then one must also change $\h$.  Recently, lattice node sets
+have been proposed that can be extended in $n$ (for this reason they are
+called {\it extensible lattices}).  For a fixed integer base $b
+\ge 2$, let  any integer $i \ge 0$ be expressed as $i=i_{1}+i_{2}b +i_{3} 
+b^{2} + \cdots$, where the digits $i_j$ are in $\{0,1,\ldots,b-1 \}$.  Then define the radical inverse function as
+$$
+\Phi_{b}(i) = i_{1}b^{-1} + i_{2}b^{-2} + i_{3}b^{-3} + \cdots .
+$$
+The sequence 
+$$
+\{ \z_{i}=\bbrace{\h \Phi_{b}(i) + \bfDelta} : i=0, 1, \ldots \}
+$$
+has the property that any finite piece with $n=b^{m}$ points,
+\begin{multline} \label{nodeset}
+\{\z_{i}=\bbrace{\h \Phi_{b}(i+lb^{m}) + \bfDelta} =\bbrace{\h 
+\Phi_{b}(i) + \Phi_b(l)\h b^{-m} + \bfDelta}: \\
+ i=0,1, \ldots,
+b^{m}-1 \}, \quad l=0, 1, \ldots, \ m=1,2, \ldots
+\end{multline}
+is the node set of a shifted rank-1 lattice \cite{HicHon97a}, 
+\cite{HicEtal00}, just
+like the pieces of a $(t,s)$-sequence are $(t,m,s)$-nets \cite[Chapter
+4]{Nie92}.  Good generating vectors $\h$ that work
+simultaneously for a range of $m$
+and $s$ have been found experimentally \cite{HicEtal00}.  The purpose
+of this article is to prove that there exist generating vectors $\h$,
+dependent on $b$, but independent of $m$ and $s$, that give node sets
+of the form \eqref{shlat} and \eqref{nodeset} with figures of merit that are nearly as
+good as the best known upper bounds for node sets where the generating
+vector is allowed to depend on $m$ and $s$.
+
+The remainder of this introduction reviews several figures of merit
+for lattice rules.  The next section gives an upper bound on the value
+of $R_{\alpha}$ for extensible lattices.  This is used to give upper
+bounds on $P_{\alpha}$ and discrepancy in the following two sections.
+
+In this article it is assumed that the integrand, $f$, is a function
+of $\x=(x_{1}, x_{2}, \ldots) \in \Cinf$, and that the integration
+domain is to be $\Cinf$.  Integration problems over $\Cs$ just assume
+that $f$ depends only on the first $s$ variables.  Let $1:s$ denote
+the set $\{1, \ldots, s\}$, and for any $u \subset 1:\infty$, let
+$\x_{u}$ denote the vector indexed by the elements of $u$.  Let
+$\abs{u}$ denote the cardinality of $u$.  Throughout this article it
+is assumed that $u$ is a finite set.
+
+Suppose that the integrand can be written as an absolutely summable
+Fourier series,
+$$
+f(\x) = \sum_{\k \in \Z^{\infty}} \tilde{f}(\k) e^{2 \pi \imath 
+\k^{T} \x},
+$$
+where $\imath=\sqrt{-1}$.  For any parameter $\bfgam \in
+[0,\infty)^{\infty}$ and $\k \in \Z^{\infty}$ let
+$$
+\tilde{r}(\k,\bfgam) = \prod_{j=1}^{\infty} r(k_{j},\gamma_{j}),
+\qquad \text{where} \qquad r(k_{j},\gamma_{j})=\begin{cases} 1, &
+k_{j}=0, \\ \gamma_{j}^{-1} \abs{k_{j}}, & k_{j} \ne 0.  \end{cases}
+$$ 
+For any $\alpha > 1$ this quantity can be used to define a Banach
+space of functions:
+$$
+\calF_{\alpha} = \{ f \in \Ltwo(\Cinf) : 
+\norm{f}_{\calF_{\alpha}} < \infty \},
+$$
+where
+$$
+\norm{f}_{\calF_{\alpha}} = \sup_{\k \in \Z^{\infty}}
+\left(\tilde{r}(\k,\bfgam)^{\alpha} \abs{\tilde{f}(\k)} \right).
+$$
+If $\gamma_{j}=0$, then functions in $\calF_{\alpha}$ are assumed not
+to depend on the coordinate $x_{j}$, i.e., $\tilde{f}(\k)=0$ for all
+$\k$ with $k_{j} \ne 0$.  Let $\tZu = \{ \k \in \Z^{\infty} : k_{j}=0
+\ \forall j \notin u \}$.  Then the subspace of $\calF_{\alpha}$
+containing functions depending only on the coordinates indexed by $u$ is
+$\calF_{u,\alpha} = \{ f \in \calF_{\alpha} : \tilde{f}(\k)=0 \
+\forall \k \notin \tZu \}$.
+
+For any positive integer $n$ and any $\h \in \Z^{\infty}$, the dual
+lattice consists of all wave numbers $\k$ with $\k^{T}\h = 0 \mod n$.  The set $B(\h,n,u) = \{ \zero \ne \k \in \tZu : \k^{T}\h = 0 \mod n\}$ consists
+of all nonzero wave numbers in the dual lattice whose nonzero
+components are in the directions indexed by $u$.  Let
+\begin{equation} \label{Pdef}
+P_{\alpha}(\h,\bfgam,n,u) = \sum_{\k \in B(\h,n,u)} 
+\tilde{r}(\k,\bfgam)^{-\alpha}.
+\end{equation}
+Then one may derive the following tight worst-case integration error bound 
+for lattice rules using the node set \eqref{shlat} \cite{Hic98b}:
+\begin{equation} \label{quaderr1}
+    \abs{\int_{\Cinf} f(\x) \ d\x - \frac 1n \sum_{i=0}^{n-1} f(\z_{i})}
+    \le P_{\alpha}(\h,\bfgam,n,u) \norm{f}_{\calF_{\alpha}} \quad
+    \forall f \in \calF_{u,\alpha}.
+\end{equation}
+
+For band-limited integrands one may derive a similar error bound.  Let
+$\tZun=\tZu \cap (-n/2, n/2]^{\infty}$ and $\calF_{n,u,\alpha} = \{ f
+\in \calF_{u,\alpha} : \tilde{f}(\k)=0 \ \forall \k \notin \tZun
+\}$.  Then the analogous error bound to \eqref{quaderr1} is
+\begin{equation} \label{quaderr2}
+    \abs{\int_{\Cinf} f(\x) \ d\x - \frac 1n \sum_{i=0}^{n-1} f(\z_{i})}
+    \le R_{\alpha}(\h,\bfgam,n,u) \norm{f}_{\calF_{\alpha}} \quad
+    \forall f \in \calF_{n,u,\alpha},
+\end{equation}
+where
+\begin{equation} \label{Rdef}
+R_{\alpha}(\h,\bfgam,n,u) = \sum_{\k \in \tilde{B}(\h,n,u)}
+\tilde{r}(\k,\bfgam)^{-\alpha}
+\end{equation}
+and $\tilde{B}(\h,n,u) = B(\h,n,u)\cap (-n/2, n/2]^{\infty}$.  Note that
+whereas one must require $\alpha>1$ for $P_{\alpha}(\h,\bfgam,n,u)$ to be
+defined and \eqref{quaderr1} to make sense, the error bound
+\eqref{quaderr2} is well defined for $\alpha \ge 0$.  Note also that 
+both $P_{\alpha}(\h,\bfgam,n,u)$ and $R_{\alpha}(\h,\bfgam,n,u)$ do not depend on 
+the shift vector $\bfDelta$.
+
+Lattice rules are not only used for periodic integrands, but
+non-periodic ones as well.  Let $\calW_{p}$ denote the Banach
+space of functions that are absolutely continuous on $[0,1]^{\infty}$
+with $\Lp$-integrable mixed partial derivatives of up to order one in
+each coordinate direction.  Let $\gamma_{u} = \prod_{j \in u}
+\gamma_{j}$.  The norm for this space is defined as
+\begin{align*}
+\norm{f}_{\calW_{p}} &= \left\{ \sum_{\substack {u \subseteq 1:\infty
+\\ \abs{u} < \infty}}  \gamma_{u}^{-p} \int_{[0,1]^{u}} \abs{ \left
+.\frac{\partial^{|u|} f}{\partial \x_{u}}\right
+\rvert_{\x_{1:\infty \setminus u}=\one}}^{p} \ d \x_{u} \right\}^{1/p}, \quad 1
+\le p < \infty, \\
+\norm{f}_{\calW_{\infty}} &= \sup_{\substack {u \subseteq 1:\infty \\
+\abs{u} < \infty}} \gamma_{u}^{-1} \sup_{\x_{u} \in
+[0,1]^{u}} \abs{ \left .\frac{\partial^{|u|} f}{\partial \x_{u}}\right
+\rvert_{\x_{1:\infty \setminus u}=\one}} .
+\end{align*}
+Again, if $\gamma_{j}=0$, then the functions in $\calW_{p}$ are
+assumed not to depend on $x_{j}$.  As above let $\calW_{u,p}$ denote
+the subspace of $\calW_{p}$ whose elements do not depend on
+$x_{j}$ for $j \notin u$.  The integration error bound for this
+space is \cite{WanHic00b}
+\begin{multline} \label{quaderr3}
+    \abs{\int_{\Cinf} f(\x) \ d\x - \frac 1n \sum_{i=0}^{n-1}
+    f(\z_{i})} \le D_{q}^{*}(\{\z_{i}\},n,u)
+    \norm{f}_{\calW_{p}} \\
+    \forall f \in \calW_{u,p}, \ \frac 1p + \frac 1q =1,
+\end{multline}
+where the (weighted) $\Lq$-star discrepancy is defined as
+\begin{subequations} \label{discdef}
+\begin{align}
+D_{q}^{*}(\{\z_{i}\},\bfgam,n,u) &= \left\{ \sum_{\emptyset \subset v
+\subseteq u} \gamma_{v}^{q} \int_{[0,1]^{v}} \abs{
+\disc_{v}(\zero, \x, \{\z_{i}\},n)}^{q} \ d \x_{v} \right\}^{1/q}, 
+\nonumber \\
+& \qquad \qquad \qquad \qquad 1 \le q < \infty, \\
+D_{\infty}^{*}(\{\z_{i}\},\bfgam,n,u) &= \sup_{\emptyset \subset v \subseteq
+u} \gamma_{v} \sup_{\x_{v} \in [0,1]^{v}} \abs{
+\disc_{v}(\zero,\x, \{\z_{i}\},n)} .
+\end{align}
+The discrepancy function, $\disc_{u}(\y,\x, \{\z_{i}\},n)$, measures
+the difference between the volume of the box $[\y_{u},\x_{u})$ and the
+proportion of sample points inside it:
+\begin{multline} \label{discfundef}
+\disc_{u}(\y,\x, \{\z_{i}\},n) \\
+= \prod_{j \in u} (x_{j} - y_{j}) -
+\frac 1n \sum_{i=0}^{n-1} \prod_{j \in u} 
+(1_{(z_{j},\infty)}(x_{j}) - 1_{(z_{j},\infty)}(y_{j})),
+\end{multline}
+\end{subequations}
+where $y_{j} \le x_{j}$ for all $j \in u$.  Here $1_{\{\cdot\}}$
+denotes the characteristic function.
+
+One may also define an $\Lq$-unanchored discrepancy:
+\begin{subequations} \label{undiscdef}
+\begin{multline}
+D_{q}(\{\z_{i}\},\bfgam,n,u) \\
+= \left\{ \sum_{\emptyset \subset v \subseteq u} 
+2^{\abs{v}}\gamma_{v}^{q} \int_{\substack{[0,1]^{2v} \\
+\y_{v} \le \x_{v}}} \abs{
+\disc_{v}(\y, \x, \{\z_{i}\},n)}^{q} \ d \y_{v} \ d \x_{v}  
+\right\}^{1/q}, \\
+ 1 \le q < \infty, 
+\end{multline}
+\begin{equation}
+D_{\infty}(\{\z_{i}\},\bfgam,n,u) = \sup_{\emptyset \subset v
+\subseteq u} \gamma_{v} \sup_{\zero \le \y_{v} \le \x_{v} 
+\le \one} \abs{ \disc_{v}(\y,\x, \{\z_{i}\},n)}.
+\end{equation}
+\end{subequations}
+Both the star and the unanchored discrepancies may be bounded above as 
+follows:
+\begin{multline} \label{discbds}
+D_{q}^{*}(\{\z_{i}\},\bfgam,n,u), D_{q}(\{\z_{i}\},\bfgam,n,u) \\
+\le \sum_{\emptyset \subset v \subseteq u} \gamma_{v} \sup_{\zero
+\le \y_{v} \le \x_{v} \le \one} \abs{ \disc_{v}(\y,\x, \{\z_{i}\},n)},
+\quad 1 \le q \le \infty.
+\end{multline}
+
+\section{Existence of Extensible Lattices with Small $R_{\alpha}$}
+
+The existence of lattices with small $R_{\alpha}(\h,\bfgam,n,1:s)$ for
+fixed $n$ and $s$ has been shown using averaging arguments.  After
+computing an upper bound on the average of $R_{\alpha}(\h,\bfgam,n,1:s)$
+over some set of $\h$, one argues that there exist at least some $\h$
+with an $R_{\alpha}(\h,\bfgam,n,1:s)$ at least as small as that upper
+bound. In the following, an averaging argument is also used, but with a
+difference.  For extensible lattice rules it will be argued that there
+exist some $\h$, independent of $n$ and $s$, such that
+$R_{\alpha}(\h,\bfgam,n,1:s)$ is not too much worse than the upper bound
+on the average for all $n$ and $s$.
+
+For extensible lattices one needs to allow generating vectors, $\h$,
+whose coordinates are generalizations of integers.  For any integer $b \ge 2$
+let $\Zb$ be the set of all $b$-adic integers
+$i= \sum_{l=1}^{\infty}i_{l}b^{l-1}$, where $i_{l} \in \{0,1, \ldots, b-1 \}$
+for all $l \ge 1$; see Mahler \cite{Mah73} for the theory of $b$-adic integers.
+ Note that $\Zb
+\supset \Z$.  The set $\Zb$ contains too many bad numbers, so define
+$$
+H_{b} = \{ i \in \Zb : \gcd(i_{1},b)=1\}.
+$$
+Then $H_{b}^{\infty} = H_{b} \times H_{b} \times \cdots$ is the set of
+candidates for $\h$, an $\infty$-vector.  The set $\Zb$ has a
+probability measure such that the set of all $i\in \Zb$ with specified
+first $l$ digits has measure $b^{-l}$.  This probability measure
+conditional on $H_{b}$ is denoted $\mu_{b}$.  The Cartesian product $H_{b}^{\infty}$
+has the product probability measure $\mu_{b}^{\infty}$.  The following upper bound
+on the average of $R_1(\h,\one,n,u)$ taken over $H_{b}^{\infty}$ is implied by the proof of \cite[Theorem 1]{Nie78b}. For $\h \in H_b^{\infty}$ we define
+$R_{\alpha}(\h,\bfgam,n,u)$ with $n=b,b^2,\ldots$ in the obvious way, namely
+by \eqref{Rdef} with $\h$ considered modulo $n$. 
+
+\begin{lemma} \label{Haraldlem} For any finite $u \subset 1:\infty$ we have 
+$$
+\int_{H_{b}^{\infty}} R_{1}(\h,\one,n,u) \ d\mu_{b}^{\infty}(\h) \le n^{-1} 
+(\beta_{1} + \beta_{2} \log n)^{\abs{u}}
+$$
+for some positive absolute constants $\beta_{1}$ and $\beta_{2}$ and $n=b, 
+b^{2}, \ldots$.
+\end{lemma}
+
+\begin{theorem} \label{Rthm} Suppose we are given a fixed integer $b \ge
+2$, a fixed $\bfgam \in [0,\infty)^{\infty}$, a fixed $\alpha \ge 1$,
+and a fixed $\epsilon > 0$.  
+
+i) There exist a $\mu_b^{\infty}$-measurable $\tilde{G}_{b} \subset H_{b}^{\infty}$ and some constant
+$C_{R}(\alpha,\bfgam,\epsilon,s)$ such that for all $\h \in
+H_{b}^{\infty} \setminus \tilde{G}_{b}$,
+\begin{multline} \label{ntoinfty}
+    R_{\alpha}(\h,\bfgam,n,1:s) \le C_{R}(\alpha,\bfgam,\epsilon,s)
+    n^{-\alpha} (\log n)^{\alpha(s+1)} [\log \log (
+    n+1)]^{\alpha(1+\epsilon)}, \\ n=b, b^{2},\ldots,\ s=1,2,\ldots.
+\end{multline}
+Furthermore, one may make $\mu_{b}^{\infty}(\tilde{G}_{b})$ arbitrarily close to 
+zero by choosing  $C_{R}(\alpha,\bfgam,\epsilon,s)$ large enough.
+
+ii)  If $\sum_{j=1}^{\infty} \gamma_{j}^{a} j [\log(j+1)]^{1+\epsilon} < \infty$ for some
+$a \in [1,\alpha]$, then for any fixed $\delta>0$ there exists some
+$\tilde{C}_{R}(\alpha,a,\bfgam,\delta)$ such that for all $\h \in
+H_{b}^{\infty} \setminus \tilde{G}_{b}$ we have
+\begin{multline}\label{nstoinfty}
+R_{\alpha}(\h,\bfgam,n,1:s) \le \tilde{C}_{R}(\alpha,a,\bfgam,\delta) 
+n^{-\alpha/a+\delta}, \\
+n=b,b^{2},\ldots,\ s=1,2,\ldots.
+\end{multline}
+Again one may make $\mu_{b}^{\infty}(\tilde{G}_{b})$ arbitrarily close to 
+zero by choosing the above leading constant large enough.
+
+iii)  If $\sum_{j=1}^{\infty} \gamma_{j}^{a} < \infty$ for some $a \in
+[1,\alpha]$, then for any fixed $\delta>0$ there exists a
+$\mu_b^{\infty}$-measurable $G_{b}
+\subset H_{b}^{\infty}$ such that for all $\h \in  H_{b}^{\infty} \setminus 
+G_{b}$ \eqref{nstoinfty} is satisfied, but \eqref{ntoinfty} may not 
+be.  Here too, $\mu_{b}^{\infty}(G_{b})$ can be made arbitrarily close to 
+zero.
+\end{theorem}
+
+\begin{proof} Define the quantities
+\begin{gather}
+    \tilde{R}_{\alpha}(\h,\bfgam,n,s) = \sum_{\{s\} \subseteq u \subseteq
+    1:s} \gamma_{u}^{\alpha} R_{\alpha}(\h,\one,n,u), \nonumber \\
+    \label{Rhatdef}
+    \hat{R}_{\alpha}(\h,\bfgam,n,s) = \sum_{\emptyset \subset u
+    \subseteq 1:s} \gamma_{u}^{\alpha} R_{\alpha}(\h,\one,n,u) =
+    \sum_{d=1}^{s} \tilde{R}_{\alpha}(\h,\bfgam,n,d).
+\end{gather}
+Note that $R_{\alpha}(\h,\bfgam,n,1:s) \le
+\hat{R}_{\alpha}(\h,\bfgam,n,s)$.  The proof here actually shows the
+above conclusions for $\hat{R}_{\alpha}(\h,\bfgam,n,s)$ rather than
+$R_{\alpha}(\h,\bfgam,n,1:s)$ because these are needed for Theorem
+\ref{Dthm} below.  
+
+There are two important relations among 
+$\hat{R}_{\alpha}(\h,\bfgam,n,s)$ for different parameters $\alpha$ 
+that are used in this proof.  Because $R_{\alpha}(\h,\one,n,u)$ is 
+non-increasing for $\alpha$ increasing, it follows that
+\begin{align}
+    \hat{R}_{\alpha}(\h,\bfgam,n,s) &  = \sum_{\emptyset \subset u
+    \subseteq 1:s} \gamma_{u}^{\alpha} R_{\alpha}(\h,\one,n,u) 
+    \le \sum_{\emptyset \subset u
+    \subseteq 1:s} \gamma_{u}^{\alpha} R_{a}(\h,\one,n,u) \nonumber \\
+    & = \hat{R}_{a}(\h,\bfgam^{\alpha/a},n,s) \label{mono}
+\end{align}
+for $\alpha \ge a$, where $\bfgam^{\alpha/a}$ denotes the vector
+obtained by raising each component of $\bfgam$ to the power
+$\alpha/a$.  Furthermore, the definitions of $R_{\alpha}$ and
+$\hat{R}_{\alpha}$ together with Jensen's inequality imply that
+\begin{align}
+    \hat{R}_{\alpha}(\h,\bfgam,n,s) &  = \sum_{\emptyset \subset u
+    \subseteq 1:s} \gamma_{u}^{\alpha} R_{\alpha}(\h,\one,n,u) 
+    \le \sum_{\emptyset \subset u
+    \subseteq 1:s} [\gamma_{u}^{a} R_{a}(\h,\one,n,u) ]^{\alpha/a} \nonumber \\
+    &\le \left[\sum_{\emptyset \subset u
+    \subseteq 1:s} \gamma_{u}^{a} R_{a}(\h,\one,n,u) 
+    \right]^{\alpha/a} = [\hat{R}_{a}(\h,\bfgam,n,s)]^{\alpha/a} \label{Jens}
+\end{align}
+for $\alpha \ge a$.
+    
+Lemma \ref{Haraldlem} implies the
+following upper bound on the average value of
+$\tilde{R}_{1}(\h,\bfgam,n,s)$:
+$$
+\int_{H_{b}^{\infty}} \tilde{R}_{1}(\h,\bfgam,n,s) \ d\mu_{b}^{\infty}(\h)
+\le \tilde{M}(\bfgam,n,s) \quad \text{for} \quad n=b, 
+b^{2}, \ldots,
+$$
+where
+$$
+\tilde{M}(\bfgam,n,s) := n^{-1} \gamma_{s} (\beta_{1}
++ \beta_{2} \log n) \prod_{j=1}^{s-1}[1+\gamma_{j} (\beta_{1} +
+\beta_{2} \log n)].
+$$
+
+For any $\epsilon > 0$ and $j=1,2,\ldots$ define $c_{j}:= c_j(\epsilon):= c_{0}(\epsilon) j
+[\log(j+1)]^{1+\epsilon}$, where $c_{0}(\epsilon)$ is chosen to be
+larger than $\sum_{j=1}^{\infty} j^{-1} [\log(j+1)]^{-1-\epsilon}$.  A
+set of bad $\h$ for a particular $n=b^{m}$ and $s$ is then defined as
+\begin{multline*}
+\tilde{G}_{bms} = \{ \h \in H_{b}^{\infty} :
+\tilde{R}_{1}(\h,\bfgam,b^{m},s) > c_{m}c_{s}
+\tilde{M}(\bfgam,b^{m},s) \},\\
+m=1, 2, \ldots, \ s=1,
+2, \ldots.
+\end{multline*}
+These sets cannot be too large.  In fact, $\mu_{b}^{\infty}(\tilde{G}_{bms})
+ \le
+1/(c_{m}c_{s})$ since
+\begin{multline*}
+\mu_{b}^{\infty}(\tilde{G}_{bms}) c_{m}c_{s} \tilde{M}(\bfgam,b^{m},s) \le
+\int_{\tilde{G}_{bms}} \tilde{R}_{1}(\h,\bfgam,b^{m},s) \ d\mu_{b}^{\infty}(\h)
+\\
+\le \int_{H_{b}^{\infty}} \tilde{R}_{1}(\h,\bfgam,b^{m},s) \
+d\mu_{b}^{\infty}(\h) \le \tilde{M}(\bfgam,b^{m},s).
+\end{multline*}
+The set of all bad $\h$ is defined as the union of these sets:  
+$$
+\tilde{G}_{b} = \bigcup_{m=1}^{\infty} \bigcup_{s=1}^{\infty} \tilde{G}_{bms}. 
+$$
+It follows that this set is also not too large, namely,
+$$
+\mu_{b}^{\infty}(\tilde{G}_{b}) \le \sum_{m=1}^{\infty}
+\sum_{s=1}^{\infty} \frac{1}{c_{m}c_{s}} = \left \{ \frac 1{c_{0}(\epsilon)}
+\sum_{j=1}^{\infty} \frac{1}{ j [\log(j+1)]^{1+\epsilon}} \right 
+\}^{2} < 1.
+$$
+Thus, $\mu_{b}^{\infty}(H_{b}^{\infty} \setminus \tilde{G}_{b}) >0$, i.e., there exist 
+some $\h$ that are not in $\tilde{G}_{b}$.  In fact, 
+$\mu_{b}^{\infty}(H_{b}^{\infty} \setminus \tilde{G}_{b})$ may be made arbitrarily close 
+to $1$ by choosing $c_{0}(\epsilon)$ large enough.
+
+For any $\h \in H_{b}^{\infty} \setminus \tilde{G}_{b}$ one may derive the following 
+upper bound on $\hat{R}_1$:
+\begin{align*}
+    \hat{R}_{1}(\h,\bfgam,b^m,s) &= \sum_{j=1}^{s}
+    \tilde{R}_{1}(\h,\bfgam,b^{m},j) \le c_{m} \sum_{j=1}^{s} c_{j}
+    \tilde{M}(\bfgam,b^{m},j) \\
+   & \le c_{0}(\epsilon) m [\log(m+1)]^{1+\epsilon} b^{-m} \\
+   & \qquad \qquad \times \prod_{j=1}^{s} [1 + \gamma_{j}
+   c_{0}(\epsilon) j \{\log(j+1)\}^{1+\epsilon} (\beta_{1} + \beta_{2} m \log b
+   ) ]
+\end{align*}
+for $m=1,2, \ldots$ and $s=1,2, \ldots$.  Applying the inequality
+$\hat{R}_{\alpha}(\h,\bfgam,n,s)\le
+[\hat{R}_{1}(\h,\bfgam,n,s)]^{\alpha}$ from \eqref{Jens} implies part
+i) of Theorem \ref{Rthm}.
+
+If $\sum_{j=1}^{\infty} \gamma_{j}^{a} j [\log(j+1)]^{1+\epsilon} < \infty$, then by
+\eqref{mono} above and Lemma \ref{boundinfprd} below it follows that for any
+$\delta>0$ and any $\h \in H_{b}^{\infty} \setminus \tilde{G}_{b}$,
+\begin{multline*}
+   \hat{R}_{a}(\h,\bfgam,b^m,s) \le \hat{R}_{1}(\h,\bfgam^{a},b^m,s) \le
+   \hat{C}_{R}(\alpha,a,\bfgam,\delta) b^{m(-1+\delta)}, \\
+   m=1,2,\ldots,\ s=1,2,\ldots, \ a \ge 1,
+\end{multline*}
+for some constant $\hat{C}_{R}(\alpha,a,\bfgam,\delta)$.  Then
+applying \eqref{Jens} completes the proof of part ii) of Theorem
+\ref{Rthm}.
+
+Lemma \ref{Haraldlem} also implies an upper bound on the
+average value of $\hat{R}_{1}(\h,\bfgam,n,s)$:
+$$
+\int_{H_{b}^{\infty}} \hat{R}_{1}(\h,\bfgam,n,s) \ d\mu_{b}^{\infty}(\h)
+\le M(\bfgam,n) \quad \text{for} \quad n=b, 
+b^{2}, \ldots,
+$$
+where it is assumed that $\sum_{j=1}^{\infty} \gamma_{j} < \infty$ and
+$M(\bfgam,n)$ is defined as
+$$
+M(\bfgam,n) := n^{-1} \prod_{j=1}^{\infty}[1+\gamma_{j} (\beta_{1} +
+\beta_{2} \log n)].
+$$
+With $c_m$ as above, a set of bad $\h$ for a particular $n=b^{m}$ and $s$
+is then defined as
+\begin{multline*}
+G_{bms} = \{ \h \in H_{b}^{\infty} : \hat{R}_{1}(\h,\bfgam,b^{m},s) >
+c_{m} M(\bfgam,b^{m})\},\\
+m=1, 2, \ldots, \ \ s=1, 2, \ldots .
+\end{multline*}
+By a similar argument to that above, $\mu_{b}^{\infty}(G_{bms}) \le
+1/c_{m}$ for all $m$ and $s$.  Moreover, since
+$\hat{R}_{1}(\h,\bfgam,b^{m},s)$ is a non-decreasing function of $s$,
+it follows that $G_{bm1} \subseteq G_{bm2} \subseteq \cdots$.  Letting
+$G_{bm} = \cup_{s=1}^{\infty} G_{bms}$, it follows that
+$\mu_{b}^{\infty}(G_{bm}) \le 1/c_{m}$.  If $G_{b} =
+\cup_{m=1}^{\infty} G_{bm}$, then $\mu_{b}^{\infty}(G_{b}) <
+1$ by the choice of the $c_m$.  Thus, for all $\h \in H_{b}^{\infty} \setminus G_{b}$, it follows from
+\eqref{mono} and by substituting $\bfgam^{a}$ for $\bfgam$ that
+\begin{align*}
+   \hat{R}_{a}(\h,\bfgam,b^m,s) & \le 
+   \hat{R}_{1}(\h,\bfgam^{a},b^m,s) \le c_{m} M(\bfgam^{a},b^{m}) \\
+   &= c_{0}(\epsilon) m
+   [\log(m+1)]^{1+\epsilon} b^{-m} \prod_{j=1}^{\infty} [1 +
+   \gamma_{j}^{a} (\beta_{1} + \beta_{2} m \log b ) ]
+\end{align*}
+for all $a \ge1$, $m \ge 1$, and $s \ge 1$.  Again using Lemma \ref{boundinfprd} and
+\eqref{Jens}, it follows that if $\sum_{j=1}^{\infty} \gamma_{j}^{a} <
+\infty$ for some $a \in [1,\alpha]$, then for any fixed $\delta>0$
+there exists a $\hat{C}_{R}(\alpha,a,\bfgam,\delta)$ such that for
+all $\h \in H_{b}^{\infty} \setminus G_{b}$,
+\begin{multline*}
+   \hat{R}_{\alpha}(\h,\bfgam,b^m,s) \le 
+   [\hat{R}_{a}(\h,\bfgam,b^m,s)]^{\alpha/a} \le
+   \hat{C}_{R}(\alpha,a,\bfgam,\delta) b^{m(-\alpha/a+\delta)}, \\
+   m=1,2,\ldots,\ s=1,2,\ldots.
+\end{multline*}
+This completes the proof of part iii) of Theorem \ref{Rthm}.
+\end{proof}
+
+The following lemma was used in the above proof.  A similar result was 
+proved in \cite{WanHic00b}.
+
+\begin{lemma} \label{boundinfprd} Given a fixed $\tilde{\bfgam} \in
+[0,\infty)^{\infty}$, let
+$$
+S(\tilde{\bfgam},m) = \prod_{j=1}^{\infty} [1 + \tilde{\gamma}_{j} m
+], \quad m=1, 2, \ldots.
+$$
+If $\sum_{j=1}^{\infty} \tilde{\gamma}_{j} < \infty$, then for any
+$\delta > 0$ it follows that $S(\tilde{\bfgam},m) \le
+\tilde{C}(\tilde{\bfgam},\delta) b^{\delta m}$ for $m=1,2,\ldots$.
+\end{lemma}
+\begin{proof}
+Let $\sigma_{d} = \sum_{j=d+1}^{\infty} \tilde{\gamma}_{j}, \ d=0, 1,
+\ldots$.  Note that by increasing $d$ one may make $\sigma_{d}$
+arbitrarily small. We can assume w.l.o.g. that all $\sigma_d > 0$.  Then applying some relatively elementary 
+inequalities yields:
+\begin{align*}
+\log[S(\tilde{\bfgam},m)] & = 
+\sum_{j=1}^{\infty} \log [1 + \tilde{\gamma}_{j} m ] \\
+& \le \sum_{j=1}^{d} \log [1 + 
+\sigma_{d}^{-1} + \tilde{\gamma}_{j}
+m ] + \sum_{j=d+1}^{\infty} \log [1 + \tilde{\gamma}_{j}
+m ] \\
+& = d \log(1 + \sigma_{d}^{-1}) + \sum_{j=1}^{d}
+\log [1 + \tilde{\gamma}_{j} m/(1 + \sigma_{d}^{-1}) ] \\
+& \qquad \qquad +
+\sum_{j=d+1}^{\infty} \log [1 + \tilde{\gamma}_{j} m] \\
+& \le d \log(1 + \sigma_{d}^{-1}) + \sigma_{d}m 
+\sum_{j=1}^{d}
+\tilde{\gamma}_{j} +
+m \sum_{j=d+1}^{\infty} \tilde{\gamma}_{j} \\
+& \le d \log(1 + \sigma_{d}^{-1}) + \sigma_{d} 
+(\sigma_{0}+1)m.\\
+\end{align*}
+Thus, it follows that
+$$
+S(\tilde{\bfgam},m) \le (1 + \sigma_{d}^{-1})^{d} b^{m\sigma_{d} 
+(\sigma_{0}+1)/\log b}.
+$$
+Choosing $d$ large enough to make $\sigma_{d} \le \delta (\log
+b)/(\sigma_{0}+1)$ completes the proof.
+\end{proof}
+
+Theorem \ref{Rthm} shows the existence of good extensible lattices
+with $R_{1}(\h,\bfgam,n,1:s) = O(n^{-1} (\log n)^{s+1} [\log \log (n+1)]^{1+
+\epsilon})$
+for any $s$ with $n$ tending to infinity.  This is slightly worse
+than the result of \cite[Theorem 5.10]{Nie92}, which shows the
+existence of lattices with $R_{1}= O(n^{-1} (\log n)^{s})$ for fixed
+$s$ and $n$, and the
+lower bound of \cite{Lar87} of the same order.  Thus, the price for an
+extensible lattice (in both $s$ and $n$) is an extra factor of the order $(\log n) [\log \log (n+1)]^{1+\epsilon}$.
+
+
+
+\section{Existence of Extensible Lattices with Small $P_{\alpha}$}
+
+
+Upper bounds on $P_{\alpha}$ follow from the upper bounds on
+$R_{\alpha}$ derived in the previous section.  The theorem below
+follows immediately from the following lemma, which is a minor
+generalization of \cite[Theorem 5.5]{Nie92}.
+
+\begin{lemma} \label{RPlem} For any integer $n \ge 2$, finite set $u
+\subset 1:\infty$, $\bfgam \in [0,\infty)^{\infty}$, $\alpha > 1$, and $\h 
+=(h_j)_{j=1}^{\infty} \in
+\Z^{\infty}$ with $\gcd(h_{j},n)=1$ for all $j \in u$ we have
+\begin{multline*}
+    P_{\alpha}(\h,\bfgam,n,u) < R_{\alpha}(\h,\bfgam,n,u) -1 + \exp\left( 2 
+    \zeta(\alpha)n^{-\alpha}  \sum_{j \in u} \gamma^{\alpha}_{j} 
+    \right)  \\
+    + n^{-1} \exp\left( 2 \zeta(\alpha) \sum_{j \in u}
+    \gamma^{\alpha}_{j} \right) \\
+    \times \left\{-1 + \exp\left[ 2^{\alpha}
+    \zeta(\alpha)n^{1-\alpha} \sum_{j \in u} \gamma^{\alpha}_{j}/(1 +
+    2 \gamma_{j}^{\alpha} \zeta(\alpha)) \right] \right\},
+\end{multline*}
+where $\zeta(\alpha) = \sum_{k=1}^{\infty} k^{-\alpha}$ is the 
+Riemann zeta function.
+\end{lemma}
+\begin{proof} The proof here follows that in \cite[Theorem
+5.5]{Nie92}.  Starting from \eqref{Pdef} the definition of
+$P_{\alpha}$ may be written as a sum of several pieces:
+\begin{align}
+    P_{\alpha}(\h,\bfgam,n,u) & = -1 + \sum_{\l \in \tZu}
+    \tilde{r}(n\l,\bfgam)^{-\alpha} + \sum_{\k \in
+    \tilde{B}(\h,n,u)} \ \ \sum_{\l \in \tZu} \tilde{r}(\k+n
+    \l,\bfgam)^{-\alpha} \nonumber \\
+    & = -1 + \prod_{j \in u} \left\{ \sum_{l \in
+    \Z} r(nl,\gamma_{j})^{-\alpha}  \right\} \nonumber \\
+    & \qquad \qquad + \sum_{\k \in \tilde{B}(\h,n,u)} \ \
+    \prod_{j \in u} \left\{ \sum_{l \in \Z}
+    r(k_{j}+nl,\gamma_{j})^{-\alpha} \right\}. \label{Paderiv}
+\end{align}
+The second term in this equation may be simplified as
+\begin{align*}
+    \prod_{j \in u} \left\{ \sum_{l \in \Z}
+    r(nl,\gamma_{j})^{-\alpha} \right\} &= \prod_{j \in u} [1 +
+    2 \gamma_{j}^{\alpha} \zeta(\alpha) n^{-\alpha} ] \\
+    &=\exp\left[ \sum_{j \in u} \log(1 + 2 \gamma_{j}^{\alpha} \zeta(\alpha)
+    n^{-\alpha} ) \right ]\\
+    & \le \exp\left( 2 \zeta(\alpha)n^{-\alpha}
+    \sum_{j \in u} \gamma^{\alpha}_{j} \right).
+\end{align*}
+
+The inner sum in the last term in \eqref{Paderiv} may be written as
+\begin{align*}
+    \lefteqn{\sum_{l \in \Z} r(k_{j}+nl,\gamma_{j})^{-\alpha}} \\
+    & = r(k_{j},\gamma_{j})^{-\alpha} + \gamma_{j}^{\alpha} \left[
+    \sum_{l=1}^{\infty} (k_{j} + nl)^{-\alpha} + \sum_{l=1}^{\infty}
+    (-k_{j} + nl)^{-\alpha} \right] \\
+    & \le r(k_{j},\gamma_{j})^{-\alpha} + \gamma_{j}^{\alpha} \left[
+    \sum_{l=1}^{\infty} (nl)^{-\alpha} + \sum_{l=1}^{\infty}
+    (-n/2 + nl)^{-\alpha} \right] \\
+    & = r(k_{j},\gamma_{j})^{-\alpha} + 2^{\alpha}\gamma_{j}^{\alpha} 
+    n^{-\alpha} \left[
+    \sum_{l=1}^{\infty} (2l)^{-\alpha} + \sum_{l=1}^{\infty}
+    (2l-1)^{-\alpha} \right] \\
+    & = r(k_{j},\gamma_{j})^{-\alpha} +
+    2^{\alpha}\gamma_{j}^{\alpha} \zeta(\alpha) n^{-\alpha}.
+\end{align*}
+Thus, the last term in \eqref{Paderiv} satisfies 
+\begin{align*}
+    \lefteqn{\sum_{\k \in \tilde{B}(\h,n,u)} \ \
+    \prod_{j \in u} \left\{ \sum_{l \in \Z}
+    r(k_{j}+nl,\gamma_{j})^{-\alpha} \right\}} \\
+    & \le \sum_{\k \in \tilde{B}(\h,n,u)} \ \ \prod_{j \in u} \left\{
+    r(k_{j},\gamma_{j})^{-\alpha} + 2^{\alpha}\gamma_{j}^{\alpha}
+    \zeta(\alpha) n^{-\alpha} \right\} \\
+    & < R_{\alpha}(\h,\bfgam,n,u) \\
+    & \qquad + \sum_{v \subset u} \left\{ \prod_{j \in u \setminus
+    v}[2^{\alpha} \gamma_{j}^{\alpha}\zeta(\alpha)n^{-\alpha} ]
+    \sum_{\substack{ \k \in \tZun \\ \k^{T} \h= 0 \mod
+    n}} \ \ \prod_{j \in v} r(k_{j},\gamma_{j})^{-\alpha} \right\}.
+\end{align*}
+Using the same argument as in the proof of \cite[Theorem 5.5]{Nie92}, it follows that
+$$
+    \sum_{\substack{ \k \in \tZun \\ \k^{T} \h= 0 \mod
+    n}} \ \ \prod_{j \in v} r(k_{j},\gamma_{j})^{-\alpha} <
+    n^{\abs{u}-\abs{v}-1}\prod_{j \in v} [1 + 2 \gamma_{j}^{\alpha} \zeta(\alpha)].
+$$
+Thus, the last term in \eqref{Paderiv} has the following upper bound:
+\begin{align*}
+    \lefteqn{\sum_{\k \in \tilde{B}(\h,n,u)} \ \
+    \prod_{j \in u} \left\{ \sum_{l \in \Z}
+    r(k_{j}+nl,\gamma_{j})^{-\alpha} \right\}} \\
+    & < R_{\alpha}(\h,\bfgam,n,u) + n^{-1}\sum_{v \subset u} \left\{
+    \prod_{j \in u \setminus v}[2^{\alpha}
+    \gamma_{j}^{\alpha}\zeta(\alpha)n^{1-\alpha} ] \prod_{j \in v} [1 + 2
+    \gamma_{j}^{\alpha} \zeta(\alpha)] \right\} \\
+    &= R_{\alpha}(\h,\bfgam,n,u) - n^{-1} \prod_{j \in u}[1 + 2
+    \gamma_{j}^{\alpha} \zeta(\alpha)] \\
+    & \qquad \qquad + n^{-1} \prod_{j \in u}[1 + 2
+    \gamma_{j}^{\alpha} \zeta(\alpha) + 2^{\alpha}
+    \gamma_{j}^{\alpha}\zeta(\alpha)n^{1-\alpha} ] \\
+    &\le R_{\alpha}(\h,\bfgam,n,u) \\
+    &\qquad \qquad + n^{-1} \exp\left( 2 \zeta(\alpha) \sum_{j \in u}
+    \gamma^{\alpha}_{j} \right) \\
+    & \qquad \qquad \times \left\{-1 + \exp\left[ 2^{\alpha}
+    \zeta(\alpha)n^{1-\alpha} \sum_{j \in u} \gamma^{\alpha}_{j}/(1 +
+    2 \gamma_{j}^{\alpha} \zeta(\alpha)) \right] \right\}.
+\end{align*}
+Combining this bound with that for the second term in \eqref{Paderiv} 
+completes the proof of this lemma.
+\end{proof}
+
+The lemma above implies that $P_{\alpha}(\h,\bfgam,n,u) <
+R_{\alpha}(\h,\bfgam,n,u) + O(n^{-\alpha})$, where the leading
+constant in the $O$ term depends on $u$.  This relationship is uniform
+in $u$ if $\sum_{j=1}^{\infty} \gamma^{\alpha}_{j} < \infty$.  Thus,
+Theorem \ref{Rthm} and Lemma \ref{RPlem} imply the following existence
+theorem for extensible lattices with good $P_{\alpha}$.
+
+\begin{theorem} \label{Pthm} Theorem \ref{Rthm} also holds if one
+replaces $R_{\alpha}$ by $P_{\alpha}$, allowing for a change of
+constants as well.
+\end{theorem}
+
+For fixed $s$ the quantity $P_{\alpha}(\h,n,1:s)$ is known to have the
+following lower and upper bounds if the generating vector is allowed
+to depend on $n$ and $s$ \cite{Nie93a,Sha63}:
+$$
+C_{1}(\alpha,s) n^{-\alpha} (\log n)^{s-1} \le
+P_{\alpha}(\h,n,1:s) \le C_{2}(\alpha,s,\epsilon) n^{-\alpha} (\log 
+n)^{\alpha(s-1)+1 + \epsilon}.
+$$
+The lower bound holds for all $\h$ and the upper bound holds for suitable
+$\h$. The price of an extensible lattice is that the upper bound has now
+increased by roughly a factor of $(\log n)^{2\alpha -1}$.  Equation
+\eqref{ntoinfty} applied to $P_{\alpha}$ improves upon \cite[Theorem
+2.1]{SloRez01} because the right-hand side decays more quickly with $n$,
+and the same $\h$ works for all $n=b^{m}$ as well as all $s$. 
+Equation \eqref{nstoinfty} applied to $P_{\alpha}$ improves upon
+\cite[Theorem 3]{SloWoz00a} because the same $\h$ works for all
+$n=b^{m}$ and all $s$.
+
+
+\section{Existence of Extensible Lattices with 
+Small Discrepancy}
+
+The unanchored discrepancy defined in \eqref{undiscdef} is related to
+$R_{1}$ \cite[Chapter 5]{Nie92}.  The following lemma, a slight
+generalization of \cite[Theorem 3.10 and Theorem 5.6]{Nie92}, makes
+this relationship explicit.  
+
+\begin{lemma} \label{RDlem} For any integer $n=b^{m}, \ m=1,2,\ldots$,
+any finite subset $u \subset 1:\infty$, any $\h \in \Z^{\infty}$, and
+any corresponding node set of a shifted lattice, $\{\z_{i} = \bbrace{\h
+\Phi_{b}(i) + \bfDelta} : i=0,1, \ldots, b^{m}-1\}$, the unanchored
+$\Linf$-discrepancy of these points projected into the coordinates
+indexed by $u$ has the following upper bound:
+\begin{equation*}
+    \sup_{\zero \le \y_{u} \le \x_{u} \le \one} \abs{
+    \disc_{u}(\y,\x, \{\z_{i}\},n)} \le 1 - (1-1/n)^{\abs{u}} + \frac 12
+    R_{1}(\h,\one,n,u).
+\end{equation*}
+\end{lemma}
+\begin{proof} It suffices to note that the proof of \cite[Theorem 3.10]{Nie92} works also for the discrepancy extended over all intervals modulo 1 and 
+that this discrepancy is invariant under shifts of the node set modulo 1.
+\end{proof}
+%\begin{proof} For any $\l \in \tZu$, let $A(\l)$ be the number of
+%$i=0, \ldots, n-1$ with $\z_{iu}=\bbrace{\l_{u}/n +\bfDelta_{u}}$. 
+%This quantity may be written as
+%\begin{align*}
+%A(\l) &= \frac 1{n^{\abs{u}}} \sum_{i=0}^{n-1} \sum_{\k \in
+%\tZun} e^{2 \pi \imath \k'(\z_{i} - \l/n - \bfDelta)} \\
+%&= \frac{1}{n^{\abs{u}-1}} + \frac 1{n^{\abs{u}}} \sum_{i=0}^{n-1} \sum_{\k %\in
+%\tZun - \{\zero\}} e^{2 \pi \imath \k'(\z_{i} - \l/n - \bfDelta)},
+%\end{align*}
+%since the inner sum in the first line is $n^{s}$ if $\z_{iu}=\bbrace{\l_{u}/%n
+%+\bfDelta_{u}}$ and zero otherwise.  For any an interval
+%$[\y_{u}, \x_{u})$, let $[\bflam_{u}/n+\bfDelta,\bfnu_{u}/n+\bfDelta]$
+%be the largest interval contained in $[\y_{u}, \x_{u})$ where $\bflam 
+%\le \bfnu$ are integer vectors.  If no such interval exists, then
+%$$
+%\abs{ \disc_{u}(\y,\x, \{\z_{i}\},n)} = \prod_{j \in u} (x_{j} - 
+% y_{j}) < \frac 1n.
+%$$
+%
+%Otherwise, by the definition of the discrepancy function, 
+%\eqref{discfundef}
+%\begin{align*}
+%   \lefteqn{\disc_{u}(\y,\x, \{\z_{i}\},n)} \\
+%   & = \prod_{j \in u} (x_{j} - y_{j}) - \frac 1n \sum_{i=1}^{n}
+%   \prod_{j \in u} (1_{(z_{j},\infty)}(x_{j}) -
+%   1_{(z_{j},\infty)}(y_{j})) \\
+%& =   \prod_{j \in u} (x_{j} - y_{j}) - \prod_{j \in u} \left(\frac {\nu_{j}% - 
+%\lambda_{j}+1}{n} \right )  - \sum_{\l_{u} \in 
+%[\bflam_{u},\bfnu_{u}]} \left( \frac{A(\l)}{n} - \frac 1{n^{\abs{u}}} 
+%\right) \\
+%& =   \prod_{j \in u} (x_{j} - y_{j}) - \prod_{j \in u} \left(\frac {\nu_{j}% - 
+%\lambda_{j}+1}{n} \right )    \\
+%&\qquad \qquad - \frac 1{n^{\abs{u}}} \sum_{\k \in \tZun - \{\zero\}} \left[%\sum_{\l_{u} \in
+%[\bflam_{u},\bfnu_{u}]} e^{-2 \pi \imath \k'\l/n} \right]  \left[\frac 1n 
+%\sum_{i=0}^{n-1}  e^{2 \pi \imath \k'(\z_{i} - \bfDelta)}   \right].
+%\end{align*}
+%Since $\abs{(x_{j} - y_{j}) - (\nu_{j} - \lambda_{j}+1)/n} < 1/n$, the
+%first two terms in the right hand side of the above equation are
+%bounded by $1 - (1-1/n)^{\abs{u}}$ by Lemma \ref{diffprodlem} below.  Moreov%er, the sum over $i$ is unity if $\k \in
+%\tilde{B}(\h,n,u)$ and zero otherwise.  The geometric sum over $\l_u$
+%has absolute value
+%$$
+%\abs{\sum_{\l_{u} \in [\bflam_{u},\bfnu_{u}]} e^{-2 \pi \imath 
+%\k'\l/n}}  =
+%\prod_{j \in u} \abs{ \sum_{\lambda_{j} \le l_{j}  \le \nu_{j}} e^{-2 \pi
+%\imath k_{j}l_{j}/n} }.
+%$$
+%For $k_{j} = 0$ the sum can be reduced to 
+%$$
+%\abs{ \sum_{\lambda_{j} \le l_{j}  \le \nu_{j}} e^{-2 \pi
+%\imath k_{j}l_{j}/n} }
+% = \nu_{j} - \lambda_{j} + 1 \le n = n/r(k_{j},1),
+%$$
+%and for $0 < \abs{k_{j}} \le n/2$ the sum can be reduced to
+%\begin{align*}
+%\abs{ \sum_{\lambda_{j} \le l_{j}  \le \nu_{j}} e^{-2 \pi
+%\imath k_{j}l_{j}/n} }
+%& = \abs{ \frac{e^{-2 \pi \imath
+%k_{j}(\nu_{j}-\lambda_{j}+1)/n} - 1}{e^{-2 \pi \imath k_{j}/n} - 1} } 
+%\\
+%&= \abs{ \frac{\sin(\pi k_{j}(\nu_{j}-\lambda_{j}+1)/n)}{\sin(\pi
+%k_{j}/n)}} \le \frac{1}{\sin(\pi \abs{k_{j}}/n)} \\
+%& \le \frac {n}{2 r(k_{j},1)}
+%\end{align*}
+%since $\sin(\pi\theta) \ge 2\theta$ for $0 \le t \le 1/2$. 
+%Substituting these bounds into the expression for the discrepancy
+%function yields
+%\begin{align*}
+% \abs{\disc_{u}(\y,\x, \{\z_{i}\},n)}& \le 1 - (1-1/n)^{\abs{u}} +
+% \frac 1{n^{\abs{u}}} \sum_{\k \in \tilde{B}(\h,n,u)}
+% \frac{n^{\abs{u}}}{2 r(k_{j},1)} \\
+%&= 1 - (1-1/n)^{\abs{u}}   + \frac 12 R_{1}(\h,\one,n,u).
+%\end{align*}
+%Since this bound holds for all $\y$ and $\x$, the theorem is proved.
+%\end{proof}
+%
+%\begin{lemma}\label{diffprodlem} \cite[Lemma 3.9]{Nie92} If $\bfsigma,
+%\bftau \in [0,1]^{s}$, then
+%    $$
+%    \abs{\prod_{j=1}^{s} \sigma_{j} - \prod_{j=1}^{s}\tau_{j}} \le 1 - (1- 
+%    \sup_{j}\abs{\tau_{j}-\sigma_{j}}).
+%    $$
+%\end{lemma}
+
+Lemma \ref{RDlem} implies the following theorem for the existence of
+extensible lattice rules with small discrepancy.
+
+\begin{theorem} \label{Dthm} Suppose we are given a fixed integer $b \ge
+2$, a fixed $\bfgam \in [0,\infty)^{\infty}$, 
+and a fixed $\epsilon > 0$.  
+
+i) There exist a $\mu_b^{\infty}$-measurable $\tilde{G}_{b} \subset H_{b}^{\infty}$ and some constant
+$C_{D}(\bfgam,\epsilon,s)$ such that for all $\h \in
+H_{b}^{\infty} \setminus \tilde{G}_{b}$ and all $\bfDelta \in \Cinf$, the node set
+of the shifted lattice given in \eqref{nodeset} satisfies
+\begin{multline} \label{Dntoinfty}
+    D^{*}_{q}(\{\z_{i}\},\bfgam,n,1:s), D_{q}(\{\z_{i}\},\bfgam,n,1:s) \\ \le
+    C_{D}(\bfgam,\epsilon,s) n^{-1} (\log n)^{s+1} [\log \log (
+    n+1)]^{1+\epsilon}, \\ n=b, b^{2},\ldots,\ s=1,2,\ldots,\ 1 \le q \le \infty.
+\end{multline}
+Furthermore, one may make $\mu_{b}^{\infty}(\tilde{G}_{b})$ arbitrarily close to 
+zero by choosing  $C_{D}(\bfgam,\epsilon,s)$ large enough.
+
+ii) If $\sum_{j=1}^{\infty} \gamma_{j} j [\log(j+1)]^{1+\epsilon} < \infty$, then for
+any fixed $\delta>0$ there exists some
+$\tilde{C}_{D}(\bfgam,\delta)$ such that for all $\h \in
+H_{b}^{\infty} \setminus \tilde{G}_{b}$ and all $\bfDelta \in \Cinf$, the node set 
+of the resulting shifted lattice satisfies
+\begin{multline}\label{Dnstoinfty}
+D^{*}_{q}(\{\z_{i}\},\bfgam,n,1:s), D_{q}(\{\z_{i}\},\bfgam,n,1:s) \le
+\tilde{C}_{D}(\bfgam,\delta) n^{-1+\delta}, \\ 
+n=b,b^{2},\ldots,\ s=1,2,\ldots,\ 1 \le q \le \infty.
+\end{multline}
+Again one may make $\mu_{b}^{\infty}(\tilde{G}_{b})$ arbitrarily close to 
+zero by choosing the above leading constant large enough.
+
+iii) If $\sum_{j=1}^{\infty} \gamma_{j} < \infty$, then for any fixed
+$\delta>0$ there exists a $\mu_b^{\infty}$-measurable $G_{b} \subset H_{b}^{\infty}$ such that
+for all $\h \in H_{b}^{\infty} \setminus G_{b}$ and all $\bfDelta \in
+\Cinf$ \eqref{Dnstoinfty} is satisfied, but \eqref{Dntoinfty} may not
+be.  Here too, $\mu_{b}^{\infty}(G_{b})$ can be made arbitrarily close
+to zero.
+\end{theorem}
+\begin{proof} From \eqref{discbds} and Lemma \ref{RDlem} it follows 
+that the star and unanchored discrepancies have the following upper bound:
+\begin{align*}
+     \lefteqn{D^{*}_{q}(\{\z_{i}\},\bfgam,n,1:s),
+     D_{q}(\{\z_{i}\},\bfgam,n,1:s) } \\
+     & \le \sum_{\emptyset \subset u
+    \subseteq 1:s} \gamma_{u} \sup_{\zero \le \y_{u} \le \x_{u} \le
+    \one} \abs{ \disc_{u}(\y,\x, \{\z_{i}\},n)} \\
+    & \le \sum_{\emptyset \subset u \subseteq 1:s} \gamma_{u}\left[1 -
+    (1-1/n)^{\abs{u}} + \frac 12 R_{1}(\h,\one,n,u) \right] \\
+    &= \prod_{j=1}^{s} (1 + 
+    \gamma_{j}) - \prod_{j=1}^{s} [1 + 
+    \gamma_{j}(1-1/n)]+ \frac 12 \hat{R}_{1}(\h,\bfgam,n,s) \\
+   &= \prod_{j=1}^{s} (1 + \gamma_{j})\left [ 1 - \prod_{j=1}^{s}
+   \left(1 - \frac {\gamma_{j}}{n(1+\gamma_{j})}\right) \right] +
+   \frac 12 \hat{R}_{1}(\h,\bfgam,n,s),
+\end{align*}
+where $\hat{R}$ was defined in \eqref{Rhatdef}.  Using the fact that
+$\log(1-x) \ge x (\log(1- a))/a$ for $0 \le x \le a < 1$, we obtain a
+lower bound on the second product:
+\begin{align*}
+   \log \left(\prod_{j=1}^{s} \left(1 - \frac
+   {\gamma_{j}}{n(1+\gamma_{j})}\right) \right) &= \sum_{j=1}^{s} \log
+   \left(1 - \frac {\gamma_{j}}{n(1+\gamma_{j})}\right) \\
+   &\ge \log(1-1/n) \sum_{j=1}^{s} \frac {
+   \gamma_{j}}{1+\gamma_{j}}.
+\end{align*}
+Thus,
+\begin{multline*}
+     D^{*}_{q}(\{\z_{i}\},\bfgam,n,1:s),
+     D_{q}(\{\z_{i}\},\bfgam,n,1:s) \\
+\le  \prod_{j=1}^{s} (1 +
+     \gamma_{j}) \left [1 - \exp\left( \log(1-1/n)
+     \sum_{j=1}^{s} \frac { \gamma_{j}}{1+\gamma_{j}} \right) \right] +
+     \frac 12 \hat{R}_{1}(\h,\bfgam,n,s) \\
+     =  \prod_{j=1}^{s} (1 +
+     \gamma_{j}) \left [1 - \left( 1- \frac 1n \right)
+     ^{\sum_{j=1}^{s} \gamma_{j}/(1+\gamma_{j})} \right] +
+     \frac 12 \hat{R}_{1}(\h,\bfgam,n,s).
+\end{multline*}
+
+Since the star and unanchored discrepancies are both bounded above by
+$\hat{R}_{1}(\h,\bfgam,n,s)/2$ plus a term that is $O(n^{-1})$
+uniformly in $s$ assuming that the $\gamma_{j}$ are summable, the
+conclusions of this theorem follow immediately from the proof of
+Theorem \ref{Rthm}.
+\end{proof}
+
+\section*{Acknowledgements} The authors would like to thank the
+participants in the 2001 Oberwolfach workshop on Numerical Integration
+and Its Complexity for their helpful comments.  We specially thank Greg
+Wasilkowski for useful discussions.
+
+\bibliographystyle{amsplain}
+\bibliography{FJH23,FJHown23}
+
+\end{document}
