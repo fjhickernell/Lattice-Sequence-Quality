@@ -52,11 +52,14 @@ where $\vh \in \{1, \ldots, n-1\}^s$ is the \emph{generating vector}.  A (random
 \begin{equation} \label{eq:shlat}
     \{\vz_i = i \vh/n + \vDelta \pmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s.
 \end{equation}
-\FredNote{Larysa, please add a figure here.}
 
 \begin{figure}[h]
-\includegraphics[width=5cm]{shifted-lattice}
+\includegraphics[width=5cm,trim={0 0 0 7.5mm},clip]{shifted-lattice}
+\caption{Two-dimensional Shifted Lattice}
+\label{fig:enter-label}
 \end{figure}
+
+
 
 Extensible lattice sequences were proposed by \cite{HicEtal00,Mai81a} and take the form
 \begin{equation} \label{eq:extlat}
@@ -107,6 +110,7 @@ $$
 \norm[\cf{\alpha}]{f} := \sup_{\vk \in \integers^{s}}
 \left(\tr(\vk)^{\alpha} \abs{\tilde{f}(\vk)} \right).
 $$
+We assume that $\alpha > 1$ (for now).
 It then follows that the error in approximating the integral by the sample mean is
 \begin{align}
 \abs{\int_{[0,1)^s} f(\vx) \, \dif \vx - \appxint_n(f)} & 
@@ -119,7 +123,7 @@ It then follows that the error in approximating the integral by the sample mean 
 \end{align}
 
 For $n = 2^m$, the quality measure $P_\alpha(\vh,n)$ takes on a simple form.  Note that 
-\begin{align*}
+\begin{align}\label{Eq:DualLattice}
     \appxint_{2^m}(\me^{2 \pi \sqrt{-1} \vk^T \cdot}) 
     &= \frac 1{2^m} \sum_{i=0}^{2^m-1} \me^{2 \pi \sqrt{-1} \vk^T (\vh\phi(i) + \vDelta \pmod{\vone})} \\
     \nonumber
@@ -134,17 +138,18 @@ For $n = 2^m$, the quality measure $P_\alpha(\vh,n)$ takes on a simple form.  No
     \end{cases} \\
     \nonumber
     & = \me^{2 \pi \sqrt{-1} \vk^T \vDelta} \bbone_{B(\vh,m)}(\vk)
-\end{align*}
+\end{align}
 Thus it follows that
 \begin{equation*}
     P_\alpha(\vh,2^m) = \sum_{\vk \in B(\vh,m)} \tr(\vk)^{-\alpha},
 \end{equation*}
 where $B(\vh,m) : = \{\vk \in \integers^s \setminus \{\vzero\} : \vk^T \vh \pmod{2^m} = 0\}$ is called the \emph{dual lattice}.  This corresponds to \cite[Equation (3)]{HicNie03a}, and we know by \cite[Theorem 5]{HicNie03a} that  there exists $\vh$ with
-\[
+\begin{equation} \label{eq:Niedbd}
     P_{\alpha}(\vh,2^m) \le C_{R}(\alpha,\epsilon,s)
     2^{-m\alpha} \log(2^{m\alpha(s+1)}) [\log \log (
     2^m+1)]^{\alpha(1+\epsilon)}, \ m = 1, 2,\ldots.
-\]
+\end{equation}
+
 
 Note that
 \begin{align*}
@@ -155,6 +160,15 @@ Note that
     & = -1 + \left[1 + 2 \sum_{k =1}^{\infty} \frac{1}{k^\alpha} \right]^d \\
     & = -1 + \left[1 + 2 \zeta(\alpha) \right]^d
 \end{align*}
+
+Therefore, the above formula \eqref{eq:Niedbd} can be extended to
+
+\begin{multline}
+    P_{\alpha}(\vh,2^m) \\
+    \le C_{R}(\alpha,\epsilon,s)
+    2^{-m\alpha}\max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
+    2^m+1))]^{\alpha(1+\epsilon)}, \\ m =0, 1, 2,\ldots.
+\end{multline}
 
 \subsection{Randomized Error Analysis}
 Another approach is to assume that $f$ in \eqref{eq:fseries} is a random function (stochastic process) where 
@@ -174,12 +188,15 @@ Then it follows that
 \textbf{Research Question}  May we extend this result to all $n$ with perhaps some extra $\log(n)$ terms?
 
 E.g.,  $n =6 = 0\cdot 1 + 1 \cdot 2 + 1 \cdot 4$, $m = 2$ $\vDelta = \vzero$.
+
 \begin{align*}
-    \appxint_{6}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})
+   \MoveEqLeft{\appxint_{6}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\\
     &= \frac 1{6} \sum_{i=0}^{5} \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \\
     &= \frac {1}{6} \left\{ \sum_{i=0}^3 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + \sum_{i=4}^5 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + \sum_{i=6}^5 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}  \right\} \\
-    &= \frac {1}{6} \left\{ 1 \cdot 4 P_\alpha(\vh,4) + \sum_{i=0}^1 \me^{2 \pi \sqrt{-1} \vk^T \vh[\phi(i)+\phi(4)]} + \sum_{i=0}^{-1} \me^{2 \pi \sqrt{-1} \vk^T \vh[\phi(i)+\vphi(6)]}  \right\} \\
-    &= \frac {1}{6} \left\{ 1\cdot 4 P_\alpha(\vh,4) + 1 \cdot 2  P_\alpha(\vh,2)\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(4)} + 0 \cdot 1 P_\alpha(\vh,1) \me^{2 \pi \sqrt{-1} \vk^T \vh\vphi(6)}  \right\}
+    &= \frac {1}{6} \left\{ \sum_{i=0}^3 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + \sum_{i=0}^1 \me^{2 \pi \sqrt{-1} \vk^T \vh[\phi(i)+\phi(4)]} + \sum_{i=0}^{-1} \me^{2 \pi \sqrt{-1} \vk^T \vh[\phi(i)+\vphi(6)]}  \right\} \ \ \text{by \eqref{eq:phiproptwo}} \\
+    &= \frac {1}{6} \left\{ 1\cdot\sum_{i=0}^{3}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + 1 \cdot \me^{2 \pi \sqrt{-1} \vk^T \phi(4)} \cdot \sum_{i=0}^{1}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \right . \\
+    & \qquad \qquad \left . +  0 \cdot 
+    \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(6)} \cdot \sum_{i=0}^{0}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \right\}
 \end{align*}
  
  Then,
@@ -187,23 +204,32 @@ E.g.,  $n =6 = 0\cdot 1 + 1 \cdot 2 + 1 \cdot 4$, $m = 2$ $\vDelta = \vzero$.
     P_\alpha(\vh,6) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}}
     \abs{\appxint_6(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha}
     \\
-    & \le \frac {1}{6} \sum_{\ell = 0}^{2} 2^{2-\ell} n_{2 - \ell}
-    \sum_{\vk \in B(\vh,2-\ell)} \tr(\vk)^{-\alpha} \\
-    & = \frac {1}{6} \sum_{\ell = 0}^{2} 2^{2-\ell} n_{2 - \ell}
-    P_\alpha(\vh,2^{2-\ell}) \\
-    & = \frac {1}{6} \left\{ 2^2 \cdot n_2 \cdot P_\alpha(\vh,2^2)+ 2^1 \cdot n_1 \cdot P_\alpha(\vh,2^1)+2^0 \cdot n_0 \cdot P_\alpha(\vh,2^0) \right\} \\
-    & =  \frac {1}{6} \left\{ 4 \cdot 1 \cdot P_\alpha(\vh,4) + 2 \cdot 1 \cdot P_\alpha(\vh,2) + 0 \cdot 1 \cdot P_\alpha(\vh,1) \right\}
+    & \le 
+    \frac {1}{6} \left\{ 1\cdot\sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\sum_{i=0}^{3}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}} \tr(\vk)^{-\alpha}  \right .
+    \\ 
+    & \qquad \qquad + 1  \cdot \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\sum_{i=0}^{1}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}} \tr(\vk)^{-\alpha}  \\
+    & \qquad \qquad \left . +  0  
+    \cdot \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\sum_{i=0}^{0}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}}  \tr(\vk)^{-\alpha} \right\}\\
+    & =
+    \frac {1}{6} \left\{ 1\cdot\sum_{\vk \in \integers^s \setminus\{\vzero\}} 4 \cdot \bbone_{B(\vh,2)}(\vk) \tr(\vk)^{-\alpha}  \right .
+    + 1  \cdot \sum_{\vk \in \integers^s \setminus\{\vzero\}}2 \cdot \bbone_{B(\vh,1)}(\vk) \tr(\vk)^{-\alpha}  \\
+    & \qquad \qquad \left . +  0  
+    \cdot \sum_{\vk \in \integers^s \setminus\{\vzero\}} 1 \cdot \bbone_{B(\vh,1)}(\vk)  \tr(\vk)^{-\alpha} \right\} \qquad \text{by \eqref{Eq:DualLattice}}\\
+    & = \frac {1}{6} \left\{ 4 \cdot 1 \cdot P_\alpha(\vh,4)+ 2 \cdot 1 \cdot P_\alpha(\vh,2)+ 1 \cdot 0 \cdot P_\alpha(\vh,1) \right\} \\
 \end{align*}
-\\ We know that and $P_\alpha(\vh,2^2) \le C_{R}(\alpha,\epsilon,s)
+
+We know that and $P_\alpha(\vh,2^2) \le C_{R}(\alpha,\epsilon,s)
     2^{-2\alpha}$ and $P_\alpha(\vh,2^1) \le C_{R}(\alpha,\epsilon,s)
     2^{-\alpha} $ . Then,
     \begin{align*}
         P_\alpha(\vh,6) & \le \frac {1}{6} \left\{ 4 \cdot 1 \cdot P_\alpha(\vh,4) + 2 \cdot 1 \cdot P_\alpha(\vh,2) \right\} \\
          & \le \frac {1}{6} \left\{C_{R}(\alpha,\epsilon,s)
          2^{2-2\alpha} + C_{R}(\alpha,\epsilon,s)
-         2^{1-\alpha} \right\}\\
+         2^{1-\alpha} \right\}
     \end{align*}
-For any non-negative integer $n$, express as  $n = n_0 + 2n_1 + \cdots + 2^m n_m$, where $n_0, n_1, \ldots$ are the binary digits of $n$.  Let $\trun(n,\ell) = n_0 + \cdots + 2^{\ell} n_{\ell}$ for $\ell = 0, \ldots, m$ and $\trun(n,-1) = 0$, then 
+
+    
+For any non-negative integer $n$, express as  $n = n_0 + 2n_1 + \cdots + 2^m n_m$, where $n_0, n_1, \ldots$ are the binary digits of $n$.  Thus, $m = \lfloor \log_2(n) \rfloor$.  Let $\trun(n,\ell) = n_0 + \cdots + 2^{\ell} n_{\ell}$ for $\ell = 0, \ldots, m$ and $\trun(n,-1) = 0$, then 
 
 \begin{align*}
     \MoveEqLeft{\appxint_{n}(\me^{2 \pi \sqrt{-1} \vk^T \cdot}) } \\
@@ -214,18 +240,36 @@ For any non-negative integer $n$, express as  $n = n_0 + 2n_1 + \cdots + 2^m n_m
     &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} \, n_{m-\ell}
     \sum_{i=0 }^{2^{m-\ell}  -1} \me^{2 \pi \sqrt{-1} \vk^T \vh[i/2^m + \phi(n - \trun(n,m-\ell))]} \\
     & \hspace{30ex} \text{by \eqref{eq:phiproptwo}} \\
-    & = \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_\ell \bbone_{B(\vh,m-\ell)}(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(n - \trun(n,m-\ell))} \\
+    & = \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_\ell \bbone_{B(\vh,m-\ell)}(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(n - \trun(n,m-\ell))} 
+\end{align*}
+\begin{align*}
       P_\alpha(\vh,n) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha} \\
       & \le \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} \sum_{\vk \in B(\vh,m-\ell)} \tr(\vk)^{-\alpha} \\
       & = \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell}) \\
       & =  \frac {1}{n} \left\{ 2^m n_m P_\alpha(\vh,2^m) + 2^{m-1} n_{m-1} P_\alpha(\vh,2^{m-1}) + \cdots + 2^0 n_0 P_\alpha(\vh,2^0)  \right\} \\
-      & \le \frac {1}{n} \left\{ C_{R}(\alpha,\epsilon,s) 2^{m(1-\alpha)} + C_{R}(\alpha,\epsilon,s) 2^{m-1-m\alpha} + \cdots +  C_{R}(\alpha,\epsilon,s) 2^{-m\alpha}\right\}
+      & \le \frac {1}{n} \left\{ C_{R}(\alpha,\epsilon,s) 2^{m(1-\alpha)} + C_{R}(\alpha,\epsilon,s) 2^{(m-1)(1-\alpha)} + \cdots +  C_{R}(\alpha,\epsilon,s) 2^{0}\right\} \\
+      & \le \frac {1}{n} \cdot C_{R}(\alpha,\epsilon,s) \frac{(1 - 2^{(m+1)(1-\alpha)})}{1 - 2^{1-\alpha}}% add C_R and the worst log
+\end{align*}
+
+With \[P_\alpha(\vh,2^0) = -1 + \left[1 + 2 \zeta(\alpha) \right]^d
+      \le C_{R}(\alpha,\epsilon,s) 2^0 \max \{1, \log(2^{0})\} \max \{1,[\log \log (2^0+1)]^{\alpha(1+\epsilon)} \} % 2^0
+\] \LarysaNote{something is not quite right?} \\ 
+
+Next try $n = \lambda 2^p$, where $\lambda$ is an odd integer. Then, $n = 2^p + 2^{p+1}n_{p+1} + \cdots + 2^m n_m$
+\FredNote{Let's carry on} \\
+
+\begin{align*}
+    P_\alpha(\vh,\lambda 2^p) 
+    %& \le \frac {1}{\lambda 2^p} \left\{2^p  P_\alpha(\vh,2^p) + \sum_{\ell = 0}^{m-p-1} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell})\right\} \\
+    & \le \frac {1}{\lambda 2^p} \sum_{\ell = 0}^{m-p} 2^{m-\ell} n_{m -\ell} P_\alpha(\vh,2^{m-\ell}) \\
+    & \le \frac {1}{\lambda 2^p} \left\{2^m n_m P_\alpha(\vh,2^m) + 2^{m-1} n_{m-1} P_\alpha(\vh,2^{m-1}) + \cdots + 2^p n_p P_\alpha(\vh,2^p) % no n_p though 
+    \right\} \\ % this sum doesnt look right
+    & \le \frac {1}{\lambda 2^p} \left\{C_{R}(\alpha,\epsilon,s) 2^{m(1-\alpha)} + C_{R}(\alpha,\epsilon,s) 2^{(m-1)(1-\alpha)} + \cdots +  C_{R}(\alpha,\epsilon,s) 2^{p(1-\alpha)}\right\} \\
+    & = \frac {1}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) \left\{ 2^{m(1-\alpha)} \cdot \frac{(1 - 2^{(m-p+1)(1-\alpha)})}{1 - 2^{1-\alpha}}\right\} 
 \end{align*}
 
 
-Next try $n = \lambda 2^m$, where $\lambda \in \integers$
-\FredNote{Let's carry on}
-
+% \left\{\right\} 
 \bibliographystyle{amsplain}
 \bibliography{FJH23,FJHown23}
 
