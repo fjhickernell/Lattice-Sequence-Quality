@@ -110,9 +110,8 @@ $$
 \norm[\cf{\alpha}]{f} := \sup_{\vk \in \integers^{s}}
 \left(\tr(\vk)^{\alpha} \abs{\tilde{f}(\vk)} \right).
 $$
-We assume that $\alpha > 1$ (for now).
 It then follows that the error in approximating the integral by the sample mean is
-\begin{align}
+\begin{align} \label{eq:wcerrPalpha}
 \abs{\int_{[0,1)^s} f(\vx) \, \dif \vx - \appxint_n(f)} & 
 = \abs{\sum_{\vk \in \integers^s} \tf(\vk) \left[\int_{[0,1)^s} \me^{2 \pi \sqrt{-1} \vk^T \vx} \, \dif \vx - \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
 \nonumber
@@ -124,7 +123,8 @@ It then follows that the error in approximating the integral by the sample mean 
 
 For $n = 2^m$, the quality measure $P_\alpha(\vh,n)$ takes on a simple form.  Note that 
 \begin{align}\label{Eq:DualLattice}
-    \appxint_{2^m}(\me^{2 \pi \sqrt{-1} \vk^T \cdot}) 
+    \MoveEqLeft{\appxint_{2^m}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \\
+    \nonumber
     &= \frac 1{2^m} \sum_{i=0}^{2^m-1} \me^{2 \pi \sqrt{-1} \vk^T (\vh\phi(i) + \vDelta \pmod{\vone})} \\
     \nonumber
     &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{2^m} \sum_{i=0}^{2^m-1} \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \\
@@ -140,15 +140,15 @@ For $n = 2^m$, the quality measure $P_\alpha(\vh,n)$ takes on a simple form.  No
     & = \me^{2 \pi \sqrt{-1} \vk^T \vDelta} \bbone_{B(\vh,m)}(\vk)
 \end{align}
 Thus it follows that
-\begin{equation*}
+\begin{equation} \label{eq:Palphadual}
     P_\alpha(\vh,2^m) = \sum_{\vk \in B(\vh,m)} \tr(\vk)^{-\alpha},
-\end{equation*}
+\end{equation}
 where $B(\vh,m) : = \{\vk \in \integers^s \setminus \{\vzero\} : \vk^T \vh \pmod{2^m} = 0\}$ is called the \emph{dual lattice}.  This corresponds to \cite[Equation (3)]{HicNie03a}, and we know by \cite[Theorem 5]{HicNie03a} that  there exists $\vh$ with
-\begin{equation} \label{eq:Niedbd}
+\begin{multline} \label{eq:Niedbd}
     P_{\alpha}(\vh,2^m) \le C_{R}(\alpha,\epsilon,s)
     2^{-m\alpha} \log(2^{m\alpha(s+1)}) [\log \log (
-    2^m+1)]^{\alpha(1+\epsilon)}, \ m = 1, 2,\ldots.
-\end{equation}
+    2^m+1)]^{\alpha(1+\epsilon)}, \\ m = 1, 2,\ldots, \quad \alpha \ge 1.
+\end{multline}
 
 
 Note that
@@ -161,13 +161,13 @@ Note that
     & = -1 + \left[1 + 2 \zeta(\alpha) \right]^d
 \end{align*}
 
-Therefore, the above formula \eqref{eq:Niedbd} can be extended to
+Therefore, the above formula \eqref{eq:Niedbd} can be extended to the case of $m=0$:
 
-\begin{multline}
+\begin{multline} \label{eq:Palphaextm}
     P_{\alpha}(\vh,2^m) \\
     \le C_{R}(\alpha,\epsilon,s)
     2^{-m\alpha}\max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
-    2^m+1))]^{\alpha(1+\epsilon)}, \\ m =0, 1, 2,\ldots.
+    2^m+1))]^{\alpha(1+\epsilon)}, \\ m =0, 1, 2,\ldots, \quad \alpha \ge 1.
 \end{multline}
 
 \subsection{Randomized Error Analysis}
@@ -220,7 +220,7 @@ E.g.,  $n =6 = 0\cdot 1 + 1 \cdot 2 + 1 \cdot 4$, $m = 2$ $\vDelta = \vzero$.
 
 We know that and $P_\alpha(\vh,2^2) \le C_{R}(\alpha,\epsilon,s)
     2^{-2\alpha}$ and $P_\alpha(\vh,2^1) \le C_{R}(\alpha,\epsilon,s)
-    2^{-\alpha} $ . Then,
+    2^{-\alpha} $. Then,
     \begin{align*}
         P_\alpha(\vh,6) & \le \frac {1}{6} \left\{ 4 \cdot 1 \cdot P_\alpha(\vh,4) + 2 \cdot 1 \cdot P_\alpha(\vh,2) \right\} \\
          & \le \frac {1}{6} \left\{C_{R}(\alpha,\epsilon,s)
@@ -240,16 +240,42 @@ For any non-negative integer $n$, express as  $n = n_0 + 2n_1 + \cdots + 2^m n_m
     &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} \, n_{m-\ell}
     \sum_{i=0 }^{2^{m-\ell}  -1} \me^{2 \pi \sqrt{-1} \vk^T \vh[i/2^m + \phi(n - \trun(n,m-\ell))]} \\
     & \hspace{30ex} \text{by \eqref{eq:phiproptwo}} \\
-    & = \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_\ell \bbone_{B(\vh,m-\ell)}(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(n - \trun(n,m-\ell))} 
+    & = \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_\ell \bbone_{B(\vh,m-\ell)}(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(n - \trun(n,m-\ell))}.
 \end{align*}
+This implies that
+\begin{equation} \label{eq:ihatarbn}
+    \abs{\appxint_{n}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \le \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_\ell \bbone_{B(\vh,m-\ell)}(\vk)
+\end{equation}
+
+Next we compute $P_\alpha(\vh,n)$ for this arbitrary $n$:
 \begin{align*}
-      P_\alpha(\vh,n) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha} \\
-      & \le \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} \sum_{\vk \in B(\vh,m-\ell)} \tr(\vk)^{-\alpha} \\
-      & = \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell}) \\
+      P_\alpha(\vh,n) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha} \qquad \text{by \eqref{eq:wcerrPalpha}} \\
+      & \le \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} \sum_{\vk \in B(\vh,m-\ell)} \tr(\vk)^{-\alpha} 
+      \qquad \text{by \eqref{eq:ihatarbn}}\\
+      & = \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell}) 
+      \qquad \text{by \eqref{eq:Palphadual}}\\
       & =  \frac {1}{n} \left\{ 2^m n_m P_\alpha(\vh,2^m) + 2^{m-1} n_{m-1} P_\alpha(\vh,2^{m-1}) + \cdots + 2^0 n_0 P_\alpha(\vh,2^0)  \right\} \\
+      & \le \frac {C_{R}(\alpha,\epsilon,s)}{n} \left\{ 2^{-m\alpha}\max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
+    2^m+1))]^{\alpha(1+\epsilon)}\right .\\
+      & \qquad  + 2^{-(m-1)\alpha}\max(1, \log(2^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
+    2^{(m-1)}+1))]^{\alpha(1+\epsilon)}\\
+      & \qquad + \cdots \\
+      & \qquad  \left . + 2^{-0}\max(1, \log(2^{0\alpha(s+1)})) [\max(1,\log \log (
+    2^{0}+1))]^{\alpha(1+\epsilon)} \right\}\\
       & \le \frac {1}{n} \left\{ C_{R}(\alpha,\epsilon,s) 2^{m(1-\alpha)} + C_{R}(\alpha,\epsilon,s) 2^{(m-1)(1-\alpha)} + \cdots +  C_{R}(\alpha,\epsilon,s) 2^{0}\right\} \\
-      & \le \frac {1}{n} \cdot C_{R}(\alpha,\epsilon,s) \frac{(1 - 2^{(m+1)(1-\alpha)})}{1 - 2^{1-\alpha}}% add C_R and the worst log
+      & \qquad \qquad \qquad \alpha \ge 1 \qquad \text{by \eqref{eq:Palphaextm}}\\
+      & \le \frac {C_{R}(\alpha,\epsilon,s)}{n} \frac{(1 - 2^{(m+1)(1-\alpha)})}{1 - 2^{1-\alpha}}
+      \max(1, \log(2^{m\alpha(s+1)})) \\
+      & \qquad \qquad \times [\max(1,\log \log (
+    2^m+1))]^{\alpha(1+\epsilon)} \\
+      & \le \frac {\widetilde{C}_{R}(\alpha,\epsilon,s)}{n}
+      \max(1, \log(n^{\alpha(s+1)}))
+      [\max(1,\log \log (
+    n+1))]^{\alpha(1+\epsilon)}
+      % add C_R and the worst log
 \end{align*}
+Unfortunately, this only decays like $\Order(n^{-1+\delta})$    
+\eqref{eq:Palphaextm}
 
 With \[P_\alpha(\vh,2^0) = -1 + \left[1 + 2 \zeta(\alpha) \right]^d
       \le C_{R}(\alpha,\epsilon,s) 2^0 \max \{1, \log(2^{0})\} \max \{1,[\log \log (2^0+1)]^{\alpha(1+\epsilon)} \} % 2^0
