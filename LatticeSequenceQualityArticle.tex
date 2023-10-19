@@ -262,7 +262,6 @@ Next we compute $P_\alpha(\vh,n)$ for this arbitrary $n$:
       & \qquad + \cdots \\
       & \qquad  \left . + 2^{-0}\max(1, \log(2^{0\alpha(s+1)})) [\max(1,\log \log (
     2^{0}+1))]^{\alpha(1+\epsilon)} \right\}\\
-      & \le \frac {1}{n} \left\{ C_{R}(\alpha,\epsilon,s) 2^{m(1-\alpha)} + C_{R}(\alpha,\epsilon,s) 2^{(m-1)(1-\alpha)} + \cdots +  C_{R}(\alpha,\epsilon,s) 2^{0}\right\} \\
       & \qquad \qquad \qquad \alpha \ge 1 \qquad \text{by \eqref{eq:Palphaextm}}\\
       & \le \frac {C_{R}(\alpha,\epsilon,s)}{n} \frac{(1 - 2^{(m+1)(1-\alpha)})}{1 - 2^{1-\alpha}}
       \max(1, \log(2^{m\alpha(s+1)})) \\
@@ -274,15 +273,11 @@ Next we compute $P_\alpha(\vh,n)$ for this arbitrary $n$:
     n+1))]^{\alpha(1+\epsilon)}
       % add C_R and the worst log
 \end{align*}
-Unfortunately, this only decays like $\Order(n^{-1+\delta})$    
-\eqref{eq:Palphaextm}
+Unfortunately, this only decays like $\Order(n^{-1+\delta})$.    
 
-With \[P_\alpha(\vh,2^0) = -1 + \left[1 + 2 \zeta(\alpha) \right]^d
-      \le C_{R}(\alpha,\epsilon,s) 2^0 \max \{1, \log(2^{0})\} \max \{1,[\log \log (2^0+1)]^{\alpha(1+\epsilon)} \} % 2^0
-\] \LarysaNote{something is not quite right?} \\ 
 
-Next try $n = \lambda 2^p$, where $\lambda$ is an odd integer. Then, $n = 2^p + 2^{p+1}n_{p+1} + \cdots + 2^m n_m$
-\FredNote{Let's carry on} \\
+Thus, next we try $n = \lambda 2^p$, where $\lambda$ is an odd integer. Then, $n = 2^p + 2^{p+1}n_{p+1} + \cdots + 2^m n_m$
+\FredNote{Let's carry on following the above.  WAtch out for your geometric sum} \\
 
 \begin{align*}
     P_\alpha(\vh,\lambda 2^p) 
