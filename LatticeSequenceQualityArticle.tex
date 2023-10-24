@@ -255,9 +255,9 @@ Next we compute $P_\alpha(\vh,n)$ for this arbitrary $n$:
       & = \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell})
       \qquad \text{by \eqref{eq:Palphadual}}\\
       & =  \frac {1}{n} \left\{ 2^m n_m P_\alpha(\vh,2^m) + 2^{m-1} n_{m-1} P_\alpha(\vh,2^{m-1}) + \cdots + 2^0 n_0 P_\alpha(\vh,2^0)  \right\} \\
-      & \le \frac {C_{R}(\alpha,\epsilon,s)}{n} \left\{ 2^{-m\alpha}\max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
-    2^m+1))]^{\alpha(1+\epsilon)}\right .\\
-      & \qquad  + 2^{-(m-1)\alpha}\max(1, \log(2^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
+      & \le \frac {C_{R}(\alpha,\epsilon,s)}{n} \left\{ 2^{m(1-\alpha)}\max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
+    2^m+1))]^{\alpha(1+\epsilon)}\right .\\ 
+      & \qquad  + 2^{(m-1)(1-\alpha)}\max(1, \log(2^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
     2^{(m-1)}+1))]^{\alpha(1+\epsilon)}\\
       & \qquad + \cdots \\
       & \qquad  \left . + 2^{-0}\max(1, \log(2^{0\alpha(s+1)})) [\max(1,\log \log (
@@ -285,11 +285,19 @@ Thus, next we try $n = \lambda 2^p$, where $\lambda$ is an odd integer. Then, $n
     & \le \frac {1}{\lambda 2^p} \sum_{\ell = 0}^{m-p} 2^{m-\ell} n_{m -\ell} P_\alpha(\vh,2^{m-\ell}) \\
     & \le \frac {1}{\lambda 2^p} \left\{2^m n_m P_\alpha(\vh,2^m) + 2^{m-1} n_{m-1} P_\alpha(\vh,2^{m-1}) + \cdots + 2^p n_p P_\alpha(\vh,2^p) % no n_p though
     \right\} \\ % this sum doesnt look right
-    & \le \frac {1}{\lambda 2^p} \left\{C_{R}(\alpha,\epsilon,s) 2^{m(1-\alpha)} + C_{R}(\alpha,\epsilon,s) 2^{(m-1)(1-\alpha)} + \cdots +  C_{R}(\alpha,\epsilon,s) 2^{p(1-\alpha)}\right\} \\
+    & \le \frac {1}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) \left\{ 2^{m(1-\alpha)}\max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
+    2^m+1))]^{\alpha(1+\epsilon)}\right .\\ 
+    & \qquad  + 2^{(m-1)(1-\alpha)}\max(1, \log(2^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
+    2^{(m-1)}+1))]^{\alpha(1+\epsilon)}\\
+      &  \qquad + \cdots \\
+      & \qquad  \left . +  2^{p(1-\alpha)}\max(1,\log(2^{p\alpha(s+1)})) [\max(1,\log \log (2^p+1]^{\alpha(1+\epsilon))}  \right\}\\
+    & = \frac {1}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) 
+    \left\{\frac{2^{p(1-\alpha)} - 2^{(m+1)(\alpha - 1)}}{1 - 2^{1 -\alpha}}\right\} \\
     & = \frac {1}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) \left\{ 2^{m(1-\alpha)} \cdot \frac{(1 - 2^{(m-p+1)(\alpha - 1)})}{1 - 2^{\alpha-1}}\right\} \\
     & = \frac {1}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) \left\{ 2^{m(1-\alpha)} \cdot \frac{(2^{(m-p+1)(\alpha - 1)}-1)}{2^{\alpha-1}-1}\right\} \\
-    & = \frac {1}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) \frac{2^{(-p+1)(\alpha -1)} - 2^{m(1-\alpha)})} {2^{\alpha-1}-1}\\
-    & = \frac {1}{\lambda 2^{p\alpha}} C_{R}(\alpha,\epsilon,s) \frac{2^{(\alpha -1)} - 2^{(m-p)(1-\alpha)})} {2^{\alpha-1}-1}\\
+    & = \frac {1}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) \frac{2^{(-p+1)(\alpha -1)} - 2^{m(1-\alpha)}} {2^{\alpha-1}-1}\\
+    & = \frac {1}{\lambda 2^{p\alpha}} C_{R}(\alpha,\epsilon,s) \frac{2^{(\alpha -1)} - 2^{(m-p)(1-\alpha)}} {2^{\alpha-1}-1}\\
+    & = \frac {\lambda^{\alpha-1}}{n^{\alpha}} C_{R}(\alpha,\epsilon,s) \frac{2^{(\alpha -1)} - 2^{(m-p)(1-\alpha)}} {2^{\alpha-1}-1}\\
 \end{align*}
 
 
