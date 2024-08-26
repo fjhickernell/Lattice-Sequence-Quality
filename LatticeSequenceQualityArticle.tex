@@ -86,12 +86,12 @@ For example,
 \]
 Note that
 \begin{equation} \label{eq:phipropone}
-\{ \phi(i) : i = 0, \ldots, 2^m-1 \} = \{0, 2^{-m}, 2\times 2^{-m}, \ldots, 1 - 2^{-m} \}.
+\{ \phi(i) : i = 0, \ldots, b^m-1 \} = \{0, b^{-m}, 2\times b^{-m}, \ldots, 1 - b^{-m} \}.
 \end{equation}
 Also note that
 \begin{multline} \label{eq:phiproptwo}
-\{ \phi(i) : i = \lambda \times 2^m , \ldots, (\lambda+1)2^m-1 \} \\
-= \{\phi(\lambda \times 2^m) + 0, \phi(\lambda \times 2^m) + 2^{-m}, \ldots, \phi(\lambda \times 2^m) + 1 - 2^{-m} \} , \\
+\{ \phi(i) : i = \lambda \times b^m , \ldots, (\lambda+1)b^m-1 \} \\
+= \{\phi(\lambda \times b^m) + 0, \phi(\lambda \times b^m) + b^{-m}, \ldots, \phi(\lambda \times b^m) + 1 - b^{-m} \} , \\
 \lambda \in \natzero.
 \end{multline}
 
@@ -103,126 +103,84 @@ We will fix $s$ and ignore $\vgamma$ for now.
 \subsection{Worst case error analysis}
 We first consider integrands, $f$, that have an absolutely summable Fourier series:
 \begin{equation} \label{eq:fseries}
-    f(\vx) = \sum_{\vk \in \integers^s} \tf(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vx}, \qquad \tf(\vk) = \int_{[0,1)^s} f(\vx) \me^{-2 \pi \sqrt{-1} \vk^T \vx}\, \dif \vx
+    f(\vx) = \sum_{\vk \in \integers^{s}} \tf(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vx}, \qquad \tf(\vk) = \int_{[0,1)^{\infty}} f(\vx) \me^{-2 \pi \sqrt{-1} \vk^T \vx}\, \dif \vx
 \end{equation}
 Define the weights
 \begin{equation}
-\tr(\vk) = \prod_{j=1}^{s} r(k_{j}),
-\qquad \text{where} \qquad r(k_{j})=\begin{cases} 1, &
-k_{j}=0, \\ \abs{k_{j}}, & k_{j} \ne 0.  \end{cases}
+\tr(\vk) = \prod_{j=1}^{s} r(k_{j},\gamma_{j}),
+\qquad \text{where} \qquad r(k_{j},\gamma_{j})=\begin{cases} 1, &
+k_{j}=0, \\ \gamma_{j}^{-1}\abs{k_{j}}, & k_{j} \ne 0.  \end{cases}
 \end{equation}
 Define a Banach
 space of functions:
 $$
-\cf_{\alpha} = \{ f \in \cl_2[0,1)^s :
+\cf_{\alpha} = \{ f \in \cl_2[0,1)^{s} :
 \norm[\cf{\alpha}]{f} < \infty \}, \qquad
 \norm[\cf{\alpha}]{f} := \sup_{\vk \in \integers^{s}}
-\left(\tr(\vk)^{\alpha} \abs{\tilde{f}(\vk)} \right).
+\left(\tr(\vk,\vgamma)^{\alpha} \abs{\tilde{f}(\vk)} \right).
 $$
+
+
+
 It then follows that the error in approximating the integral by the sample mean is
 \begin{align} \label{eq:wcerrPalpha}
-\abs{\int_{[0,1)^s} f(\vx) \, \dif \vx - \appxint_n(f)} &
-= \abs{\sum_{\vk \in \integers^s} \tf(\vk) \left[\int_{[0,1)^s} \me^{2 \pi \sqrt{-1} \vk^T \vx} \, \dif \vx - \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
+\abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)} &
+= \abs{\sum_{\vk \in \integers^{s}} \tf(\vk) \left[\int_{[0,1)^{s}} \me^{2 \pi \sqrt{-1} \vk^T \vx} \, \dif \vx - \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
 \nonumber
 & = \abs{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \tf(\vk) \left[ \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
 \nonumber
-& \le \norm[\cf{\alpha}]{f} \underbrace{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha}}_{=: P_\alpha(\vh,n) = \text{quality of the lattice nodes}} \\
+& \le \norm[\cf{\alpha}]{f} \underbrace{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha}}_{=: P_\alpha(\vh,\vgamma,n,1:s) = \text{quality of the lattice nodes}}  %\qquad \forall f \in \cf_{\alpha} \\
 \nonumber
 \end{align}
 
-Define:
-$$
-\cf_{\alpha,n} = \{ f \in \cf_{\alpha} :
-\tilde{f}(\vk) = 0 \ \forall k \notin \tilde Z_n \} , \qquad \text{where} \qquad \tilde Z_n = \left\{\integers^s \cap \left(-\frac{n}{2},\frac{n}{2}\right]\right\}
-$$
-
-Then $\forall f \in \cf_{\alpha,n}$ :
-\begin{align} \label{eq:wcerrRalpha}
-\abs{\int_{[0,1)^s} f(\vx) \, \dif \vx - \appxint_n(f)} &
-= \abs{\sum_{\vk \in \integers^s} \tf(\vk) \left[\int_{[0,1)^s} \me^{2 \pi \sqrt{-1} \vk^T \vx} \, \dif \vx - \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
-\nonumber
-&= \abs{\sum_{\vk \in \integers^s \setminus\tilde \integers_n} \tf(\vk) \left[\int_{[0,1)^s} \me^{2 \pi \sqrt{-1} \vk^T \vx} \, \dif \vx - \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
-\nonumber
-&+ \abs{\sum_{\vk \in \tilde \integers_n} \tf(\vk) \left[\int_{[0,1)^s} \me^{2 \pi \sqrt{-1} \vk^T \vx} \, \dif \vx - \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
-\nonumber
-& = \abs{\sum_{\vk \in \tilde\integers_n\setminus\{\vzero\}} \tf(\vk) \left[ \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
-\nonumber
-& \le \norm[\cf{\alpha}]{f} \underbrace{\sum_{\vk \in \tilde \integers_n \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha}}_{=: R_\alpha(\vh,n) = \text{quality of the lattice nodes}} \\
-\nonumber
-\end{align}
-
-For $n = 2^m$, the quality measure $P_\alpha(\vh,n)$ takes on a simple form.  Note that
+For $n = b^m$, the quality measure $P_\alpha(\vh,\vgamma,n,1:s)$ takes on a simple form.  Note that
 \begin{align}\label{Eq:DualLattice}
-    \MoveEqLeft{\appxint_{2^m}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \\
+    \MoveEqLeft{\appxint_{b^m}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \\
     \nonumber
-    &= \frac 1{2^m} \sum_{i=0}^{2^m-1} \me^{2 \pi \sqrt{-1} \vk^T (\vh\phi(i) + \vDelta \pmod{\vone})} \\
+    &= \frac 1{b^m} \sum_{i=0}^{b^m-1} \me^{2 \pi \sqrt{-1} \vk^T (\vh\phi(i) + \vDelta \pmod{\vone})} \\
     \nonumber
-    &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{2^m} \sum_{i=0}^{2^m-1} \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \\
+    &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{b^m} \sum_{i=0}^{b^m-1} \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \\
     \nonumber
-    &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{2^m} \sum_{i=0}^{2^m-1} \me^{2 \pi \sqrt{-1} \vk^T \vh i/2^m} \qquad \text{by \eqref{eq:phipropone}}\\
+    &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{b^m} \sum_{i=0}^{b^m-1} \me^{2 \pi \sqrt{-1} \vk^T \vh i/b^m} \qquad \text{by \eqref{eq:phipropone}}\\
     \nonumber
-    &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{2^m} \times
+    &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{b^m} \times
     \begin{cases}
-    \frac{\me^{2 \pi \sqrt{-1} \vk^T \vh} - 1}{\me^{2 \pi \sqrt{-1} \vk^T \vh/2^m} - 1} = 0, & \vk^T \vh \pmod{2^m} \ne 0\\
-    2^m, & \vk^T \vh \pmod{2^m} = 0
+    \frac{\me^{2 \pi \sqrt{-1} \vk^T \vh} - 1}{\me^{2 \pi \sqrt{-1} \vk^T \vh/b^m} - 1} = 0, & \vk^T \vh \pmod{b^m} \ne 0\\
+    b^m, & \vk^T \vh \pmod{b^m} = 0
     \end{cases} \\
     \nonumber
-    & = \me^{2 \pi \sqrt{-1} \vk^T \vDelta} \bbone_{B(\vh,m)}(\vk)
+    & = \me^{2 \pi \sqrt{-1} \vk^T \vDelta} \bbone_{B(\vh,m,1:s)}(\vk)
 \end{align}
 Thus it follows that
 \begin{equation} \label{eq:Palphadual}
-    P_\alpha(\vh,2^m) = \sum_{\vk \in B(\vh,m)} \tr(\vk)^{-\alpha},
+    P_\alpha(\vh,\vgamma,b^m,1:s) = \sum_{\vk \in B(\vh,m,1:s)} \tr(\vk,\vgamma)^{-\alpha},
 \end{equation}
-where $B(\vh,m) : = \{\vk \in \integers^s \setminus \{\vzero\} : \vk^T \vh \pmod{2^m} = 0\}$ is called the \emph{dual lattice}.  This corresponds to \cite[Equation (3)]{HicNie03a}, and we know by \cite[Theorem 5]{HicNie03a} that  there exists $\vh$ with
+where $B(\vh,m,1:s) : = \{\vk \in  \integers^s \setminus \{\vzero\} : \vk^T \vh \pmod{b^m} = 0\}$ is called the \emph{dual lattice}.  This corresponds to \cite[Equation (3)]{HicNie03a}, and we know by \cite[Theorem 5]{HicNie03a} that  there exists $\vh$ with
 \begin{multline} \label{eq:Niedbd}
-    P_{\alpha}(\vh,2^m) \le C_{R}(\alpha,\epsilon,s)
-    2^{-m\alpha} \log(2^{m\alpha(s+1)}) [\log \log (
-    2^m+1)]^{\alpha(1+\epsilon)}, \\ m = 1, 2,\ldots, \quad \alpha \ge 1.
+    P_{\alpha}(\vh,\vgamma,b^m,1:s) \le C_{R}(\alpha,\vgamma,\epsilon,s)
+    b^{-m\alpha} \log(b^{m\alpha(s+1)}) [\log \log (
+    b^m+1)]^{\alpha(1+\epsilon)}, \\ m = 1, 2,\ldots, \quad \alpha \ge 1.
 \end{multline}
 
 Note that
 \begin{align*}
-    P_{\alpha}(\vh,1) & = \sum_{\vk \ne \vzero} \tr(\vk)^{-\alpha} = -1 + \sum_{\vk \in \integers^s} \tr(\vk)^{-\alpha} \\
-    & = -1 + \sum_{k_1 =-\infty}^{\infty} \cdots \sum_{k_s  =-\infty}^{\infty} \frac{1}{\prod_{j=1}^s[\max(1,\abs{k_j})]^\alpha} \\
-    & = -1 + \sum_{k_1 =-\infty}^{\infty} \frac{1}{[\max(1,\abs{k_1})]^\alpha} \cdots \sum_{k_s  =-\infty}^{\infty} \frac{1}{[\max(1,\abs{k_s})]^\alpha} \\
-    & = -1 + \left[\sum_{k =-\infty}^{\infty} \frac{1}{[\max(1,\abs{k})]^\alpha} \right]^d \\
-    & = -1 + \left[1 + 2 \sum_{k =1}^{\infty} \frac{1}{k^\alpha} \right]^d \\
-    & = -1 + \left[1 + 2 \zeta(\alpha) \right]^d
+    P_{\alpha}(\vh,\vgamma,1,1:s) & = \sum_{\vk \ne \vzero} \tr(\vk, \vgamma)^{-\alpha} = -1 + \sum_{\vk \in \integers^s} \tr(\vk,\vgamma)^{-\alpha} \\
+    & = -1 + \sum_{k_1 =-\infty}^{\infty} \cdots \sum_{k_s  =-\infty}^{\infty} \frac{1}{\prod_{j=1}^s[\max(1,\gamma_j^{-1}\abs{k_j})]^\alpha} \\
+    & = -1 + \sum_{k_1 =-\infty}^{\infty} \frac{1}{[\max(1,\gamma_1^{-1}\abs{k_1})]^\alpha} \cdots \sum_{k_s  =-\infty}^{\infty} \frac{1}{[\max(1,\gamma_s^{-1}\abs{k_s})]^\alpha} \\
+    & = -1 + \left[\sum_{k =-\infty}^{\infty} \frac{1}{[\max(1,\gamma^{-1}\abs{k})]^\alpha} \right]^d \\
+    & = -1 + \left[1 + 2 \gamma^{\alpha} \sum_{k =1}^{\infty} \frac{1}{k^\alpha} \right]^d \\
+    & = -1 + \left[1 + 2 \gamma^{\alpha}\zeta(\alpha) \right]^d
 \end{align*}
 
 Therefore, the above formula \eqref{eq:Niedbd} can be extended to the case of $m=0$:
 
 \begin{multline} \label{eq:Palphaextm}
-    P_{\alpha}(\vh,2^m) \\
-    \le C_{R}(\alpha,\epsilon,s)
-    2^{-m\alpha}\max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
-    2^m+1))]^{\alpha(1+\epsilon)}, \\ m =0, 1, 2,\ldots, \quad \alpha \ge 1.
-\end{multline}
-
-For $n = b^m$: 
-\begin{align}\label{eq:Ralphadual}
-    R_\alpha(\vh,n) %&= \sum_{\vk \in \tilde Z_n \setminus\{\vzero\}} \abs{\me^{2 \pi \sqrt{-1} \vk^T \vDelta} \bbone_{B(\vh,m)}(\vk)}\tr(\vk)^{-\alpha} \\
-    &=  \sum_{\vk \in \tilde B(\vh,m)} \tr(\vk)^{-\alpha} 
-\end{align} % add citation
-where $\tilde B(\vh,m) = B(\vh,m) \cap (-\frac{b^m}{2},\frac{b^m}{2}]$. This corresponds to \cite[Equation (5)]{HicNie03a} and we know by \cite[Theorem 5]{HicNie03a} that  there exists $\vh$ with
-\begin{multline} \label{eq:NiedbdR}
-    R_{\alpha}(\vh,b^m) \le C_{R}(\alpha,\epsilon,s)
-    b^{-m\alpha} \log(b^{m\alpha(s+1)}) [\log \log (
-    b^m+1)]^{\alpha(1+\epsilon)}, \\ m = 1, 2,\ldots, \quad \alpha \ge 1.
-\end{multline}
-Also note that:
-\begin{align*}
-    R_{\alpha}(\vh,1)  &= \sum_{\vk \in \tilde \integers_1 \setminus\{\vzero\}} \tr(\vk)^{-\alpha} \\
-    &= -1 + \sum_{\vk \in \tilde \integers_1 } \tr(\vk)^{-\alpha} \\
-    &= 0 %??
-\end{align*}
-Hence, \eqref{eq:NiedbdR} can be extended to the case of m = 0:
-\begin{multline} \label{eq:Palphaextm}
-    R_{\alpha}(\vh,b^m) \\
-    \le C_{R}(\alpha,\epsilon,s)
+    P_{\alpha}(\vh,\vgamma,b^m,1:s) \\
+    \le C_{R}(\alpha,\vgamma,\epsilon,s)
     b^{-m\alpha}\max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)}, \\ m =0, 1, 2,\ldots, \quad \alpha \ge 1.
 \end{multline}
+
 
 \subsection{Randomized Error Analysis}
 Another approach is to assume that $f$ in \eqref{eq:fseries} is a random function (stochastic process) where
@@ -283,7 +241,7 @@ We know that and $P_\alpha(\vh,2^2) \le C_{R}(\alpha,\epsilon,s)
     \end{align*}
 
 
-For any non-negative integer $n$, express as  $n = n_0 + 2n_1 + \cdots + 2^m n_m$, where $n_0, n_1, \ldots$ are the binary digits of $n$.  Thus, $m = \lfloor \log_2(n) \rfloor$.  Let $\trun(n,\ell) = n_0 + \cdots + 2^{\ell} n_{\ell}$ for $\ell = 0, \ldots, m$ and $\trun(n,-1) = 0$, then
+For any non-negative integer $n$, express as  $n = n_0 + bn_1 + \cdots + b^m n_m$, where the digits $n_0, n_1, \ldots$ are in $\{0, 1, \cdots, b-1\}$ .  Thus, $m = \lfloor \log_b(n) \rfloor$.  Let $\trun(n,\ell) = n_0 + \cdots + b^{\ell} n_{\ell}$ for $\ell = 0, \ldots, m$ and $\trun(n,-1) = 0$, then
 
 \begin{align*}
     \MoveEqLeft{\appxint_{n}(\me^{2 \pi \sqrt{-1} \vk^T \cdot}) } \\
@@ -292,82 +250,25 @@ For any non-negative integer $n$, express as  $n = n_0 + 2n_1 + \cdots + 2^m n_m
     &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} \,
     \sum_{i=n - \trun(n,m-\ell) }^{n - \trun(n,m-\ell-1)  -1} \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \\
     &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} \, n_{m-\ell}
-    \sum_{i=0 }^{2^{m-\ell}  -1} \me^{2 \pi \sqrt{-1} \vk^T \vh[i/2^m + \phi(n - \trun(n,m-\ell))]} \\
+    \sum_{i=0 }^{b^{m-\ell}  -1} \me^{2 \pi \sqrt{-1} \vk^T \vh[i/b^m + \phi(n - \trun(n,m-\ell))]} \\
     & \hspace{30ex} \text{by \eqref{eq:phiproptwo}} \\
-    & = \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_\ell \bbone_{B(\vh,m-\ell)}(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(n - \trun(n,m-\ell))}.
+    & = \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_\ell \bbone_{B(\vh,m-\ell)}(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(n - \trun(n,m-\ell))}.
 \end{align*}
 This implies that
 \begin{equation} \label{eq:ihatarbn}
-    \abs{\appxint_{n}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \le \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_\ell \bbone_{B(\vh,m-\ell)}(\vk)
+    \abs{\appxint_{n}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_\ell \bbone_{B(\vh,m-\ell)}(\vk)
 \end{equation}
 
-Next we compute $P_\alpha(\vh,n)$ for this arbitrary $n$:
+Next we compute $P_\alpha(\vh,\vgamma,n,1:s)$ for this arbitrary $n$:
 \begin{align*}
-      P_\alpha(\vh,n) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha} \qquad \text{by \eqref{eq:wcerrPalpha}} \\
-      & \le \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} \sum_{\vk \in B(\vh,m-\ell)} \tr(\vk)^{-\alpha}
+      P_\alpha(\vh,\vgamma,n,1:s) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha} \qquad \text{by \eqref{eq:wcerrPalpha}} \\
+      & \le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \sum_{\vk \in B(\vh,m-\ell,u)} \tr(\vk)^{-\alpha}
       \qquad \text{by \eqref{eq:ihatarbn}}\\
-      & = \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell})
+      & = \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} P_\alpha(\vh,\vgamma,b^{m-\ell},1:s)
       \qquad \text{by \eqref{eq:Palphadual}}\\
-      & =  \frac {1}{n} \left\{ 2^m n_m P_\alpha(\vh,2^m) + 2^{m-1} n_{m-1} P_\alpha(\vh,2^{m-1}) + \cdots + 2^0 n_0 P_\alpha(\vh,2^0)  \right\} \\
-      & \le \frac {C_{R}(\alpha,\epsilon,s)}{n} \left\{ 2^{m(1-\alpha)}\max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
-    2^m+1))]^{\alpha(1+\epsilon)}\right .\\ 
-      & \qquad  + 2^{(m-1)(1-\alpha)}\max(1, \log(2^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
-    2^{(m-1)}+1))]^{\alpha(1+\epsilon)}\\
-      & \qquad + \cdots \\
-      & \qquad  \left . + 2^{-0}\max(1, \log(2^{0\alpha(s+1)})) [\max(1,\log \log (
-    2^{0}+1))]^{\alpha(1+\epsilon)} \right\}\\
-      & \qquad \qquad \qquad \alpha \ge 1 \qquad \text{by \eqref{eq:Palphaextm}}\\
-      & \le \frac {C_{R}(\alpha,\epsilon,s)}{n} \frac{(1 - 2^{(m+1)(1-\alpha)})}{1 - 2^{1-\alpha}}
-      \max(1, \log(2^{m\alpha(s+1)})) \\
-      & \qquad \qquad \times [\max(1,\log \log (
-    2^m+1))]^{\alpha(1+\epsilon)} \\
-      & \le \frac {\widetilde{C}_{R}(\alpha,\epsilon,s)}{n}
-      \max(1, \log(n^{\alpha(s+1)}))
-      [\max(1,\log \log (
-    n+1))]^{\alpha(1+\epsilon)}
-      % add C_R and the worst log
-\end{align*}
-Unfortunately, this only decays like $\Order(n^{-1+\delta})$.
-
-
-Thus, next we try $n = \lambda 2^p$, where $\lambda$ is an odd integer. Then, $n = 2^p + 2^{p+1}n_{p+1} + \cdots + 2^m n_m$
-\FredNote{Let's carry on following the above.  WAtch out for your geometric sum} \\
-
-\begin{align*}
-    P_\alpha(\vh,\lambda 2^p)
-    %& \le \frac {1}{\lambda 2^p} \left\{2^p  P_\alpha(\vh,2^p) + \sum_{\ell = 0}^{m-p-1} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell})\right\} \\
-    & \le \frac {1}{\lambda 2^p} \sum_{\ell = 0}^{m-p} 2^{m-\ell} n_{m -\ell} P_\alpha(\vh,2^{m-\ell}) \\
-    &= \frac {1}{\lambda 2^p} \left\{2^m n_m P_\alpha(\vh,2^m) + 2^{m-1} n_{m-1} P_\alpha(\vh,2^{m-1}) + \cdots + 2^p n_p P_\alpha(\vh,2^p) % no n_p though
-    \right\} \\ % this sum doesnt look right
-    & \le \frac {1}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) \left\{ 2^{m(1-\alpha)}\max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
-    2^m+1))]^{\alpha(1+\epsilon)}\right .\\ 
-    & \qquad  + 2^{(m-1)(1-\alpha)}\max(1, \log(2^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
-    2^{(m-1)}+1))]^{\alpha(1+\epsilon)}\\
-      &  \qquad + \cdots \\
-      & \qquad  \left . +   2^{p(1-\alpha)}\max(1,\log(2^{p\alpha(s+1)})) [\max(1,\log \log (2^p+1))]^{\alpha(1+\epsilon))}  \right\}\\
-    & \le \frac {1}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) 
-    \left\{\frac{2^{p(1-\alpha)} - 2^{(m+1)(1- \alpha )}}{1 - 2^{1 -\alpha}}\right\} \max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
-    2^m+1))]^{\alpha(1+\epsilon)} \\
-    & = \frac { C_{R}(\alpha,\epsilon,s)}{\lambda 2^p} \left\{ 2^{p(1-\alpha)} \cdot \frac{(1 - 2^{(m-p+1)(1- \alpha )})}{1 - 2^{1- \alpha}}\right\} 
-     \max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
-    2^m+1))]^{\alpha(1+\epsilon)} \\
-    &=  \frac {C_{R}(\alpha,\epsilon,s)}{\lambda 2^{p\alpha}}  \frac{1 - 2^{(m-p+1)(1- \alpha )}}{1 - 2^{1- \alpha}} \max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
-    2^m+1))]^{\alpha(1+\epsilon)} \\
-    &\le \frac{\lambda^{\alpha -1}}{n^{\alpha}} \widetilde{C}_{R}(\alpha,\epsilon,s)  \max(1, \log(n^{\alpha(s+1)})) [\max(1,\log \log (
-    n+1))]^{\alpha(1+\epsilon)} \\ 
-\end{align*}
-Which decays like $\Order(2^p)$ \\
-
-
-\begin{align*}
-      P_\alpha(\vh,n) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha} \qquad \text{by \eqref{eq:wcerrPalpha}} \\
-      & \le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \sum_{\vk \in B(\vh,m-\ell)} \tr(\vk)^{-\alpha}
-      \qquad \text{by \eqref{eq:ihatarbn}}\\
-      & = \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} P_\alpha(\vh,b^{m-\ell})
-      \qquad \text{by \eqref{eq:Palphadual}}\\
-      & =  \frac {1}{n} \left\{ b^m n_m P_\alpha(\vh,b^m) + b^{m-1} n_{m-1} P_\alpha(\vh,b^{m-1}) + \cdots + b^0 n_0 P_\alpha(\vh,b^0)  \right\} \\
-      &\le \frac {1}{n} \left\{ b^m (b-1) P_\alpha(\vh,b^m) + b^{m-1} (b-1) P_\alpha(\vh,b^{m-1}) + \cdots + 2^0 (b-1) P_\alpha(\vh,b^0)  \right\} \\
-      & \le \frac {(b-1)C_{R}(\alpha,\epsilon,s)}{n} \left\{ b^{m(1-\alpha)}\max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
+      & =  \frac {1}{n} \left\{ b^m n_m P_\alpha(\vh,\vgamma,b^m,1:s) + b^{m-1} n_{m-1} P_\alpha(\vh,\vgamma,b^{m-1},1:s) + \cdots + b^0 n_0 P_\alpha(\vh,\vgamma,b^0,1:s)  \right\} \\
+      &\le \frac {(b-1)}{n} \left\{ b^m  P_\alpha(\vh,\vgamma,b^m,1:s) + b^{m-1}  P_\alpha(\vh,\vgamma,b^{m-1},1:s) + \cdots + 2^0  P_\alpha(\vh,\vgamma,b^0,1:s)  \right\} \\
+      & \le \frac {(b-1)C_{R}(\alpha,\vgamma,\epsilon,s)}{n} \left\{ b^{m(1-\alpha)}\max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)}\right .\\ 
       & \qquad  + b^{(m-1)(1-\alpha)}\max(1, \log(b^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
     b^{(m-1)}+1))]^{\alpha(1+\epsilon)}\\
@@ -375,38 +276,68 @@ Which decays like $\Order(2^p)$ \\
       & \qquad  \left . + b^{-0}\max(1, \log(b^{0\alpha(s+1)})) [\max(1,\log \log (
     b^{0}+1))]^{\alpha(1+\epsilon)} \right\}\\
       & \qquad \qquad \qquad \alpha \ge 1 \qquad \text{by \eqref{eq:Palphaextm}}\\
-      & \le \frac {(b-1)C_{R}(\alpha,\epsilon,s)}{n} \frac{(1 - b^{(m+1)(1-\alpha)})}{1 - b^{1-\alpha}}
+      & \le \frac {(b-1)C_{R}(\alpha,\vgamma,\epsilon,s)}{n} \frac{(1 - b^{(m+1)(1-\alpha)})}{1 - b^{1-\alpha}}
       \max(1, \log(b^{m\alpha(s+1)})) \\
       & \qquad \qquad \times [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)} \\
-      & \le \frac {\widetilde{C}_{R}(\alpha,\epsilon,s)}{n}
+      & \le \frac {\widetilde{C}_{R}(\alpha,\vgamma,\epsilon,s)}{n}
       \max(1, \log(n^{\alpha(s+1)}))
       [\max(1,\log \log (
     n+1))]^{\alpha(1+\epsilon)}
 \end{align*}
+
 Unfortunately, this only decays like $\Order(n^{-1+\delta})$. \\
 
-Thus, next we try $n = \lambda b^p$, where $\lambda$ is an odd integer. Then, $n = b^pn_p + b^{p+1}n_{p+1} + \cdots + b^m n_m$ \\
+% \begin{align*}
+%       P_\alpha(\vh,\vgamma,n,u) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha} \qquad \text{by \eqref{eq:wcerrPalpha}} \\
+%       & \le \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} \sum_{\vk \in B(\vh,m-\ell)} \tr(\vk)^{-\alpha}
+%       \qquad \text{by \eqref{eq:ihatarbn}}\\
+%       & = \frac {1}{n} \sum_{\ell = 0}^{m} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,\vgamma,2^{m-\ell},u)
+%       \qquad \text{by \eqref{eq:Palphadual}}\\
+%       & =  \frac {1}{n} \left\{ 2^m n_m P_\alpha(\vh,\vgamma,2^m,u) + 2^{m-1} n_{m-1} P_\alpha(\vh,\vgamma,2^{m-1},u) + \cdots + 2^0 n_0 P_\alpha(\vh,\vgamma,2^0,u)  \right\} \\
+%       & \le \frac {C_{R}(\alpha,\epsilon,s)}{n} \left\{ 2^{m(1-\alpha)}\max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
+%     2^m+1))]^{\alpha(1+\epsilon)}\right .\\ 
+%       & \qquad  + 2^{(m-1)(1-\alpha)}\max(1, \log(2^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
+%     2^{(m-1)}+1))]^{\alpha(1+\epsilon)}\\
+%       & \qquad + \cdots \\
+%       & \qquad  \left . + 2^{-0}\max(1, \log(2^{0\alpha(s+1)})) [\max(1,\log \log (
+%     2^{0}+1))]^{\alpha(1+\epsilon)} \right\}\\
+%       & \qquad \qquad \qquad \alpha \ge 1 \qquad \text{by \eqref{eq:Palphaextm}}\\
+%       & \le \frac {C_{R}(\alpha,\epsilon,s)}{n} \frac{(1 - 2^{(m+1)(1-\alpha)})}{1 - 2^{1-\alpha}}
+%       \max(1, \log(2^{m\alpha(s+1)})) \\
+%       & \qquad \qquad \times [\max(1,\log \log (
+%     2^m+1))]^{\alpha(1+\epsilon)} \\
+%       & \le \frac {\widetilde{C}_{R}(\alpha,\epsilon,s)}{n}
+%       \max(1, \log(n^{\alpha(s+1)}))
+%       [\max(1,\log \log (
+%     n+1))]^{\alpha(1+\epsilon)}
+%       % add C_R and the worst log
+% \end{align*}
+% Unfortunately, this only decays like $\Order(n^{-1+\delta})$.
 
+
+Thus, next we try $n = \lambda b^p$, where $\lambda$ is an odd integer. Then, $n = b^pn_p + b^{p+1}n_{p+1} + \cdots + b^m n_m$
+\FredNote{Let's carry on following the above.  WAtch out for your geometric sum} \\
 \begin{align*}
-    P_\alpha(\vh,\lambda b^p)
+    P_\alpha(\vh,\vgamma,\lambda b^p,1:s)
     %& \le \frac {1}{\lambda 2^p} \left\{2^p  P_\alpha(\vh,2^p) + \sum_{\ell = 0}^{m-p-1} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell})\right\} \\
-    & \le \frac {1}{\lambda b^p} \sum_{\ell = 0}^{m-p} b^{m-\ell} n_{m -\ell} P_\alpha(\vh,b^{m-\ell}) \\
-    &= \frac {1}{\lambda b^p} \left\{b^m n_m P_\alpha(\vh,b^m) + b^{m-1} n_{m-1} P_\alpha(\vh,b^{m-1}) + \cdots + b^p n_p P_\alpha(\vh,2^p) 
+    & \le \frac {1}{\lambda b^p} \sum_{\ell = 0}^{m-p} b^{m-\ell} n_{m -\ell} P_\alpha(\vh,\vgamma,b^{m-\ell},1:s) \\
+    &= \frac {1}{\lambda b^p} \left\{b^m n_m P_\alpha(\vh,\vgamma,b^m,1:s) + b^{m-1} n_{m-1} P_\alpha(\vh,\vgamma,b^{m-1},1:s) + \cdots + b^p n_p P_\alpha(\vh,\vgamma,b^p,1:s) 
     \right\} \\ 
-    & \le \frac {1}{\lambda b^p} \left\{b^m (b-1) P_\alpha(\vh,b^m) + b^{m-1} (b-1) P_\alpha(\vh,b^{m-1}) + \cdots + b^p (b-1) P_\alpha(\vh,2^p) 
+    & \le \frac {(b-1)}{\lambda b^p} \left\{b^m  P_\alpha(\vh,\vgamma,b^m,1:s) + b^{m-1}  P_\alpha(\vh,\vgamma,b^{m-1},1:s) + \cdots + b^p  P_\alpha(\vh,\vgamma,b^p,1:s) 
     \right\} \\ 
-    & \le \frac {(b-1)}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) \left\{ b^{m(1-\alpha)}\max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
+    & \le \frac {(b-1)}{\lambda b^p} C_{R}(\alpha,\vgamma,\epsilon,s) \left\{ b^{m(1-\alpha)}\max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)}\right .\\ 
     & \qquad  + b^{(m-1)(1-\alpha)}\max(1, \log(b^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
     b^{(m-1)}+1))]^{\alpha(1+\epsilon)}\\
       &  \qquad + \cdots \\
       & \qquad  \left . +   b^{p(1-\alpha)}\max(1,\log(b^{p\alpha(s+1)})) [\max(1,\log \log (b^p+1))]^{\alpha(1+\epsilon))}  \right\}\\
     & \le \frac {(b-1)}{\lambda b^p} C_{R}(\alpha,\epsilon,s) 
-    \left\{\frac{b^{p(1-\alpha)} - b^{(m+1)(1- \alpha )}}{1 - b^{1 -\alpha}}\right\} \max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
+    \left\{\frac{b^{p(1-\alpha)} - b^{(m+1)(1- \alpha )}}{1 - b^{1 -\alpha}}\right\} \\
+     & \qquad \qquad \times \max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)} \\
-    & = \frac { (b-1) C_{R}(\alpha,\epsilon,s)}{\lambda b^p} \left\{ b^{p(1-\alpha)} \cdot \frac{(1 - b^{(m-p+1)(1- \alpha )})}{1 - b^{1- \alpha}}\right\} 
-     \max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
+    & = \frac { (b-1) C_{R}(\alpha,\epsilon,s)}{\lambda b^p} \left\{ b^{p(1-\alpha)} \cdot \frac{(1 - b^{(m-p+1)(1- \alpha )})}{1 - b^{1- \alpha}}\right\} \\
+    & \qquad \qquad \times \max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)} \\
     &=  \frac {(b-1)C_{R}(\alpha,\epsilon,s)}{\lambda b^{p\alpha}}  \frac{1 - b^{(m-p+1)(1- \alpha )}}{1 - b^{1- \alpha}} \max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)} \\
@@ -414,58 +345,37 @@ Thus, next we try $n = \lambda b^p$, where $\lambda$ is an odd integer. Then, $n
     n+1))]^{\alpha(1+\epsilon)} \\ 
 \end{align*}
 Which decays like $\Order(b^p)$ \\
+% \begin{align*}
+%     P_\alpha(\vh,\lambda 2^p)
+%     %& \le \frac {1}{\lambda 2^p} \left\{2^p  P_\alpha(\vh,2^p) + \sum_{\ell = 0}^{m-p-1} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell})\right\} \\
+%     & \le \frac {1}{\lambda 2^p} \sum_{\ell = 0}^{m-p} 2^{m-\ell} n_{m -\ell} P_\alpha(\vh,2^{m-\ell}) \\
+%     &= \frac {1}{\lambda 2^p} \left\{2^m n_m P_\alpha(\vh,2^m) + 2^{m-1} n_{m-1} P_\alpha(\vh,2^{m-1}) + \cdots + 2^p n_p P_\alpha(\vh,2^p) % no n_p though
+%     \right\} \\ % this sum doesnt look right
+%     & \le \frac {1}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) \left\{ 2^{m(1-\alpha)}\max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
+%     2^m+1))]^{\alpha(1+\epsilon)}\right .\\ 
+%     & \qquad  + 2^{(m-1)(1-\alpha)}\max(1, \log(2^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
+%     2^{(m-1)}+1))]^{\alpha(1+\epsilon)}\\
+%       &  \qquad + \cdots \\
+%       & \qquad  \left . +   2^{p(1-\alpha)}\max(1,\log(2^{p\alpha(s+1)})) [\max(1,\log \log (2^p+1))]^{\alpha(1+\epsilon))}  \right\}\\
+%     & \le \frac {1}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) 
+%     \left\{\frac{2^{p(1-\alpha)} - 2^{(m+1)(1- \alpha )}}{1 - 2^{1 -\alpha}}\right\} \max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
+%     2^m+1))]^{\alpha(1+\epsilon)} \\
+%     & = \frac { C_{R}(\alpha,\epsilon,s)}{\lambda 2^p} \left\{ 2^{p(1-\alpha)} \cdot \frac{(1 - 2^{(m-p+1)(1- \alpha )})}{1 - 2^{1- \alpha}}\right\} 
+%      \max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
+%     2^m+1))]^{\alpha(1+\epsilon)} \\
+%     &=  \frac {C_{R}(\alpha,\epsilon,s)}{\lambda 2^{p\alpha}}  \frac{1 - 2^{(m-p+1)(1- \alpha )}}{1 - 2^{1- \alpha}} \max(1, \log(2^{m\alpha(s+1)})) [\max(1,\log \log (
+%     2^m+1))]^{\alpha(1+\epsilon)} \\
+%     &\le \frac{\lambda^{\alpha -1}}{n^{\alpha}} \widetilde{C}_{R}(\alpha,\epsilon,s)  \max(1, \log(n^{\alpha(s+1)})) [\max(1,\log \log (
+%     n+1))]^{\alpha(1+\epsilon)} \\ 
+% \end{align*}
+% Which decays like $\Order(2^p)$ \\
 
 
-\begin{align*}
-      R_\alpha(\vh,n) & = \sum_{\vk \in \tilde \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha} \qquad \text{by \eqref{eq:wcerrRalpha}} \\
-      &\le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \sum_{\vk \in \tilde \integers^s \setminus\{\vzero\}} \bbone_{B(\vh,m-\ell)}(\vk) \tr(\vk)^{-\alpha} \qquad \text{by \eqref{eq:ihatarbn}} \\
-      &= \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \sum_{\vk \in \tilde B(\vh,m-\ell)} \tr(\vk)^{-\alpha} \\
-      & = \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} R_\alpha(\vh,b^{m-\ell})
-      \qquad \text{by \eqref{eq:Ralphadual}}\\
-      & =  \frac {1}{n} \left\{ b^m n_m R_\alpha(\vh,b^m) + b^{m-1} n_{m-1} R_\alpha(\vh,b^{m-1}) + \cdots + b^0 n_0 R_\alpha(\vh,b^0)  \right\} \\
-      &\le \frac {1}{n} \left\{ b^m (b-1) R_\alpha(\vh,b^m) + b^{m-1} (b-1) R_\alpha(\vh,b^{m-1}) + \cdots + b^0 (b-1) R_\alpha(\vh,b^0)  \right\} \\
-      & \le \frac {(b-1)C_{R}(\alpha,\epsilon,s)}{n} \left\{ b^{m(1-\alpha)} \log(b^{m\alpha(s+1)}) [\log \log (
-    b^m+1)]^{\alpha(1+\epsilon)}\right .\\ 
-      & \qquad  + b^{(m-1)(1-\alpha)} \log(b^{(m-1)\alpha(s+1)}) [\log \log (
-    b^{(m-1)}+1)]^{\alpha(1+\epsilon)}\\
-      & \qquad + \cdots \\
-      & \qquad  \left . + b^{1-\alpha} \log(b^{\alpha(s+1)})) [\log \log (
-    b^{1}+1)]^{\alpha(1+\epsilon)} \right\}\\
-      & \qquad \qquad \qquad \alpha \ge 1 \qquad \text{by \eqref{eq:Palphaextm}}\\ %note to self: edit
-      & \le \frac {(b-1)C_{R}(\alpha,\epsilon,s)}{n} \frac{b^{1-\alpha} - b^{(m+1)(1-\alpha)}}{1 - b^{1-\alpha}}
-       \log(b^{m\alpha(s+1)}) \\
-      & \qquad \qquad \times [\max(1,\log \log (
-    b^m+1))]^{\alpha(1+\epsilon)} \\
-      & \le \frac {\widetilde{C}_{R}(\alpha,\epsilon,s)}{n}
-       \max(1, \log(n^{\alpha(s+1)})) [\max(1,\log \log (
-    n+1))]^{\alpha(1+\epsilon)} \\
-\end{align*} 
 
-For $n = \lambda b^p$:
-\begin{align*}
-    R_\alpha(\vh,\lambda b^p)
-    & \le \frac {1}{\lambda b^p} \sum_{\ell = 0}^{m-p} b^{m-\ell} n_{m -\ell} R_\alpha(\vh,b^{m-\ell}) \\
-    &= \frac {1}{\lambda b^p} \left\{b^m n_m R_\alpha(\vh,b^m) + b^{m-1} n_{m-1} R_\alpha(\vh,b^{m-1}) + \cdots + b^p n_p R_\alpha(\vh,2^p) 
-    \right\} \\ 
-    & \le \frac {1}{\lambda b^p} \left\{b^m (b-1) R_\alpha(\vh,b^m) + b^{m-1} (b-1) P_\alpha(\vh,b^{m-1}) + \cdots + b^p (b-1) R_\alpha(\vh,2^p) 
-    \right\} \\ 
-    & \le \frac {(b-1)}{\lambda 2^p} C_{R}(\alpha,\epsilon,s) \left\{ b^{m(1-\alpha)}\max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
-    b^m+1))]^{\alpha(1+\epsilon)}\right .\\ 
-    & \qquad  + b^{(m-1)(1-\alpha)}\max(1, \log(b^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
-    b^{(m-1)}+1))]^{\alpha(1+\epsilon)}\\
-      &  \qquad + \cdots \\
-      & \qquad  \left . +   b^{p(1-\alpha)}\max(1,\log(b^{p\alpha(s+1)})) [\max(1,\log \log (b^p+1))]^{\alpha(1+\epsilon))}  \right\}\\
-    & \le \frac {(b-1)}{\lambda b^p} C_{R}(\alpha,\epsilon,s) 
-    \left\{\frac{b^{p(1-\alpha)} - b^{(m+1)(1- \alpha )}}{1 - b^{1 -\alpha}}\right\} \max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
-    b^m+1))]^{\alpha(1+\epsilon)} \\
-    & = \frac { (b-1) C_{R}(\alpha,\epsilon,s)}{\lambda b^p} \left\{ b^{p(1-\alpha)} \cdot \frac{(1 - b^{(m-p+1)(1- \alpha )})}{1 - b^{1- \alpha}}\right\} 
-     \max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
-    b^m+1))]^{\alpha(1+\epsilon)} \\
-    &=  \frac {(b-1)C_{R}(\alpha,\epsilon,s)}{\lambda b^{p\alpha}}  \frac{1 - b^{(m-p+1)(1- \alpha )}}{1 - b^{1- \alpha}} \max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
-    b^m+1))]^{\alpha(1+\epsilon)} \\
-    &\le \frac{\lambda^{\alpha -1}}{n^{\alpha}} \widetilde{C}_{R}(\alpha,\epsilon,s)  \max(1, \log(n^{\alpha(s+1)})) [\max(1,\log \log (
-    n+1))]^{\alpha(1+\epsilon)} \\ 
-\end{align*}
+
+
+
+
 % \left\{\right\}
 \bibliographystyle{amsplain}
 \bibliography{FJH23,FJHown23}
