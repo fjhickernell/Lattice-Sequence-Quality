@@ -1,0 +1,149 @@
+\documentclass[authoryear]{elsarticle}
+\usepackage{mathtools,upref,siunitx,upquote,fancyvrb,bbm,xspace,color,amsmath,amssymb, bm}
+\usepackage[hyphens]{url}
+\usepackage[utf8]{inputenc}
+\usepackage{esdiff}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\input{FJHDef.tex}
+
+
+\usepackage{algpseudocode}
+\usepackage{algorithm, algorithmicx}
+\algnewcommand\algorithmicparam{\textbf{Parameters:}}
+\algnewcommand\PARAM{\item[\algorithmicparam]}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\RETURN{\State \textbf{Return }}
+
+\newcommand{\tr}{\widetilde{r}}
+\newcommand{\appxintn}{\appxint_n}
+\DeclareMathOperator{\appxint}{\hat{I}}
+\DeclareMathOperator{\trun}{trunc}
+\newcommand{\onetos}{1\!:\!s}
+
+\newcommand{\FredNote}[1]{{\color{blue}#1}}
+
+\newcommand{\LarysaNote}[1]{{\color{violet}#1}}
+\begin{document}
+
+% \maketitle
+\section{Introduction}
+
+
+
+Multidimensional integrals arise in various fields and practical applications \LarysaNote{such as quantitative finance, statistics , and physics } \FredNote{Often these arise as expectations of random variables.}  However, many such integrals cannot be computed analytically and, thus, numerical methods are often utilized. \FredNote{A common approach to approximating an integral that represents a population mean is by a sample mean:} 
+\[
+\mathbb{E}[f(\underbrace{\vX}_{\sim \mathcal{U}[0,1]^d})] : = \int_{[0,1)^s} f(\vx) \, \dif \vx \approx \frac{1}{n} \sum_{i=0}^{n-1} f(\vz_i) =:\appxintn(f),
+\]
+\citep{DicEtal22a,Nie92,SloJoe94}.
+The nodeset, $\{\vz_0, \vz_1, \ldots \}$, is chosen as independent and identically distributed (IID), which corresponds to simple Monte Carlo. However, the nodeset may be chosen to be more evenly distributed, which corresponds to quasi-Monte Carlo methods. Lattices are a popular choice of nodes $\{\vz_i\}_{i=0}^{\infty} \in [0,1)^s$ for such approximations. \\
+
+% what we are doing 
+
+\LarysaNote{In this work we establish the upper bounds on the figures of merit for extensible lattices with arbitrary cardinality $n$. }
+\cite{HicNie03a} established the existence of extensible lattices with good generating vectors for the preferred values $n = b, b^2, \ldots$.  Our purpose is to extend these results to all positive $n$, recognizing that the upper bounds on the figures of merit will be somewhat worse for general $n$ than for powers of the base. \\
+
+\LarysaNote{We consider a case of an arbitrary positive $n$ and the case of $n = \lambda b^p$, where $\lambda$ is a small odd integer. We found $P_{\alpha}$  } \\
+
+   
+In the next section, we give more background on extensible lattices. In Section 2 we go over the figures of merit and the worst case error analysis for arbitrary $n$ for integrands that have absolutely summable Fourier series. In Section 3 we derive upper bounds on the figure of merit % P_alpha 
+for $n$ other than $b^m$, and in Section 4 we generalize the results to other spaces of integrands and error measures. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=5cm,clip]{lattice-plot.png}
+\caption{Two-dimensional Shifted Lattice}
+\label{fig:enter-label}
+\end{figure}
+\section{Background}
+
+Historically, lattice points were initially constructed as sets with fixed cardinality, $n$, and took the form
+\begin{equation} \label{eq:lat}
+    \{\vz_i = i \vh/n \bmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s,
+\end{equation}
+where $\vh \in \{1, \ldots, n-1\}^s$ is the \emph{generating vector}.  A (random) shift, $\vDelta \in [0,1)^s$, is often added:
+\begin{equation} \label{eq:shlat}
+    \{\vz_i = i \vh/n + \vDelta \pmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s.
+\end{equation}
+
+
+
+% \cite{HicNie03a} established the existence of extensible lattices with good generating vectors for the preferred values $n = b, b^2, \ldots$.  The purpose of this thesis is to extend these results to all positive $n$, recognizing that the upper bounds on the figures of merit will be somewhat worse for general $n$ than for powers of the base. 
+
+% In the next section, we give more background on extensible lattices. In Section 2 we go over the figures of merit and the worst case error analysis for arbitrary $n$ for integrands that have absolutely summable Fourier series. In Section 3 we derive upper bounds on the figure of merit % P_alpha 
+% for $n$ other than $b^m$, and in Section 4 we generalize the results to other spaces of integrands and error measures. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Lattices are a popular choice of nodes $\{\vz_i\}_{i=0}^{\infty} \in [0,1)^s$ for approximating multidimensional integrals by a sample mean,
+% \[
+% \int_{[0,1)^s} f(\vx) \, \dif \vx \approx \frac{1}{n} \sum_{i=0}^{n-1} f(\vz_i) =:\appxintn(f),
+% \]
+% \citep{DicEtal22a,Nie92,SloJoe94}.
+
+
+
+% \cite{HicNie03a} established the existence of extensible lattices with good generating vectors for the preferred values $n = b, b^2, \ldots$.  The purpose of this thesis is to extend these results to all positive $n$, recognizing that the upper bounds on the figures of merit will be somewhat worse for general $n$ than for powers of the base. 
+
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=5cm,trim={0 0 0 7.5mm},clip]{shifted-lattice}
+% \caption{Two-dimensional Shifted Lattice}
+% \label{fig:enter-label}
+% \end{figure}
+
+% Historically, lattice points were initially constructed as sets with fixed cardinality, $n$, and took the form
+% \begin{equation} \label{eq:lat}
+%     \{\vz_i = i \vh/n \bmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s,
+% \end{equation}
+% where $\vh \in \{1, \ldots, n-1\}^s$ is the \emph{generating vector}.  A (random) shift, $\vDelta \in [0,1)^s$, is often added:
+% \begin{equation} \label{eq:shlat}
+%     \{\vz_i = i \vh/n + \vDelta \pmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s.
+% \end{equation}
+
+
+
+
+Extensible lattice sequences were proposed by \cite{HicEtal00,Mai81a} and take the form
+\begin{equation} \label{eq:extlat}
+    \{\vz_i = \vh\phi(i)+ \vDelta \pmod{\vone} : i=0,1, \ldots \} \in [0,1)^s.
+\end{equation}
+where $\{\phi(\cdot)\}_{i=0}^\infty$ is the van der Corput sequence in base $b$.  In this case $\vh$ must be a generalized integer as defined in \cite[Section 2]{HicNie03a}.
+
+The van der Corput sequence is defined as: 
+\[
+\phi((\cdots i_2 i_1 i_0)_b) = {}_b0.i_0 i_1 i_2 \cdots.
+\]
+For example, for $b=2$,
+\[
+\phi(6) = \phi(110_2) = {}_20.011 = \frac 38.
+\]
+Note that the first ${b^m}$ points of the van der Corput sequence are just equally spaced points reordered. 
+\begin{equation} \label{eq:phipropone}
+\{ \phi(i) : i = 0, \ldots, b^m-1 \} = \{0, b^{-m}, 2\times b^{-m}, \ldots, 1 - b^{-m} \}.
+\end{equation}
+Also note that
+\begin{multline} \label{eq:phiproptwo}
+\{ \phi(i) : i = \lambda \times b^m , \ldots, (\lambda+1)b^m-1 \} \\
+= \{\phi(\lambda \times b^m) + 0, \phi(\lambda \times b^m) + b^{-m}, \ldots, \phi(\lambda \times b^m) + 1 - b^{-m} \} , \\
+\lambda \in \natzero.
+\end{multline}
+
+
+
+\bibliographystyle{elsarticle-harv.bst}
+\bibliography{FJH23,FJHown23}
+ \end{document}
