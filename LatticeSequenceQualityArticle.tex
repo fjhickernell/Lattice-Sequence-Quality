@@ -1,5 +1,6 @@
-\documentclass{amsart}
-\usepackage{mathtools,upref,siunitx,upquote,fancyvrb,bbm,xspace,color}
+\documentclass[authoryear]{elsarticle}
+%https://assets.ctfassets.net/o78em1y1w4i4/3ro3yQff1q67JHmLi1sAqV/1348e3852f277867230fc4b84a801734/elsdoc-1.pdf
+\usepackage{mathtools,upref,siunitx,upquote,fancyvrb,bbm,xspace,color,amsmath,amssymb, bm}
 \usepackage[hyphens]{url}
 \usepackage[utf8]{inputenc}
 \usepackage{esdiff}
@@ -21,6 +22,7 @@
 \newcommand{\appxintn}{\appxint_n}
 \DeclareMathOperator{\appxint}{\hat{I}}
 \DeclareMathOperator{\trun}{trunc}
+\newcommand{\onetos}{1\!:\!s}
 
 \newcommand{\FredNote}[1]{{\color{blue}#1}}
 
@@ -48,25 +50,32 @@
 \end{itemize}
 
 \section{Introduction}
-Lattices are a popular choice of nodes $\{\vz_i\}_{i=0}^{n-1} \in [0,1)^s$ for approximating multidimensional integrals by a sample mean,
+Lattices are a popular choice of nodes $\{\vz_i\}_{i=0}^{\infty} \in [0,1)^s$ for approximating multidimensional integrals by a sample mean,
 \[
-\int_{[0,1)^s} f(\vx) \, \dif \vx \approx \frac{1}{n} \sum_{i=0}^{n-1} f(\vz_i) =:\appxint(f),
+\int_{[0,1)^s} f(\vx) \, \dif \vx \approx \frac{1}{n} \sum_{i=0}^{n-1} f(\vz_i) =:\appxintn(f),
 \]
-\cite{DicEtal22a,Nie92,SloJoe94}.
+\citep{DicEtal22a,Nie92,SloJoe94}.
+
+
+
+\cite{HicNie03a} established the existence of extensible lattices with good generating vectors for the preferred values $n = b, b^2, \ldots$.  The purpose here is to extend these results to all positive $n$, recognizing that the upper bounds on the figures of merit will be somewhat worse for general $n$ than for powers of the base.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=5cm,trim={0 0 0 7.5mm},clip]{shifted-lattice}
+\caption{Two-dimensional Shifted Lattice}
+\label{fig:enter-label}
+\end{figure}
+
 Historically, lattice points were initially constructed as sets with fixed cardinality, $n$, and took the form
 \begin{equation} \label{eq:lat}
-    \{\vz_i = i \vh/n \pmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s,
+    \{\vz_i = i \vh/n \bmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s,
 \end{equation}
 where $\vh \in \{1, \ldots, n-1\}^s$ is the \emph{generating vector}.  A (random) shift, $\vDelta \in [0,1)^s$, is often added:
 \begin{equation} \label{eq:shlat}
     \{\vz_i = i \vh/n + \vDelta \pmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s.
 \end{equation}
 
-\begin{figure}[h]
-\includegraphics[width=5cm,trim={0 0 0 7.5mm},clip]{shifted-lattice}
-\caption{Two-dimensional Shifted Lattice}
-\label{fig:enter-label}
-\end{figure}
 
 
 
@@ -74,17 +83,17 @@ Extensible lattice sequences were proposed by \cite{HicEtal00,Mai81a} and take t
 \begin{equation} \label{eq:extlat}
     \{\vz_i = \vh\phi(i)+ \vDelta \pmod{\vone} : i=0,1, \ldots \} \in [0,1)^s.
 \end{equation}
-where $\{\phi(\cdot)\}_{i=0}^\infty$ is the van der Corput sequence (in base 2 for now).  In this case $\vh$ must be a generalized integer as defined in \cite[Section 2]{HicNie03a}.
+where $\{\phi(\cdot)\}_{i=0}^\infty$ is the van der Corput sequence in base $b$.  In this case $\vh$ must be a generalized integer as defined in \cite[Section 2]{HicNie03a}.
 
-For the van der Corput sequence
+The van der Corput sequence is defined as: 
 \[
-\phi((\cdots i_2 i_1 i_0)_2) = {}_20.i_0 i_1 i_2 \cdots.
+\phi((\cdots i_2 i_1 i_0)_b) = {}_b0.i_0 i_1 i_2 \cdots.
 \]
-For example,
+For example, for $b=2$,
 \[
 \phi(6) = \phi(110_2) = {}_20.011 = \frac 38.
 \]
-Note that
+Note that the first ${b^m}$ points of the van der Corput sequence are just equally spaced points reordered. 
 \begin{equation} \label{eq:phipropone}
 \{ \phi(i) : i = 0, \ldots, b^m-1 \} = \{0, b^{-m}, 2\times b^{-m}, \ldots, 1 - b^{-m} \}.
 \end{equation}
@@ -95,20 +104,17 @@ Also note that
 \lambda \in \natzero.
 \end{multline}
 
+\section{Background}
 
-Hickernell and Niederreiter \cite{HicNie03a} established the existence of extensible lattices with good generating vectors for the preferred values $n = 2, 4, 8, \ldots$.  The purpose here is to extend these results to all $n>1$, recognizing that the upper bounds on the figures of merit will be somewhat worse.
-
-We will fix $s$ and ignore $\vgamma$ for now.
-
-\subsection{Worst case error analysis}
+\section{Worst case error analysis for arbitrary $n$}
 We first consider integrands, $f$, that have an absolutely summable Fourier series:
 \begin{equation} \label{eq:fseries}
-    f(\vx) = \sum_{\vk \in \integers^{s}} \tf(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vx}, \qquad \tf(\vk) = \int_{[0,1)^{\infty}} f(\vx) \me^{-2 \pi \sqrt{-1} \vk^T \vx}\, \dif \vx
+    f(\vx) = \sum_{\vk \in \integers^{s}} \tf(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vx}, \qquad \text{where } \tf(\vk) = \int_{[0,1)^{\infty}} f(\vx) \me^{-2 \pi \sqrt{-1} \vk^T \vx}\, \dif \vx
 \end{equation}
 Define the weights
 \begin{equation}
-\tr(\vk) = \prod_{j=1}^{s} r(k_{j},\gamma_{j}),
-\qquad \text{where} \qquad r(k_{j},\gamma_{j})=\begin{cases} 1, &
+\tr(\vk,\vgamma) = \prod_{j=1}^{s} r(k_{j},\gamma_{j}),
+\qquad \text{where } r(k_{j},\gamma_{j})=\begin{cases} 1, &
 k_{j}=0, \\ \gamma_{j}^{-1}\abs{k_{j}}, & k_{j} \ne 0.  \end{cases}
 \end{equation}
 Define a Banach
@@ -124,20 +130,21 @@ $$
 
 It then follows that the error in approximating the integral by the sample mean is
 \begin{align} \label{eq:wcerrPalpha}
+\nonumber
 \abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)} &
 = \abs{\sum_{\vk \in \integers^{s}} \tf(\vk) \left[\int_{[0,1)^{s}} \me^{2 \pi \sqrt{-1} \vk^T \vx} \, \dif \vx - \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
 \nonumber
 & = \abs{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \tf(\vk) \left[ \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
-\nonumber
-& \le \norm[\cf{\alpha}]{f} \underbrace{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha}}_{=: P_\alpha(\vh,\vgamma,n,1:s) = \text{quality of the lattice nodes}}  %\qquad \forall f \in \cf_{\alpha} \\
-\nonumber
+& \le \norm[\cf{\alpha}]{f} \underbrace{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk,\vgamma)^{-\alpha}}_{=: P_\alpha(\vh,\vgamma,n,1:s) = \text{quality of the lattice nodes}},  %\qquad \forall f \in \cf_{\alpha} \\
 \end{align}
+where $\onetos$ means $\{1, \ldots, s\}$.
+This the same as \cite[(4)]{HicNie03a} but we do not assume the first $n$ points are a lattice. 
 
-For $n = b^m$, the quality measure $P_\alpha(\vh,\vgamma,n,1:s)$ takes on a simple form.  Note that
+For $n = b^m$, the quality measure $P_\alpha(\vh,\vgamma,n,\onetos)$ takes on a simple form.  Note that
 \begin{align}\label{Eq:DualLattice}
     \MoveEqLeft{\appxint_{b^m}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \\
     \nonumber
-    &= \frac 1{b^m} \sum_{i=0}^{b^m-1} \me^{2 \pi \sqrt{-1} \vk^T (\vh\phi(i) + \vDelta \pmod{\vone})} \\
+    &= \frac 1{b^m} \sum_{i=0}^{b^m-1} \me^{2 \pi \sqrt{-1} \vk^T (\vh\phi(i) + \vDelta \bmod{\vone})} \\
     \nonumber
     &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{b^m} \sum_{i=0}^{b^m-1} \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \\
     \nonumber
@@ -153,95 +160,107 @@ For $n = b^m$, the quality measure $P_\alpha(\vh,\vgamma,n,1:s)$ takes on a simp
 \end{align}
 Thus it follows that
 \begin{equation} \label{eq:Palphadual}
-    P_\alpha(\vh,\vgamma,b^m,1:s) = \sum_{\vk \in B(\vh,m,1:s)} \tr(\vk,\vgamma)^{-\alpha},
+    P_\alpha(\vh,\vgamma,b^m,\onetos) = \sum_{\vk \in B(\vh,m,1:s)} \tr(\vk,\vgamma)^{-\alpha},
 \end{equation}
-where $B(\vh,m,1:s) : = \{\vk \in  \integers^s \setminus \{\vzero\} : \vk^T \vh \pmod{b^m} = 0\}$ is called the \emph{dual lattice}.  This corresponds to \cite[Equation (3)]{HicNie03a}, and we know by \cite[Theorem 5]{HicNie03a} that  there exists $\vh$ with
+where $B(\vh,m,\onetos) : = \{\vk \in  \integers^s \setminus \{\vzero\} : \vk^T \vh \pmod{b^m} = 0\}$ is called the \emph{dual lattice}.  This corresponds to \cite[Equation (3)]{HicNie03a}, and we know by \cite[Theorem 5]{HicNie03a} that  there exists $\vh$ with
 \begin{multline} \label{eq:Niedbd}
-    P_{\alpha}(\vh,\vgamma,b^m,1:s) \le C_{R}(\alpha,\vgamma,\epsilon,s)
-    b^{-m\alpha} \log(b^{m\alpha(s+1)}) [\log \log (
+    P_{\alpha}(\vh,\vgamma,b^m,\onetos) \le C_{R}(\alpha,\vgamma,\epsilon,s)
+    b^{-m\alpha} (\log b^{m})^{\alpha(s+1)} [\log \log (
     b^m+1)]^{\alpha(1+\epsilon)}, \\ m = 1, 2,\ldots, \quad \alpha \ge 1.
 \end{multline}
 
-Note that
+%Note that
+This result can be extended to the case when $m = 0$
 \begin{align*}
-    P_{\alpha}(\vh,\vgamma,1,1:s) & = \sum_{\vk \ne \vzero} \tr(\vk, \vgamma)^{-\alpha} = -1 + \sum_{\vk \in \integers^s} \tr(\vk,\vgamma)^{-\alpha} \\
+    P_{\alpha}(\vh,\vgamma,1,\onetos) & = \sum_{\vk \ne \vzero} \tr(\vk, \vgamma)^{-\alpha} = -1 + \sum_{\vk \in \integers^s} \tr(\vk,\vgamma)^{-\alpha} \\
     & = -1 + \sum_{k_1 =-\infty}^{\infty} \cdots \sum_{k_s  =-\infty}^{\infty} \frac{1}{\prod_{j=1}^s[\max(1,\gamma_j^{-1}\abs{k_j})]^\alpha} \\
     & = -1 + \sum_{k_1 =-\infty}^{\infty} \frac{1}{[\max(1,\gamma_1^{-1}\abs{k_1})]^\alpha} \cdots \sum_{k_s  =-\infty}^{\infty} \frac{1}{[\max(1,\gamma_s^{-1}\abs{k_s})]^\alpha} \\
     & = -1 + \left[\sum_{k =-\infty}^{\infty} \frac{1}{[\max(1,\gamma^{-1}\abs{k})]^\alpha} \right]^d \\
     & = -1 + \left[1 + 2 \gamma^{\alpha} \sum_{k =1}^{\infty} \frac{1}{k^\alpha} \right]^d \\
-    & = -1 + \left[1 + 2 \gamma^{\alpha}\zeta(\alpha) \right]^d
+    & = -1 + \left[1 + 2 \gamma^{\alpha}\zeta(\alpha) \right]^d,
 \end{align*}
 
-Therefore, the above formula \eqref{eq:Niedbd} can be extended to the case of $m=0$:
+where $\zeta(\alpha)$ is the Riemann zeta function. \\
 
+Therefore, the above formula \eqref{eq:Niedbd} can be extended to the case of $m=0$ as follows:
 \begin{multline} \label{eq:Palphaextm}
-    P_{\alpha}(\vh,\vgamma,b^m,1:s) \\
+    P_{\alpha}(\vh,\vgamma,b^m,\onetos) \\
     \le C_{R}(\alpha,\vgamma,\epsilon,s)
-    b^{-m\alpha}\max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
+    b^{-m\alpha}\max(1, (\log b^{m})^{\alpha(s+1)})[\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)}, \\ m =0, 1, 2,\ldots, \quad \alpha \ge 1.
 \end{multline}
 
 
-\subsection{Randomized Error Analysis}
-Another approach is to assume that $f$ in \eqref{eq:fseries} is a random function (stochastic process) where
-\begin{equation}
-    \abs{\tf(\vk)} \IIDsim \cn(0,\tr(\vk)^{-2\alpha}).
-\end{equation}
-Then it follows that
-\begin{align*}
-    \MoveEqLeft{\Ex_f\left[\left(\int_{[0,1)^d} f(\vx) \, \dif \vx - \appxintn(f) \right)^2\right]} \\
-    & =
-    \Ex_f\left[\left(\sum_{\vk \in \integers^s \setminus\{\vzero\}} \tf(\vk) \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right)^2\right] \\
-     & =
-    \Ex_f\left[\sum_{\vk,\vl \in \integers^s \setminus\{\vzero\}} \tf(\vk) \tf^*(\vl) \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot}) \appxintn(\me^{-2 \pi \sqrt{-1} \vl^T \cdot})\right] \\
-    & = \underbrace{\sum_{\vk\in \integers^s \setminus\{\vzero\}} \tr(\vk)^{-2\alpha} \abs{\appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}^2}_{Q_{2\alpha}(\vh,n) = \text{another measure of quality of the lattice nodes}}  \\
-\end{align*}
+% \subsection{Randomized Error Analysis}
+% Another approach is to assume that $f$ in \eqref{eq:fseries} is a random function (stochastic process) where
+% \begin{equation}
+%     \abs{\tf(\vk)} \IIDsim \cn(0,\tr(\vk)^{-2\alpha}).
+% \end{equation}
+% Then it follows that
+% \begin{align*}
+%     \MoveEqLeft{\Ex_f\left[\left(\int_{[0,1)^d} f(\vx) \, \dif \vx - \appxintn(f) \right)^2\right]} \\
+%     & =
+%     \Ex_f\left[\left(\sum_{\vk \in \integers^s \setminus\{\vzero\}} \tf(\vk) \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right)^2\right] \\
+%      & =
+%     \Ex_f\left[\sum_{\vk,\vl \in \integers^s \setminus\{\vzero\}} \tf(\vk) \tf^*(\vl) \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot}) \appxintn(\me^{-2 \pi \sqrt{-1} \vl^T \cdot})\right] \\
+%     & = \underbrace{\sum_{\vk\in \integers^s \setminus\{\vzero\}} \tr(\vk)^{-2\alpha} \abs{\appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}^2}_{Q_{2\alpha}(\vh,n) = \text{another measure of quality of the lattice nodes}}  \\
+% \end{align*}
 
-\textbf{Research Question}  May we extend this result to all $n$ with perhaps some extra $\log(n)$ terms?
-
-E.g.,  $n =6 = 0\cdot 1 + 1 \cdot 2 + 1 \cdot 4$, $m = 2$ $\vDelta = \vzero$.
-
-\begin{align*}
-   \MoveEqLeft{\appxint_{6}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\\
-    &= \frac 1{6} \sum_{i=0}^{5} \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \\
-    &= \frac {1}{6} \left\{ \sum_{i=0}^3 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + \sum_{i=4}^5 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + \sum_{i=6}^5 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}  \right\} \\
-    &= \frac {1}{6} \left\{ \sum_{i=0}^3 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + \sum_{i=0}^1 \me^{2 \pi \sqrt{-1} \vk^T \vh[\phi(i)+\phi(4)]} + \sum_{i=0}^{-1} \me^{2 \pi \sqrt{-1} \vk^T \vh[\phi(i)+\vphi(6)]}  \right\} \ \ \text{by \eqref{eq:phiproptwo}} \\
-    &= \frac {1}{6} \left\{ 1\cdot\sum_{i=0}^{3}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + 1 \cdot \me^{2 \pi \sqrt{-1} \vk^T \phi(4)} \cdot \sum_{i=0}^{1}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \right . \\
-    & \qquad \qquad \left . +  0 \cdot
-    \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(6)} \cdot \sum_{i=0}^{0}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \right\}
-\end{align*}
-
- Then,
-\begin{align*}
-    P_\alpha(\vh,6) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}}
-    \abs{\appxint_6(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha}
-    \\
-    & \le
-    \frac {1}{6} \left\{ 1\cdot\sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\sum_{i=0}^{3}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}} \tr(\vk)^{-\alpha}  \right .
-    \\
-    & \qquad \qquad + 1  \cdot \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\sum_{i=0}^{1}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}} \tr(\vk)^{-\alpha}  \\
-    & \qquad \qquad \left . +  0
-    \cdot \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\sum_{i=0}^{0}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}}  \tr(\vk)^{-\alpha} \right\}\\
-    & =
-    \frac {1}{6} \left\{ 1\cdot\sum_{\vk \in \integers^s \setminus\{\vzero\}} 4 \cdot \bbone_{B(\vh,2)}(\vk) \tr(\vk)^{-\alpha}  \right .
-    + 1  \cdot \sum_{\vk \in \integers^s \setminus\{\vzero\}}2 \cdot \bbone_{B(\vh,1)}(\vk) \tr(\vk)^{-\alpha}  \\
-    & \qquad \qquad \left . +  0
-    \cdot \sum_{\vk \in \integers^s \setminus\{\vzero\}} 1 \cdot \bbone_{B(\vh,1)}(\vk)  \tr(\vk)^{-\alpha} \right\} \qquad \text{by \eqref{Eq:DualLattice}}\\
-    & = \frac {1}{6} \left\{ 4 \cdot 1 \cdot P_\alpha(\vh,4)+ 2 \cdot 1 \cdot P_\alpha(\vh,2)+ 1 \cdot 0 \cdot P_\alpha(\vh,1) \right\} \\
-\end{align*}
-
-We know that and $P_\alpha(\vh,2^2) \le C_{R}(\alpha,\epsilon,s)
-    2^{-2\alpha}$ and $P_\alpha(\vh,2^1) \le C_{R}(\alpha,\epsilon,s)
-    2^{-\alpha} $. Then,
-    \begin{align*}
-        P_\alpha(\vh,6) & \le \frac {1}{6} \left\{ 4 \cdot 1 \cdot P_\alpha(\vh,4) + 2 \cdot 1 \cdot P_\alpha(\vh,2) \right\} \\
-         & \le \frac {1}{6} \left\{C_{R}(\alpha,\epsilon,s)
-         2^{2-2\alpha} + C_{R}(\alpha,\epsilon,s)
-         2^{1-\alpha} \right\}
-    \end{align*}
+% \textbf{Research Question}  May we extend this result to all $n$ with perhaps some extra $\log(n)$ terms?
 
 
-For any non-negative integer $n$, express as  $n = n_0 + bn_1 + \cdots + b^m n_m$, where the digits $n_0, n_1, \ldots$ are in $\{0, 1, \cdots, b-1\}$ .  Thus, $m = \lfloor \log_b(n) \rfloor$.  Let $\trun(n,\ell) = n_0 + \cdots + b^{\ell} n_{\ell}$ for $\ell = 0, \ldots, m$ and $\trun(n,-1) = 0$, then
+
+
+\section{The figure of merit $P_{\alpha}(\vh,\vgamma,n,\onetos)$ for  $n$ other than $b^m$}
+
+
+
+
+
+
+% E.g.,  $n =6 = 0\cdot 1 + 1 \cdot 2 + 1 \cdot 4$, $m = 2$ $\vDelta = \vzero$.
+
+% \begin{align*}
+%    \MoveEqLeft{\appxint_{6}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\\
+%     &= \frac 1{6} \sum_{i=0}^{5} \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \\
+%     &= \frac {1}{6} \left\{ \sum_{i=0}^3 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + \sum_{i=4}^5 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + \sum_{i=6}^5 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}  \right\} \\
+%     &= \frac {1}{6} \left\{ \sum_{i=0}^3 \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + \sum_{i=0}^1 \me^{2 \pi \sqrt{-1} \vk^T \vh[\phi(i)+\phi(4)]} + \sum_{i=0}^{-1} \me^{2 \pi \sqrt{-1} \vk^T \vh[\phi(i)+\vphi(6)]}  \right\} \ \ \text{by \eqref{eq:phiproptwo}} \\
+%     &= \frac {1}{6} \left\{ 1\cdot\sum_{i=0}^{3}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} + 1 \cdot \me^{2 \pi \sqrt{-1} \vk^T \phi(4)} \cdot \sum_{i=0}^{1}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \right . \\
+%     & \qquad \qquad \left . +  0 \cdot
+%     \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(6)} \cdot \sum_{i=0}^{0}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)} \right\}
+% \end{align*}
+
+%  Then,
+% \begin{align*}
+%     P_\alpha(\vh,6) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}}
+%     \abs{\appxint_6(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha}
+%     \\
+%     & \le
+%     \frac {1}{6} \left\{ 1\cdot\sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\sum_{i=0}^{3}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}} \tr(\vk)^{-\alpha}  \right .
+%     \\
+%     & \qquad \qquad + 1  \cdot \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\sum_{i=0}^{1}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}} \tr(\vk)^{-\alpha}  \\
+%     & \qquad \qquad \left . +  0
+%     \cdot \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\sum_{i=0}^{0}\me^{2 \pi \sqrt{-1} \vk^T \vh\phi(i)}}  \tr(\vk)^{-\alpha} \right\}\\
+%     & =
+%     \frac {1}{6} \left\{ 1\cdot\sum_{\vk \in \integers^s \setminus\{\vzero\}} 4 \cdot \bbone_{B(\vh,2)}(\vk) \tr(\vk)^{-\alpha}  \right .
+%     + 1  \cdot \sum_{\vk \in \integers^s \setminus\{\vzero\}}2 \cdot \bbone_{B(\vh,1)}(\vk) \tr(\vk)^{-\alpha}  \\
+%     & \qquad \qquad \left . +  0
+%     \cdot \sum_{\vk \in \integers^s \setminus\{\vzero\}} 1 \cdot \bbone_{B(\vh,1)}(\vk)  \tr(\vk)^{-\alpha} \right\} \qquad \text{by \eqref{Eq:DualLattice}}\\
+%     & = \frac {1}{6} \left\{ 4 \cdot 1 \cdot P_\alpha(\vh,4)+ 2 \cdot 1 \cdot P_\alpha(\vh,2)+ 1 \cdot 0 \cdot P_\alpha(\vh,1) \right\} \\
+% \end{align*}
+
+% We know that and $P_\alpha(\vh,2^2) \le C_{R}(\alpha,\epsilon,s)
+%     2^{-2\alpha}$ and $P_\alpha(\vh,2^1) \le C_{R}(\alpha,\epsilon,s)
+%     2^{-\alpha} $. Then,
+%     \begin{align*}
+%         P_\alpha(\vh,6) & \le \frac {1}{6} \left\{ 4 \cdot 1 \cdot P_\alpha(\vh,4) + 2 \cdot 1 \cdot P_\alpha(\vh,2) \right\} \\
+%          & \le \frac {1}{6} \left\{C_{R}(\alpha,\epsilon,s)
+%          2^{2-2\alpha} + C_{R}(\alpha,\epsilon,s)
+%          2^{1-\alpha} \right\}
+%     \end{align*}
+
+\subsection{$P_{\alpha}(\vh,\vgamma,n,\onetos)$ for  arbitrary $n$}
+For any non-negative integer $n$, express as  $n = n_0 + bn_1 + \cdots + b^m n_m$, where the digits $n_0, n_1, \ldots$ are in $\{0, 1, \cdots, b-1\}$. Thus, $m = \lfloor \log_b(n) \rfloor$.  Let $\trun(n,\ell) = n_0 + \cdots + b^{\ell} n_{\ell}$ for $\ell = 0, \ldots, m$ and $\trun(n,-1) = 0$, then
 
 \begin{align*}
     \MoveEqLeft{\appxint_{n}(\me^{2 \pi \sqrt{-1} \vk^T \cdot}) } \\
@@ -252,38 +271,39 @@ For any non-negative integer $n$, express as  $n = n_0 + bn_1 + \cdots + b^m n_m
     &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} \, n_{m-\ell}
     \sum_{i=0 }^{b^{m-\ell}  -1} \me^{2 \pi \sqrt{-1} \vk^T \vh[i/b^m + \phi(n - \trun(n,m-\ell))]} \\
     & \hspace{30ex} \text{by \eqref{eq:phiproptwo}} \\
-    & = \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_\ell \bbone_{B(\vh,m-\ell)}(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(n - \trun(n,m-\ell))}.
+    & = \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \bbone_{B(\vh,m-\ell,1:s)}(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(n - \trun(n,m-\ell))}.
 \end{align*}
 This implies that
 \begin{equation} \label{eq:ihatarbn}
-    \abs{\appxint_{n}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_\ell \bbone_{B(\vh,m-\ell)}(\vk)
+    \abs{\appxint_{n}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \bbone_{B(\vh,m-\ell, 1:s)}(\vk)
 \end{equation}
 
-Next we compute $P_\alpha(\vh,\vgamma,n,1:s)$ for this arbitrary $n$:
+\LarysaNote{First we want to express it as a sum.. } 
+Next we compute $P_\alpha(\vh,\vgamma,n,\onetos)$ for this arbitrary $n$:
 \begin{align*}
-      P_\alpha(\vh,\vgamma,n,1:s) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk)^{-\alpha} \qquad \text{by \eqref{eq:wcerrPalpha}} \\
-      & \le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \sum_{\vk \in B(\vh,m-\ell,u)} \tr(\vk)^{-\alpha}
+      P_\alpha(\vh,\vgamma,n,\onetos) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk,\vgamma)^{-\alpha} \qquad \text{by \eqref{eq:wcerrPalpha}} \\
+      & \le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \sum_{\vk \in B(\vh,m-\ell,\onetos)} \tr(\vk,\vgamma)^{-\alpha}
       \qquad \text{by \eqref{eq:ihatarbn}}\\
-      & = \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} P_\alpha(\vh,\vgamma,b^{m-\ell},1:s)
+      & = \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} P_\alpha(\vh,\vgamma,b^{m-\ell},\onetos)
       \qquad \text{by \eqref{eq:Palphadual}}\\
-      & =  \frac {1}{n} \left\{ b^m n_m P_\alpha(\vh,\vgamma,b^m,1:s) + b^{m-1} n_{m-1} P_\alpha(\vh,\vgamma,b^{m-1},1:s) + \cdots + b^0 n_0 P_\alpha(\vh,\vgamma,b^0,1:s)  \right\} \\
-      &\le \frac {(b-1)}{n} \left\{ b^m  P_\alpha(\vh,\vgamma,b^m,1:s) + b^{m-1}  P_\alpha(\vh,\vgamma,b^{m-1},1:s) + \cdots + 2^0  P_\alpha(\vh,\vgamma,b^0,1:s)  \right\} \\
-      & \le \frac {(b-1)C_{R}(\alpha,\vgamma,\epsilon,s)}{n} \left\{ b^{m(1-\alpha)}\max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
+\intertext{Writing this sum out explicitly, we get}
+      P_\alpha(\vh,\vgamma,n,\onetos) & =  \frac {1}{n} \left\{ b^m n_m P_\alpha(\vh,\vgamma,b^m,\onetos) + b^{m-1} n_{m-1} P_\alpha(\vh,\vgamma,b^{m-1},\onetos) + \cdots + b^0 n_0 P_\alpha(\vh,\vgamma,b^0,\onetos)  \right\} \\
+      &\le \frac {(b-1)}{n} \left\{ b^m  P_\alpha(\vh,\vgamma,b^m,\onetos) + b^{m-1}  P_\alpha(\vh,\vgamma,b^{m-1},\onetos) + \cdots + 2^0  P_\alpha(\vh,\vgamma,b^0,\onetos)  \right\} \\
+      & \le \frac {(b-1)C_{P}(\alpha,\vgamma,\epsilon,s)}{n} \left\{ b^{m(1-\alpha)}\max(1, (\log b^{m})^{\alpha(s+1)}) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)}\right .\\ 
-      & \qquad  + b^{(m-1)(1-\alpha)}\max(1, \log(b^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
+      & \qquad  + b^{(m-1)(1-\alpha)}\max(1, (\log b^{(m-1)})^{\alpha(s+1)}) [\max(1,\log \log (
     b^{(m-1)}+1))]^{\alpha(1+\epsilon)}\\
       & \qquad + \cdots \\
-      & \qquad  \left . + b^{-0}\max(1, \log(b^{0\alpha(s+1)})) [\max(1,\log \log (
+      & \qquad  \left . + b^{-0}\max(1, (\log b^{0})^{\alpha(s+1)}) [\max(1,\log \log (
     b^{0}+1))]^{\alpha(1+\epsilon)} \right\}\\
       & \qquad \qquad \qquad \alpha \ge 1 \qquad \text{by \eqref{eq:Palphaextm}}\\
-      & \le \frac {(b-1)C_{R}(\alpha,\vgamma,\epsilon,s)}{n} \frac{(1 - b^{(m+1)(1-\alpha)})}{1 - b^{1-\alpha}}
-      \max(1, \log(b^{m\alpha(s+1)})) \\
+      & \le \frac {(b-1)C_{P}(\alpha,\vgamma,\epsilon,s)}{n} \frac{(1 - b^{(m+1)(1-\alpha)})}{1 - b^{1-\alpha}}
+      \max(1, (\log b^{m})^{\alpha(s+1)}) \\
       & \qquad \qquad \times [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)} \\
-      & \le \frac {\widetilde{C}_{R}(\alpha,\vgamma,\epsilon,s)}{n}
-      \max(1, \log(n^{\alpha(s+1)}))
-      [\max(1,\log \log (
-    n+1))]^{\alpha(1+\epsilon)}
+      & \le \frac {C_{P}(\alpha,\vgamma,\epsilon,s)}{n} \frac{(b-1)}{1 - b^{1-\alpha}}
+  [\max(1, (\log n)^{\alpha(s+1)})
+      [\max(1,\log \log (n+1))]^{\alpha(1+\epsilon)} 
 \end{align*}
 
 Unfortunately, this only decays like $\Order(n^{-1+\delta})$. \\
@@ -315,36 +335,37 @@ Unfortunately, this only decays like $\Order(n^{-1+\delta})$. \\
 % \end{align*}
 % Unfortunately, this only decays like $\Order(n^{-1+\delta})$.
 
+\subsection{$P_{\alpha}(\vh,\vgamma,n,\onetos)$ for $n$ an integer multiple of $b^p$}
 
 Thus, next we try $n = \lambda b^p$, where $\lambda$ is an odd integer. Then, $n = b^pn_p + b^{p+1}n_{p+1} + \cdots + b^m n_m$
-\FredNote{Let's carry on following the above.  WAtch out for your geometric sum} \\
+% \FredNote{Let's carry on following the above.  WAtch out for your geometric sum}
 \begin{align*}
-    P_\alpha(\vh,\vgamma,\lambda b^p,1:s)
+    P_\alpha(\vh,\vgamma,\lambda b^p,\onetos)
     %& \le \frac {1}{\lambda 2^p} \left\{2^p  P_\alpha(\vh,2^p) + \sum_{\ell = 0}^{m-p-1} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell})\right\} \\
-    & \le \frac {1}{\lambda b^p} \sum_{\ell = 0}^{m-p} b^{m-\ell} n_{m -\ell} P_\alpha(\vh,\vgamma,b^{m-\ell},1:s) \\
-    &= \frac {1}{\lambda b^p} \left\{b^m n_m P_\alpha(\vh,\vgamma,b^m,1:s) + b^{m-1} n_{m-1} P_\alpha(\vh,\vgamma,b^{m-1},1:s) + \cdots + b^p n_p P_\alpha(\vh,\vgamma,b^p,1:s) 
+    & \le \frac {1}{\lambda b^p} \sum_{\ell = 0}^{m-p} b^{m-\ell} n_{m -\ell} P_\alpha(\vh,\vgamma,b^{m-\ell},\onetos) \\
+    &= \frac {1}{\lambda b^p} \left\{b^m n_m P_\alpha(\vh,\vgamma,b^m,\onetos) + b^{m-1} n_{m-1} P_\alpha(\vh,\vgamma,b^{m-1},\onetos) + \cdots + b^p n_p P_\alpha(\vh,\vgamma,b^p,\onetos) 
     \right\} \\ 
-    & \le \frac {(b-1)}{\lambda b^p} \left\{b^m  P_\alpha(\vh,\vgamma,b^m,1:s) + b^{m-1}  P_\alpha(\vh,\vgamma,b^{m-1},1:s) + \cdots + b^p  P_\alpha(\vh,\vgamma,b^p,1:s) 
+    & \le \frac {(b-1)}{\lambda b^p} \left\{b^m  P_\alpha(\vh,\vgamma,b^m,\onetos) + b^{m-1}  P_\alpha(\vh,\vgamma,b^{m-1},\onetos) + \cdots + b^p  P_\alpha(\vh,\vgamma,b^p,\onetos) 
     \right\} \\ 
-    & \le \frac {(b-1)}{\lambda b^p} C_{R}(\alpha,\vgamma,\epsilon,s) \left\{ b^{m(1-\alpha)}\max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
+    & \le \frac {(b-1)}{\lambda b^p} C_{P}(\alpha,\vgamma,\epsilon,s) \left\{ b^{m(1-\alpha)}\max(1, (\log b^{m})^{\alpha(s+1)})) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)}\right .\\ 
-    & \qquad  + b^{(m-1)(1-\alpha)}\max(1, \log(b^{(m-1)\alpha(s+1)})) [\max(1,\log \log (
+    & \qquad  + b^{(m-1)(1-\alpha)}\max(1, (\log b^{(m-1)})^{\alpha(s+1)})) [\max(1,\log \log (
     b^{(m-1)}+1))]^{\alpha(1+\epsilon)}\\
       &  \qquad + \cdots \\
-      & \qquad  \left . +   b^{p(1-\alpha)}\max(1,\log(b^{p\alpha(s+1)})) [\max(1,\log \log (b^p+1))]^{\alpha(1+\epsilon))}  \right\}\\
-    & \le \frac {(b-1)}{\lambda b^p} C_{R}(\alpha,\epsilon,s) 
+      & \qquad  \left . +   b^{p(1-\alpha)}\max(1,(\log b^{p})^{\alpha(s+1)})) [\max(1,\log \log (b^p+1))]^{\alpha(1+\epsilon))}  \right\}\\
+    & \le \frac {(b-1)}{\lambda b^p} C_{P}(\alpha,\vgamma,\epsilon,s) 
     \left\{\frac{b^{p(1-\alpha)} - b^{(m+1)(1- \alpha )}}{1 - b^{1 -\alpha}}\right\} \\
-     & \qquad \qquad \times \max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
+     & \qquad \qquad \times \max(1, (\log b^{m})^{\alpha(s+1)})) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)} \\
-    & = \frac { (b-1) C_{R}(\alpha,\epsilon,s)}{\lambda b^p} \left\{ b^{p(1-\alpha)} \cdot \frac{(1 - b^{(m-p+1)(1- \alpha )})}{1 - b^{1- \alpha}}\right\} \\
-    & \qquad \qquad \times \max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
+    & = \frac { (b-1) C_{P}(\alpha, \vgamma, \epsilon,s)}{\lambda b^p} \left\{ b^{p(1-\alpha)} \cdot \frac{(1 - b^{(m-p+1)(1- \alpha )})}{1 - b^{1- \alpha}}\right\} \\
+    & \qquad \qquad \times \max(1, (\log b^{m})^{\alpha(s+1)})) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)} \\
-    &=  \frac {(b-1)C_{R}(\alpha,\epsilon,s)}{\lambda b^{p\alpha}}  \frac{1 - b^{(m-p+1)(1- \alpha )}}{1 - b^{1- \alpha}} \max(1, \log(b^{m\alpha(s+1)})) [\max(1,\log \log (
+    &=  \frac {(b-1)C_{P}(\alpha, \vgamma, \epsilon,s)}{\lambda b^{p\alpha}}  \frac{1 - b^{(m-p+1)(1- \alpha )}}{1 - b^{1- \alpha}} \max(1, (\log b^{m})^{\alpha(s+1)})) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)} \\
-    &\le \frac{\lambda^{\alpha -1}}{n^{\alpha}} \widetilde{C}_{R}(\alpha,\epsilon,s)  \max(1, \log(n^{\alpha(s+1)})) [\max(1,\log \log (
-    n+1))]^{\alpha(1+\epsilon)} \\ 
+    &\le \frac{\lambda^{\alpha -1}{C}_{P}(\alpha, \vgamma,\epsilon,s)}{n^{\alpha}}  \frac {(b-1)} {1 - b^{1- \alpha}}   \max(1, (\log n )^{\alpha(s+1)})) [\max(1,\log \log (
+    n+1))]^{\alpha(1+\epsilon)}
 \end{align*}
-Which decays like $\Order(b^p)$ \\
+Which decays  nearly like $\Order(b^{-p \alpha})$ \\
 % \begin{align*}
 %     P_\alpha(\vh,\lambda 2^p)
 %     %& \le \frac {1}{\lambda 2^p} \left\{2^p  P_\alpha(\vh,2^p) + \sum_{\ell = 0}^{m-p-1} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell})\right\} \\
@@ -370,14 +391,86 @@ Which decays like $\Order(b^p)$ \\
 % \end{align*}
 % Which decays like $\Order(2^p)$ \\
 
+% For small $\lambda$: let $\lambda = 3, \ p = 10,\  b =2 $
+% \begin{align*}
+%     P_\alpha(\vh,\vgamma,3 \cdot 2^{10},\onetos) 
+%     &\leq \frac{3^{\alpha -1}{C}_{P}(\alpha, \vgamma,\epsilon,s)}{(3 \cdot 2^{10})^{\alpha}}  \frac {1} {1 - 2^{1- \alpha}} \\
+%     & \qquad \qquad \times
+%     \max(1, (\log (3 \cdot 2^{10}) )^{\alpha(s+1)})) [\max(1,\log \log (
+%     3 \cdot 2^{10}+1))]^{\alpha(1+\epsilon)}
+% \end{align*}
+
+% For large $\lambda$: let $\lambda = 1021, \ p = 1, \ b =2 $
+
+% \begin{align*}
+%     P_\alpha(\vh,\vgamma,1021 \cdot 2^{1},\onetos) 
+%     &\leq \frac{1021^{\alpha -1}{C}_{P}(\alpha, \vgamma,\epsilon,s)}{(1021 \cdot 2^{1})^{\alpha}}  \frac {1} {1 - 2^{1- \alpha}} \\
+%     & \qquad \qquad \times \max(1, (\log (1021 \cdot 2^{1}) )^{\alpha(s+1)})) [\max(1,\log \log (
+%     1021 \cdot 2^{1}+1))]^{\alpha(1+\epsilon)}
+% \end{align*}
+
+
+\section{Extensions to other spaces of integrands and error measures}
+
+We can also consider a more general class of integrands, note: 
+$$
+\norm[\cf{\alpha,q}]{f} := \norm[q]{\tr(\cdot,\vgamma)^{\alpha}\tilde{f}(\cdot)} = \norm[q]{\big\{\tr(\vk,\vgamma)^{\alpha}\tilde{f}(\vk)\bigr\}_{\vk \in \integers^s}} = \left[\sum_{\vk \in \integers^s} \left(\tr(\vk,\vgamma)^{\alpha}\abs{\tilde{f}(\vk)}\right)^q \right]^{\frac{1}{q}} \qquad 1 \leq q \leq \infty, \qquad\frac{1}{q} + \frac{1}{q'} = 1 
+$$
+
+$\abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)} = \abs{\sum_{\vk \neq 0} \tf(\vx) \, - \appxint_n(f)}  \leq \norm[\cf{\alpha,q}]{f} \norm[q^{'}]{\tr(\cdot,\vgamma)^{-\alpha} \eta(\cdot)}$, \\ 
+
+where $\eta(\vk) = \appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})$. \\
+
+For $n = b^m,\  \eta(\vk) = \me^{2 \pi \sqrt{-1} \vk^T \vDelta}\bbone_{B(\vh,m,1:s)}(\vk) $
+
+\begin{align*}
+    \norm[q'] {\tr(\cdot,\vgamma)^{-\alpha} \eta(\vk)} 
+    &= \norm[q'] {\tr(\vk,\vgamma)^{-\alpha} \me^{2 \pi \sqrt{-1} \vk^T \vDelta}\bbone_{B(\vh,m,1:s)}(\vk) } \\
+    &=  \left( \sum_{\vk} \abs{\tr(\vk,\vgamma)^{-\alpha} \me^{2 \pi \sqrt{-1} \vk^T \vDelta}\bbone_{B(\vh,m,1:s)}(\vk)}^{q'}\right)^{\frac{1}{q'}} \\
+    &= \left(\sum_{\vk \in B(\vh,m,1:s)} \tr(\vk,\vgamma)^{-\alpha q'}\right)^{\frac{1}{q'}} \\
+    &= \left( P_{\alpha q'}(\vh,\vgamma,b^m,\onetos) \right)^{\frac{1}{q'}} \\
+    &= (\approx n^{-\alpha q'})^{\frac{1}{q'}} \\
+    & \approx n^{-\alpha}
+\end{align*}
 
 
 
+Now, consider arbitrary $n$:
+\begin{align*}
+    \norm[q'] {\tr(\cdot,\vgamma)^{-\alpha} \appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}^{q'} 
+    % &= \left(\sum_{\vk}  \abs{\tr(\vk,\vgamma)^{-\alpha} \appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}^{q'} \right) \\
+    % & \leq \left(\sum_{\vk  }  \abs{\tr(\vk,\vgamma)^{-\alpha} \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m-\ell} \bbone_{B(\vh,m-\ell)}  }^{q'}\right) \text{by \eqref{eq:ihatarbn}} \\
+    % % &\leq   P_{\alpha}(\vh,\vgamma,n,\onetos)  \textbf{\LarysaNote{??}}
+    % & = \left(\sum_{\vk \in B(\vh,m-\ell,1:s)  }  \abs{\tr(\vk,\vgamma)^{-\alpha} \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m-\ell}  }^{q'}\right) \\
+    % &= {\left( \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m-\ell}\right)^{q'}}{\sum_{\vk \in B(\vh,m-\ell,1:s)} \tr(\vk,\vgamma)^{-\alpha q'}} \\
+    % &= P_{\alpha q'}(\vh,\vgamma,n,\onetos) \\
+    % & \approx n^{-1}
+    &\leq  \norm[1] {\tr(\cdot,\vgamma)^{-\alpha} \appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \\ 
+    % &= P_{\alpha}(\vh,\vgamma,n,\onetos) \\
+    &  \approx \Order(n^{-1+\delta}) %?
+\end{align*}
+This quantity has the same upper bound as the case with $q^{'} = 1$. Therefore, there does not appear to be an advantage in making $q$ smaller and thus making $q^{'}$ larger. 
+% bounded by P_\alpha since q'= 1 is the max 
+\subsection{Randomized Error Analysis}
+Another approach is to assume that $f$ in \eqref{eq:fseries} is a random function (stochastic process) where
+\begin{equation}
+    \abs{\tf(\vk)} \IIDsim \cn(0,\tr(\vk)^{-2\alpha}).
+\end{equation}
+Then it follows that
+\begin{align*}
+    \MoveEqLeft{\Ex_f\left[\left(\int_{[0,1)^d} f(\vx) \, \dif \vx - \appxintn(f) \right)^2\right]} \\
+    & =
+    \Ex_f\left[\left(\sum_{\vk \in \integers^s \setminus\{\vzero\}} \tf(\vk) \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right)^2\right] \\
+     & =
+    \Ex_f\left[\sum_{\vk,\vl \in \integers^s \setminus\{\vzero\}} \tf(\vk) \tf^*(\vl) \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot}) \appxintn(\me^{-2 \pi \sqrt{-1} \vl^T \cdot})\right] \\
+    & = \underbrace{\sum_{\vk\in \integers^s \setminus\{\vzero\}} \tr(\vk)^{-2\alpha} \abs{\appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}^2}_{Q_{2\alpha}(\vh,n) = \text{another measure of quality of the lattice nodes}}  \\
+\end{align*}
+
+In terms of powers of $n$, we will not be able to improve the upper bound by making $q^{'}$ bigger. 
 
 
 
 % \left\{\right\}
-\bibliographystyle{amsplain}
+\bibliographystyle{elsarticle-harv.bst}
 \bibliography{FJH23,FJHown23}
-
 \end{document}
