@@ -1,4 +1,4 @@
-function [ssdiscopt,ssdisc,xlat,optfwts] = discrepancy(n,d,coordwts)
+function [ssdiscopt,ssdisc,xlat,optfwtsall] = discrepancy(n,d,coordwts)
     arguments
         n = 50  %number of points
         d = 2 %dimension
