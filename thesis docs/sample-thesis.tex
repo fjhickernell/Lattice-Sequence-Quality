@@ -1,5 +1,42 @@
-\documentclass[authoryear]{elsarticle}
-%https://assets.ctfassets.net/o78em1y1w4i4/3ro3yQff1q67JHmLi1sAqV/1348e3852f277867230fc4b84a801734/elsdoc-1.pdf
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% IIT Sample THESIS File,   Version 3, Updated by Babak Hamidian on 11/18/2003
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% File: sample3.tex                                   %
+% IIT Sample LaTeX File                               %
+% by Ozlem Kalinli on 05/30/2003                      %
+% Revised by Babak Hamidian on 11/18/2003             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                     %
+% This is a sample thesis document created using      %
+% iitthesis.cls style file. The PDF output is also    %
+% available for your reference. In this file, it has  %
+% been illustrated how to make table of contents,     %
+% list of tables, list of figures, list of symbols,   %
+% bibliography, equations, enumerations, etc.         %
+% You can find detailed instructions                  %
+% for using the style file in Help.doc,               %
+% TableHelp.doc, FigureHelp.doc, and                  %
+% Bibliography.doc files.                             %
+%                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Note: The texts that are used in this sample3.tex   %
+% file are irrelevant. They are just used to show     %
+% you the style created by iitthesis style file.      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Updates added by Jonathan Harmon, effective Dec. 15. 2021. 
+
+\documentclass{iitthesis-au} %current document class
+
+\usepackage{graphicx}    % This package is used for Figures
+\usepackage{rotating}           % This package is used for landscape mode.
+\usepackage{epsfig}
+\usepackage{subfigure}          % These two packages, epsfig and subfigure, are used for creating subplots.
+% Packages are explained in the Help document.
+
+
 \usepackage{mathtools,upref,siunitx,upquote,fancyvrb,bbm,xspace,color,amsmath,amssymb, bm}
 \usepackage[hyphens]{url}
 \usepackage[utf8]{inputenc}
@@ -8,8 +45,6 @@
 \usepackage{xcolor}
 
 \input{FJHDef.tex}
-
-
 \usepackage{algpseudocode}
 \usepackage{algorithm, algorithmicx}
 \algnewcommand\algorithmicparam{\textbf{Parameters:}}
@@ -27,45 +62,119 @@
 \newcommand{\FredNote}[1]{{\color{blue}#1}}
 
 \newcommand{\LarysaNote}[1]{{\color{violet}#1}}
-
-
-
 \begin{document}
+
+
+%%% Declarations for Title Page %%%
 \title{The Quality of Lattice Sequences}
 \author{Larysa Matiukha}
-\author{Yuhan Ding}
-\author{Fred J. Hickernell}
-\begin{abstract}This project is where all of the files and commands go that are needed elsewhere
+\degree{Master of Science}
+\dept{Applied Mathematics}
+\date{May 2025}
+\copyrightnoticetrue      % create copyright page or not
+% \coadvisortrue           % add co-advisor. activate it by removing % symbol to add co-advisor
+\maketitle                % create title and copyright pages
+
+
+\prelimpages         % Settings of preliminary pages are done with \prelimpages command
+
+
+%%%  Acknowledgement %%%
+\begin{acknowledgment}     % acknowledgement environment, this is optional
+%\vspace{10pt}	%These two lines will single space the ACK if needed
+%\ssp
+\par  This dissertation could not have been written without Dr. X
+who not only served as my supervisor but also encouraged and
+challenged me throughout my academic program. He and the other
+faculty members, Dr. Y and Dr. Z, guided me through the
+dissertation process, never accepting less than my best efforts. I
+thank them all.\\ \\ (Don't copy this sample text. Write your own
+acknowledgment.)
+
+% or \input{acknowledgement.tex} % you need a separate acknowledgement.tex file to include it.
+
+\end{acknowledgment}
+
+\begin{authorship}
+	\par I, Larysa Matiukha, attest that the work in this thesis is substantially my own.	
+	
+	In accordance with the disciplinary norm of [your major] (see IIT Faculty Handbook, Appendix S), the following collaborations occurred in the thesis: 
+	
+	
+	%Be sure to include the parenthetical reference to the Faculty Handbook. The Handbook can be found here: https://web.iit.edu/general-counsel/faculty-handbook. Appendix S contains references for "disciplinary norms" of authorship by discipline.	
+\end{authorship}
+
+% Table of Contents
+\tableofcontents
+\clearpage
+
+% List of Tables
+\listoftables
+
+\clearpage
+
+%List of Figures
+\listoffigures
+
+\clearpage
+
+%List of Symbols(optional)
+
+ \clearpage
+
+
+
+%%% Abstract %%%
+\begin{abstract}           % abstract environment, this is optional
+\par Your Abstract goes here! 
+% or \input{abstract.tex}  %you need a separate abstract.tex file to include it.
+
 \end{abstract}
+%\clearpage
 
-\maketitle
 
-\begin{itemize}
-    \item finish the derivation for $n = \lambda 2^p$ and add log terms 
-    \item derive the bounds on other figures of merit
-    \item replace base 2 by arbitrary prime base (b)
-    \item add more explanation, motivation 
-    \item derive bound for arbitrary $s$ and $\gamma$
-    \item derive the bounds for $Q_{2\alpha}$
-\end{itemize}
 
-\section{Introduction}
-Lattices are a popular choice of nodes $\{\vz_i\}_{i=0}^{\infty} \in [0,1)^s$ for approximating multidimensional integrals by a sample mean,
+
+\textpages     % Settings of text-pages are done with \textpages command
+
+% % Chapters are created with 
+% \Chapter{title} command
+
+
+% \maketitle
+\Chapter{Introduction}
+%\Section{Introduction}
+
+
+
+Multidimensional integrals arise in various fields and practical applications such as quantitative finance \cite{CafMorOwe97}, statistics \cite{Gen92,GenBre99}, and physics \cite{PapTra97}. 
+
+
+\FredNote{Often these arise as expectations of random variables.}  However, many such integrals cannot be computed analytically and, thus, numerical methods are often utilized. \FredNote{A common approach to approximating an integral that represents a population mean is by a sample mean:} 
 \[
-\int_{[0,1)^s} f(\vx) \, \dif \vx \approx \frac{1}{n} \sum_{i=0}^{n-1} f(\vz_i) =:\appxintn(f),
+\mathbb{E}[f(\underbrace{\vX}_{\sim \mathcal{U}[0,1]^d})] : = \int_{[0,1)^s} f(\vx) \, \dif \vx \approx \frac{1}{n} \sum_{i=0}^{n-1} f(\vz_i) =:\appxintn(f),
 \]
-\citep{DicEtal22a,Nie92,SloJoe94}.
+\cite{DicEtal22a,Nie92,SloJoe94}.
+The nodeset, $\{\vz_0, \vz_1, \ldots \}$, is chosen as independent and identically distributed (IID), which corresponds to simple Monte Carlo. However, the nodeset may be chosen to be more evenly distributed, which corresponds to quasi-Monte Carlo methods. Lattices are a popular choice of nodes $\{\vz_i\}_{i=0}^{\infty} \in [0,1)^s$ for such approximations. \\
+
+% what we are doing 
+In this work we derive the upper bounds on the figure of merit $P_{\alpha}$ for extensible lattices with arbitrary cardinality $n$. We consider a case of an arbitrary positive $n$ and the case of $n = \lambda b^p$, where $\lambda$ is a odd integer. For arbitrary n, we found that $P_{\alpha}$ decays like $\Order(n^{-1})$, and in the case of $n = \lambda b^p$, $P_{\alpha}$ decays like $\Order(b^{-p \alpha})$, which can be faster when $\lambda$ is small. Hickernell and Niederreiter \cite{HicNie03a} established the existence of extensible lattices with good generating vectors for the preferred values $n = b, b^2, \ldots$.  Our purpose is to extend these results to all positive $n$, recognizing that the upper bounds on the figures of merit will be somewhat worse for general $n$ than for powers of the base. \\
 
 
 
-\cite{HicNie03a} established the existence of extensible lattices with good generating vectors for the preferred values $n = b, b^2, \ldots$.  The purpose here is to extend these results to all positive $n$, recognizing that the upper bounds on the figures of merit will be somewhat worse for general $n$ than for powers of the base.
+   
+In the next chapter, we give more background on extensible lattices. In chapter 3 we go over the figures of merit and the worst case error analysis for arbitrary $n$ for integrands that have absolutely summable Fourier series. In chapter 4 we derive upper bounds on the figure of merit % P_alpha 
+for $n$ other than $b^m$, and in chapter 5 we generalize the results to other spaces of integrands and error measures. 
+
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=5cm,trim={0 0 0 7.5mm},clip]{shifted-lattice}
+\includegraphics[width=5cm]{lattice-plot.png}
 \caption{Two-dimensional Shifted Lattice}
 \label{fig:enter-label}
 \end{figure}
+
+\Chapter{Background}
 
 Historically, lattice points were initially constructed as sets with fixed cardinality, $n$, and took the form
 \begin{equation} \label{eq:lat}
@@ -75,6 +184,52 @@ where $\vh \in \{1, \ldots, n-1\}^s$ is the \emph{generating vector}.  A (random
 \begin{equation} \label{eq:shlat}
     \{\vz_i = i \vh/n + \vDelta \pmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s.
 \end{equation}
+
+
+
+% \cite{HicNie03a} established the existence of extensible lattices with good generating vectors for the preferred values $n = b, b^2, \ldots$.  The purpose of this thesis is to extend these results to all positive $n$, recognizing that the upper bounds on the figures of merit will be somewhat worse for general $n$ than for powers of the base. 
+
+% In the next Chapter, we give more background on extensible lattices. In Section 2 we go over the figures of merit and the worst case error analysis for arbitrary $n$ for integrands that have absolutely summable Fourier series. In Section 3 we derive upper bounds on the figure of merit % P_alpha 
+% for $n$ other than $b^m$, and in Section 4 we generalize the results to other spaces of integrands and error measures. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Lattices are a popular choice of nodes $\{\vz_i\}_{i=0}^{\infty} \in [0,1)^s$ for approximating multidimensional integrals by a sample mean,
+% \[
+% \int_{[0,1)^s} f(\vx) \, \dif \vx \approx \frac{1}{n} \sum_{i=0}^{n-1} f(\vz_i) =:\appxintn(f),
+% \]
+% \citep{DicEtal22a,Nie92,SloJoe94}.
+
+
+
+% \cite{HicNie03a} established the existence of extensible lattices with good generating vectors for the preferred values $n = b, b^2, \ldots$.  The purpose of this thesis is to extend these results to all positive $n$, recognizing that the upper bounds on the figures of merit will be somewhat worse for general $n$ than for powers of the base. 
+
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=5cm,trim={0 0 0 7.5mm},clip]{shifted-lattice}
+% \caption{Two-dimensional Shifted Lattice}
+% \label{fig:enter-label}
+% \end{figure}
+
+% Historically, lattice points were initially constructed as sets with fixed cardinality, $n$, and took the form
+% \begin{equation} \label{eq:lat}
+%     \{\vz_i = i \vh/n \bmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s,
+% \end{equation}
+% where $\vh \in \{1, \ldots, n-1\}^s$ is the \emph{generating vector}.  A (random) shift, $\vDelta \in [0,1)^s$, is often added:
+% \begin{equation} \label{eq:shlat}
+%     \{\vz_i = i \vh/n + \vDelta \pmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s.
+% \end{equation}
 
 
 
@@ -104,9 +259,11 @@ Also note that
 \lambda \in \natzero.
 \end{multline}
 
-\section{Background}
 
-\section{Worst case error analysis for arbitrary $n$}
+\LarysaNote{Hickernell et al.} showed that if a lattice sequence in base $b$ has the worst case error of $C(b^m)^{-\alpha}$ in a reproducing kernel Hilbert space, then the worst case error of using the first $n \geq 2$ points of the lattice sequence is $ C \frac{\log_bn}{n^{\min(\alpha,1)}}$, for some constants $C, \alpha > 0$ \cite [Corollary 1]{HicEtal10a}. 
+We provide a refinement of this result (\LarysaNote{no extra log term}.)
+
+\Chapter{Worst case error analysis for arbitrary $n$}
 We first consider integrands, $f$, that have an absolutely summable Fourier series:
 \begin{equation} \label{eq:fseries}
     f(\vx) = \sum_{\vk \in \integers^{s}} \tf(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vx}, \qquad \text{where } \tf(\vk) = \int_{[0,1)^{\infty}} f(\vx) \me^{-2 \pi \sqrt{-1} \vk^T \vx}\, \dif \vx
@@ -191,7 +348,7 @@ Therefore, the above formula \eqref{eq:Niedbd} can be extended to the case of $m
 \end{multline}
 
 
-% \subsection{Randomized Error Analysis}
+% \Subsection{Randomized Error Analysis}
 % Another approach is to assume that $f$ in \eqref{eq:fseries} is a random function (stochastic process) where
 % \begin{equation}
 %     \abs{\tf(\vk)} \IIDsim \cn(0,\tr(\vk)^{-2\alpha}).
@@ -211,7 +368,7 @@ Therefore, the above formula \eqref{eq:Niedbd} can be extended to the case of $m
 
 
 
-\section{The figure of merit $P_{\alpha}(\vh,\vgamma,n,\onetos)$ for  $n$ other than $b^m$}
+\Chapter{The figure of merit $P_{\alpha}(\vh,\vgamma,n,\onetos)$ for  $n$ other than $b^m$}
 
 
 
@@ -259,7 +416,7 @@ Therefore, the above formula \eqref{eq:Niedbd} can be extended to the case of $m
 %          2^{1-\alpha} \right\}
 %     \end{align*}
 
-\subsection{$P_{\alpha}(\vh,\vgamma,n,\onetos)$ for  arbitrary $n$}
+\Section{$P_{\alpha}(\vh,\vgamma,n,\onetos)$ for  arbitrary $n$}
 For any non-negative integer $n$, express as  $n = n_0 + bn_1 + \cdots + b^m n_m$, where the digits $n_0, n_1, \ldots$ are in $\{0, 1, \cdots, b-1\}$. Thus, $m = \lfloor \log_b(n) \rfloor$.  Let $\trun(n,\ell) = n_0 + \cdots + b^{\ell} n_{\ell}$ for $\ell = 0, \ldots, m$ and $\trun(n,-1) = 0$, then
 
 \begin{align*}
@@ -335,7 +492,7 @@ Unfortunately, this only decays like $\Order(n^{-1+\delta})$. \\
 % \end{align*}
 % Unfortunately, this only decays like $\Order(n^{-1+\delta})$.
 
-\subsection{$P_{\alpha}(\vh,\vgamma,n,\onetos)$ for $n$ an integer multiple of $b^p$}
+\Section{$P_{\alpha}(\vh,\vgamma,n,\onetos)$ for $n$ an integer multiple of $b^p$}
 
 Thus, next we try $n = \lambda b^p$, where $\lambda$ is an odd integer. Then, $n = b^pn_p + b^{p+1}n_{p+1} + \cdots + b^m n_m$
 % \FredNote{Let's carry on following the above.  WAtch out for your geometric sum}
@@ -365,8 +522,7 @@ Thus, next we try $n = \lambda b^p$, where $\lambda$ is an odd integer. Then, $n
     &\le \frac{\lambda^{\alpha -1}{C}_{P}(\alpha, \vgamma,\epsilon,s)}{n^{\alpha}}  \frac {(b-1)} {1 - b^{1- \alpha}}   \max(1, (\log n )^{\alpha(s+1)})) [\max(1,\log \log (
     n+1))]^{\alpha(1+\epsilon)}
 \end{align*}
-Which decays  nearly like $\Order(b^{-p \alpha})$. \\
-For small $\lambda$ the decay is closer to $\Order(n^{-\alpha})$, and for large $\lambda$ the decay is close to $\Order(n^{-1})$
+Which decays  nearly like $\Order(b^{-p \alpha})$ \\
 % \begin{align*}
 %     P_\alpha(\vh,\lambda 2^p)
 %     %& \le \frac {1}{\lambda 2^p} \left\{2^p  P_\alpha(\vh,2^p) + \sum_{\ell = 0}^{m-p-1} 2^{m-\ell} n_{m - \ell} P_\alpha(\vh,2^{m-\ell})\right\} \\
@@ -411,7 +567,7 @@ For small $\lambda$ the decay is closer to $\Order(n^{-\alpha})$, and for large 
 % \end{align*}
 
 
-\section{Extensions to other spaces of integrands and error measures}
+\Chapter{Extensions to other spaces of integrands and error measures}
 
 We can also consider a more general class of integrands, note: 
 $$
@@ -452,7 +608,7 @@ Now, consider arbitrary $n$:
 \end{align*}
 This quantity has the same upper bound as the case with $q^{'} = 1$. Therefore, there does not appear to be an advantage in making $q$ smaller and thus making $q^{'}$ larger. 
 % bounded by P_\alpha since q'= 1 is the max 
-\subsection{Randomized Error Analysis}
+\Section{Randomized Error Analysis}
 Another approach is to assume that $f$ in \eqref{eq:fseries} is a random function (stochastic process) where
 \begin{equation}
     \abs{\tf(\vk)} \IIDsim \cn(0,\tr(\vk)^{-2\alpha}).
@@ -470,12 +626,36 @@ Then it follows that
 In terms of powers of $n$, we will not be able to improve the upper bound by making $q^{'}$ bigger. 
 
 
-\section{Lattice Sequences and Toeplitz Matrices}
+\Chapter{Lattice Sequences and Toeplitz Matrices}
 
 Consider the lattice sequence defined in \eqref{eq:extlat} and the formula for $P_{\alpha}(\vh,\gamma, n, 1:s)$ given in \eqref{eq:wcerrPalpha}
 
+%\[ \]
+Previously, we assumed that all the weights were equal. Now, we want to see if we can improve the upper bound on $P_{\alpha}$ if we have unequal weights. 
+Let $\appxintn(f) = \frac{1}{n} \sum_{i=0}^{n-1} w_if(\vz_i) $
 
-% \left\{\right\}
-\bibliographystyle{elsarticle-harv.bst}
-\bibliography{FJH23,FJHown23}
-\end{document}
+Then the error in \eqref{eq:wcerrPalpha} becomes
+\begin{align*}
+\nonumber
+\abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)}^2 
+& \le \norm[\cf{\alpha},2]{f}^2 \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}^2\tr(\vk,\vgamma)^{-2\alpha} \\
+\end{align*}
+
+
+
+
+
+$B_2$ is a Bernoulli polynomial of degree 2 \cite{OlvEtal10a}
+% BIBLIOGRAPHY
+%
+% you have two options: 1) create bibliography manually,
+% 2) create bibliography automatically. See BibliographyHelp.pdf file for details.
+
+
+%\bibliographystyle{plain}
+%\bibliographystyle{apacite}
+\bibliographystyle{ieeetr} %this package will format in IEEE style.
+%\bibliographystyle{elsarticle-harv.bst}
+\bibliography{FJH23,FJHown23,LarysaReferences}
+
+\end{document}  % end of document
