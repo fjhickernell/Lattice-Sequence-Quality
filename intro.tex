@@ -41,8 +41,13 @@ Multidimensional integrals arise in various fields and practical applications \L
 The nodeset, $\{\vz_0, \vz_1, \ldots \}$, is chosen as independent and identically distributed (IID), which corresponds to simple Monte Carlo. However, the nodeset may be chosen to be more evenly distributed, which corresponds to quasi-Monte Carlo methods. Lattices are a popular choice of nodes $\{\vz_i\}_{i=0}^{\infty} \in [0,1)^s$ for such approximations. \\
 
 % what we are doing 
+% \LarysaNote{In this work, we study how poor lattices perform if they have \emph{not} preferred cardinality. Our main results are presented in Theorem 1, where we consider the case when $n$ is  any positive integer, and also when $n$ is a integer multiple of a power of the base. We found that the error decays relatively slowly for any $n$, but when $n$ is a small multiple of, the decay is close to that of the preferred values. }
+%In this work 
 
-In this work we derive the upper bounds on the figure of merit $P_{\alpha}$ for extensible lattices with arbitrary cardinality $n$. We consider a case of an arbitrary positive $n$ and the case of $n = \lambda b^p$, where $\lambda$ is a odd integer. For arbitrary n, we found that $P_{\alpha}$ decays like $\Order(n^{-1})$, and in the case of $n = \lambda b^p$, $P_{\alpha}$ decays like $\Order(b^{-p \alpha})$, which can be faster when $\lambda$ is small. \cite{HicNie03a} established the existence of extensible lattices with good generating vectors for the preferred values $n = b, b^2, \ldots$.  Our purpose is to extend these results to all positive $n$, recognizing that the upper bounds on the figures of merit will be somewhat worse for general $n$ than for powers of the base. \\
+%we derive the upper bounds on the figure of merit $P_{\alpha}$ for extensible lattices with arbitrary cardinality $n$. We consider a case of an arbitrary positive $n$ and the case of $n = \lambda b^p$, where $\lambda$ is a odd integer. For arbitrary n, we found that $P_{\alpha}$ decays like $\Order(n^{-1})$, and in the case of $n = \lambda b^p$, $P_{\alpha}$ decays like $\Order(b^{-p \alpha})$, which can be faster when $\lambda$ is small. \\
+\LarysaNote{Typically, for integral approximations lattices with preferred number of points $b^m$ are used ($b$ is a prime, $m$ is a positive integer). In this work, we study how big approximation error can be if we use lattices with any number of points $n$. We found that the error decays relatively slow for any $n$, but when $n$ is a small multiple of a power of the base, the decay is close to that of the preferred values.}
+
+\cite{HicNie03a} established the existence of extensible lattices with good generating vectors for the preferred values $n = b, b^2, \ldots$.  Our purpose is to extend these results to all positive $n$, recognizing that the upper bounds on the figures of merit will be somewhat worse for general $n$ than for powers of the base. \\
 
 
 
@@ -143,6 +148,79 @@ Also note that
 
 \cite{HicEtal10a} established 
 
+
+
+
+
+
+\section{Proof of \eqref{eq:mainresulttwo}}
+Next, suppose that $n$ is an integer multiple of the base. Let $n = \lambda b^p$, where $\lambda$ is an odd integer. Then,  $b$-ary expansion of $n$ takes the form:  $n = b^pn_p + b^{p+1}n_{p+1} + \cdots + b^m n_m$.
+
+
+
+% suppose that $n = \lambda b^p$, where $\lambda$ is an odd integer. Then, the $n = b^pn_p + b^{p+1}n_{p+1} + \cdots + b^m n_m$
+% % \FredNote{Let's carry on following the above.  WAtch out for your geometric sum}
+
+Earlier we showed 
+% Thus the figure of merit $P_\alpha(\vh,\vgamma,\lambda b^p,\onetos)$ is also bounded above by a sum of of $P_\alpha$for powers of the base.
+It follows that $P_\alpha$ for $n = \lambda b^p$ can also be bounded above by a sum of $P_\alpha$ for powers of the base. 
+\begin{align*}
+    P_\alpha(\vh,\vgamma,\lambda b^p,\onetos)
+    & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_{\lambda b^p}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk,\vgamma)^{-\alpha} \qquad \text{by \eqref{eq:wcerrPalpha}} \\
+    & \le \frac {1}{\lambda b^p} \sum_{\ell = 0}^{m-p} b^{m-\ell} n_{m -\ell} P_\alpha(\vh,\vgamma,b^{m-\ell},\onetos) \qquad \text{by \eqref{eq:Palphadual}}
+\end{align*}
+Similarly to the proof for arbitrary $n$, we substitute in the upper bounds for $P_\alpha$  
+\begin{align*}
+   P_\alpha(\vh,\vgamma,\lambda b^p,\onetos) 
+    &\le \frac {1}{\lambda b^p} \left\{ b^m n_m P_\alpha(\vh,\vgamma,b^m,\onetos) + b^{m-1} n_{m-1} P_\alpha(\vh,\vgamma,b^{m-1},\onetos) \right. \\
+    &\qquad + \cdots + b^p n_p P_\alpha(\vh,\vgamma,b^p,\onetos) 
+    \bigg\} \\ 
+    & \le \frac {(b-1)}{\lambda b^p}  
+    \left\{
+    b^m  P_\alpha(\vh,\vgamma,b^m,\onetos) + b^{m-1}  P_\alpha(\vh,\vgamma,b^{m-1},\onetos) \right. \\
+    &\qquad + \cdots + b^p  P_\alpha(\vh,\vgamma,b^p,\onetos) 
+    \bigg\} \\
+    & \le \frac {(b-1)}{\lambda b^p} C_{P}(\alpha,\vgamma,\epsilon,s) \\
+    &\qquad \times \left\{ b^{m(1-\alpha)}\max\left(1, (\log b^m)^{\alpha(s+1)}\right) \max\left(1,\log \log (b^m+1)\right)^{\alpha(1+\epsilon)} \right.\\ 
+    & \qquad  + b^{(m-1)(1-\alpha)}\max\left(1, (\log b^{(m-1)})^{\alpha(s+1)}\right) \max\left(1,\log \log (b^{(m-1)}+1)\right)^{\alpha(1+\epsilon)}\\
+    &  \qquad + \cdots \\
+    & \qquad  \left . +   b^{p(1-\alpha)}\max\left(1,(\log b^p)^{\alpha(s+1)}\right) \max\left(1,\log \log (b^p+1)\right)^{\alpha(1+\epsilon)}  \right\}.
+\end{align*}
+
+Next, we factor out the largest logarithmic term and $b^{p(1-\alpha)}$
+and compute the sum of the geometric series 
+
+\begin{align*}
+     P_\alpha(\vh,\vgamma,\lambda b^p,\onetos)
+     & \le \frac {(b-1)}{\lambda b^p} C_{P}
+    (\alpha,\vgamma,\epsilon,s) 
+    \left\{\frac{b^{p(1-\alpha)} - b^{(m+1)(1- \alpha )}}{1 - b^{1 -\alpha}}\right\} \\
+     & \qquad \qquad \times \max(1, (\log b^{m})^{\alpha(s+1)})) [\max(1,\log \log (
+    b^m+1))]^{\alpha(1+\epsilon)} \\
+    & = \frac { (b-1) C_{P}(\alpha, \vgamma, \epsilon,s)}{\lambda b^p} \left\{ b^{p(1-\alpha)} \cdot \frac{(1 - b^{(m-p+1)(1- \alpha )})}{1 - b^{1- \alpha}}\right\} \\
+    & \qquad \qquad \times \max(1, (\log b^{m})^{\alpha(s+1)})) [\max(1,\log \log (
+    b^m+1))]^{\alpha(1+\epsilon)}
+\end{align*}
+
+Finally, we simplify the sum %to arrive(??) to the final
+\begin{align*}
+    P_\alpha(\vh,\vgamma,\lambda b^p,\onetos)
+    &\leq  \frac {(b-1)C_{P}(\alpha, \vgamma, \epsilon,s)}{\lambda b^{p\alpha}}  \frac{1 - b^{(m-p+1)(1- \alpha )}}{1 - b^{1- \alpha}} \\
+    &\qquad \times \max(1, (\log b^{m})^{\alpha(s+1)})) [\max(1,\log \log (
+    b^m+1))]^{\alpha(1+\epsilon)} \\
+    &\le \frac{\lambda^{\alpha -1}{C}_{P}(\alpha, \vgamma,\epsilon,s)}{n^{\alpha}}  \frac {(b-1)} {1 - b^{1- \alpha}}   \max(1, (\log n )^{\alpha(s+1)})) [\max(1,\log \log (
+    n+1))]^{\alpha(1+\epsilon)}   
+\end{align*}
+This completes the proof of \eqref{eq:mainresulttwo}. The upper bound for this case is 
+
+
+
+% Which decays  nearly like $\Order(b^{-p \alpha})$ \\
+% For small $\lambda$ the decay is closer to $\Order(n^{-\alpha})$, and for large $\lambda$ the decay is close to $\Order(n^{-1})$
+
+In this case the upper bound decays almost like $\Order(b^{-p \alpha})$
+which is an improvement since for small $\lambda$ the decay is close to that for preferred values of $n$. 
+However, for large $\lambda$, the decay is closer to (4.1)
 
 \bibliographystyle{elsarticle-harv.bst}
 \bibliography{FJH23,FJHown23}

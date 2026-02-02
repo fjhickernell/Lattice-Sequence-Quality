@@ -120,7 +120,7 @@
 \dsp           % double space
 \vspace*{3in}
 \begin{center}
-\copyright \ Copyright by \\ \@author \\ 2024 %will need to update each year until I can automate. JH 9/11/23
+\copyright \ Copyright by \\ \@author \\ 2025 %will need to update each year until I can automate. JH 9/11/23
 \end{center}
 \clearpage
  }

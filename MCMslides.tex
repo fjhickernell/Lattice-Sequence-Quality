@@ -1,0 +1,577 @@
+\documentclass{beamer}
+\setbeamertemplate{bibliography item}{[\theenumiv]}
+\usepackage[english]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+% \usepackage{graphicx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{setspace}
+ \usepackage{movie15}
+\usetheme{CambridgeUS}
+% \usetheme{Boadilla}
+ \usepackage{hyperref}
+
+\usepackage[authoryear]{natbib}
+% \usepackage{mathtools,upref,siunitx,upquote,fancyvrb,bbm,xspace,color,amsmath,amssymb, bm,amsthm }
+% \usepackage[hyphens]{url}
+% \usepackage[utf8]{inputenc}
+% \usepackage{esdiff}
+% \usepackage{graphicx}
+% \usepackage{xcolor}
+
+\input{FJHDef.tex}
+\usepackage{xspace}
+\usepackage{algpseudocode}
+\usepackage{algorithm, algorithmicx}
+\algnewcommand\algorithmicparam{\textbf{Parameters:}}
+\algnewcommand\PARAM{\item[\algorithmicparam]}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\RETURN{\State \textbf{Return }}
+
+\newcommand{\tr}{\widetilde{r}}
+\newcommand{\appxintn}{\appxint_n}
+\DeclareMathOperator{\appxint}{\hat{I}}
+\DeclareMathOperator{\trun}{trunc}
+\newcommand{\onetos}{1\!:\!s}
+
+% \newcommand{\FredNote}[1]{{\color{blue}#1}}
+% \newcommand{\FredBNote}[1]{{\color{blue}[#1]}}
+
+% \newcommand{\LarysaNote}[1]{{\color{violet}#1}}
+
+% \newtheorem{theorem}{Theorem}
+
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1ex,left]{author in head/foot}%
+      \hspace*{1em}%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1ex,right]{date in head/foot}%
+      \insertframenumber{} / \inserttotalframenumber\hspace*{1em}
+    \end{beamercolorbox}%
+  }
+}
+
+
+\title[Illinois Institute of Technology]{The Quality of Lattice Sequences}
+% \subtitle{\footnotesize This research is supported in part by U.S.\  NSF  Grant \#2316011}
+%\subtitle{\footnotesize Larysa Matiukha \& Dr.\ Sou-Cheng T.\ Choi}
+
+\author[] {Larysa Matiukha, Yuhan Ding, Fred J Hickernell
+}
+
+\institute{Department of Applied Mathematics, Illinois Institute of Technology}
+
+
+\date{28 July 2025}
+
+% \setbeamertemplate{title page}{
+%   \vbox{}
+%   \vfill
+%   \begin{centering}
+%     {\usebeamerfont{title}\inserttitle\par}
+%     \vskip0.5em
+%     {\usebeamerfont{author}\insertauthor\par}
+%     \vskip0.5em
+%     {\usebeamerfont{institute}\insertinstitute\par}
+%     \vskip1em
+%     {\footnotesize This research is supported in part by U.S.\  NSF  Grant \#2316011.\par}
+%     \vskip1em
+%     {\usebeamerfont{date}\insertdate\par}
+%   \end{centering}
+%   \vfill
+% }
+
+%{{This research is supported in part by U.s. NSF  Grant #2316011}}
+\graphicspath{ {./images/} }
+
+% \logo{
+% \includegraphics[width=1cm]{thesis docs/slides_images/iit_logo.png}
+
+% }
+
+ % you can change it on choice
+% I recommend: CambridgeUS, Berlin, Singapore
+% for more choices, visit: https://deic.uab.cat/~iblanes/beamer_gallery/index_by_theme_and_color.html
+
+
+
+\begin{document}
+{
+
+\begin{frame} 
+    \maketitle
+\end{frame}
+}
+%\frame{\titlepage}
+\begin{frame}
+\frametitle{Contents}
+\tableofcontents
+\end{frame}
+
+
+\addtocontents{toc}{\setcounter{tocdepth}{2}}
+
+
+\section{Motivation}
+% \begin{frame}{Motivation}
+% % \textbf{High-dimensional integrals}:
+% % \begin{itemize}
+% %     \item Appear in quantitative finance \cite{CafMorOwe97}, statistics \cite{Gen92,GenBre99}, and physics \cite{PapTra97}
+% %     \item Often arise as expectations of random variables: 
+% %     \[
+% %     \mathbb{E}[f(\vX)] = \int_{[0,1)^s} f(\vx) \, \dif \vx
+% %     \]
+% % \end{itemize}
+
+% % \vspace{0.5em}
+% % \textbf{Challenge:} Analytical solutions are often infeasible.
+
+% % \vspace{0.5em}
+% % \textbf{Solution:} Approximate by a sample mean:
+% % \[
+% % \appxintn(f) = \frac{1}{n} \sum_{i=0}^{n-1} f(\vz_i)
+% % \]
+% % \begin{itemize}
+% %     \item \textbf{Monte Carlo (MC):} $\vz_i$ are IID
+% %     \item \textbf{Quasi-Monte Carlo (QMC):} $\vz_i$ more evenly spaced
+% % \end{itemize}
+
+
+
+% \vspace{0.5em}
+% \textbf{Lattices}
+% \begin{itemize}
+%   %  \item A popular choice of nodes for approximating multidimensional integrals by a sample mean
+%   \item Node sets $\{\vz_i\}_{i=0}^{n-1} \in [0,1)^{s \times n}$ that fill the space evenly
+%     \item Can be defined extensibly for $n = b, b^2, \ldots$, where $b$ is a prime \cite{HicEtal00, Mai81a} :
+%     % \item (something on faster convergence compared to MC?)
+% %     \[
+% % \{\vz_i = \vh \phi(i) + \vDelta \pmod{\vone} : i = 0,1,\ldots\} \subset [0,1)^s
+% % \]
+% % \begin{itemize}
+% %     \item $\vh$ must be a \textbf{generalized integer} \cite[Section 2]{HicNie03a}.
+% %     \item $\phi(i)$: the \textbf{van der Corput sequence} in base $b$.
+% % \end{itemize}
+% \end{itemize}
+
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.8\linewidth]{thesis docs/lattice-plot1.png}
+%     \label{fig:enter-label}
+% \end{figure}
+
+
+
+% \begin{tabular}{m{0.3\textwidth}m{0.7\textwidth}}
+% What about  $ n = 47$?
+% & \includegraphics[width=0.3\linewidth]{thesis docs/plots/lattice_47.png} 
+% \end{tabular}
+% \end{frame}
+% \begin{frame}{Extensible Lattices and Contributions}
+
+% \textbf{Extensible lattice sequences:} \cite{HicEtal00, Mai81a}
+% \[
+% \{\vz_i = \vh \phi(i) + \vDelta \pmod{\vone} : i = 0,1,\ldots\} \subset [0,1)^s
+% \]
+% \begin{itemize}
+%     \item $\vh \in \mathbb{Z}^s$: generating vector
+%     \item $\vDelta \in [0,1)^s$: random shift
+%     \item $\phi(i)$: the \textbf{van der Corput sequence} in base $b$.
+    
+% \end{itemize}
+
+% \vspace{0.5em}
+% \textbf{Limitation:} Lattice sequences defined for sample size $n = b^m$
+
+% \vspace{0.5em}
+% \textbf{Our contribution:}
+% \begin{itemize}
+%     \item Derive theoretical upper bounds on the figure of merit $P_\alpha$ for arbitrary $n$
+%     \item Explore behavior of $P_{\alpha,2}$ numerically
+% \end{itemize}
+% \end{frame}
+
+
+\begin{frame}{What About Partial Lattices?}
+
+\textbf{Extensible Lattice Sequences} \cite{HicEtal00, Mai81a}:
+\small
+\[
+\{\vz_i = \vh \phi(i) + \vDelta \pmod{\vone} : i = 0,1,\ldots\} \subset [0,1)^s
+\]
+
+\begin{itemize}
+    \item $\vh$: a \textbf{generating vector} with \textbf{generalized integer} coordinates
+    \item $\phi(i)$: van der Corput sequence in prime base $b$ 
+    %\item $\vh \in \{1, \ldots, n-1\}^s$ is the \textbf{generating vector}, must be a \textbf{generalized integer} \cite[Section 2]{HicNie03a}.
+    \item For $n = b^m$, $m \in \naturals$ \cite[Theorem 5]{HicNie03a} shows there exists $\vh$ with:
+\end{itemize}
+
+\vspace{-1em}
+\small
+\begin{equation*}
+P_\alpha(\vh, \vgamma, n, \onetos) \le C_{P}(\alpha,\vgamma,\epsilon,s)\, n^{-\alpha} (\log n)^{\alpha(s+1)} [\log \log( n +1 )]^{\alpha(1+\epsilon)}
+\end{equation*}
+\normalsize
+
+\vspace{-0.5em}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.82\linewidth]{lattice-plot1.png}
+\end{figure}
+
+\vspace{-0.8em}
+\textbf{Question:} How much worse is $P_\alpha$ when $n$ is \emph{not} a power of the base $b$?
+%\textbf{Question:} How much worse is the figure of merit $P_\alpha$ when $n$ is \emph{not} a power of the base $b$?
+\end{frame}
+
+% \begin{tabular}{m{0.3\textwidth}m{0.7\textwidth}}
+% What about  $ n = 47$?
+% & \includegraphics[width=0.3\linewidth]{thesis docs/plots/lattice_47.png} 
+% \end{tabular}
+% \begin{frame}
+
+% \begin{itemize}
+%     \item Extend the upper bound in \cite[Theorem 5]{HicNie03a} to all positive $n$
+%     \item 
+% \end{itemize}
+    
+% \end{frame}
+\begin{frame}{Examples of Partial Lattices}
+  \begin{columns}[c] 
+
+  \column{0.31\textwidth}
+  \includegraphics[width=\linewidth]{plots/lattice_40.png}
+  \centering \small 
+
+  \column{0.31\textwidth}
+  \includegraphics[width=\linewidth]{plots/lattice_47.png}
+  \centering \small 
+
+  \column{0.31\textwidth}
+  \includegraphics[width=\linewidth]{plots/lattice_48.png}
+  \centering \small 
+
+\end{columns}
+\end{frame}
+
+ \section{Worst Case Error Analysis for Arbitrary $n$}
+
+\begin{frame}{Worst-Case Error Analysis for arbitrary $n$}
+
+\textbf{Goal:} Bound the integration error 
+\small
+\[
+\left| \int_{[0,1)^s} f(\vx) \, \dif \vx - \appxint_n(f) \right|,
+\quad \appxintn(f) := \frac{1}{n} \sum_{i=0}^{n-1} f(\vz_i) \]
+\textbf{Set-up:}
+\begin{itemize} 
+    \item Assume $f$ has an absolutely summable Fourier series %\quad (with Fourier coefficients $\tilde{f}(\vk)$)
+    \item Coordinate weights:
+    \small
+    \[ \tr(\vk,\vgamma) = \prod_{j=1}^{s} r(k_{j},\gamma_{j}),
+\quad  r(k_{j},\gamma_{j})=\begin{cases} 1, &
+k_{j}=0, \\ \gamma_{j}^{-1}\abs{k_{j}}, & k_{j} \ne 0.  \end{cases}\]
+    \item  Banach space of functions:
+    \small
+\[
+\cf_{\alpha} = \{ f \in \cl_2[0,1)^{s} :
+\norm[\cf{\alpha}]{f} < \infty \}, \quad
+\norm[\cf{\alpha}]{f} := \sup_{\vk \in \integers^{s}}
+\left(\tr(\vk,\vgamma)^{\alpha} \abs{\tilde{f}(\vk)} \right),
+\]
+\item[] where \(\tilde{f}(\vk)\) are the Fourier coefficients.
+    % \item The cubature error can be bounded by:
+    % \small
+    % \[
+    % |\text{Error}| \le \norm[\cf{\alpha}]{f} \cdot P_\alpha(\vh,\vgamma,n,1:s)
+    % \]
+\end{itemize}
+\end{frame}
+
+% \begin{frame}{Examples of Partial Lattices}
+    
+% \end{frame}
+
+
+
+\begin{frame}{Cubature Error} 
+The cubature error can be bounded by:
+    \small
+    \[
+    |\text{Error}| \le \norm[\cf{\alpha}]{f} \cdot \underbrace{P_\alpha(\vh,\vgamma,n,1:s)}_{ \text{quality of the nodes}}
+    \]
+\begin{itemize}
+\item For arbitrary $n$: 
+\small
+\[ P_\alpha(\vh,\vgamma,n,1:s) = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk,\vgamma)^{-\alpha}\]
+\item For $n = b^m$: \small
+\[
+P_\alpha(\vh,\vgamma,b^m,\onetos) = \sum_{\vk \in B(\vh,m,1:s )} \tr(\vk,\vgamma)^{-\alpha}
+\]
+\item[] where 
+\vspace{-1ex} \[ B(\vh,m,\onetos) := \left\{ \vk \in \mathbb{Z}^s \setminus \{\vzero\} : \vk^T \vh \equiv 0 \pmod{b^m} \right\}
+\]
+% \[
+% \text{where } B(\vh,m,\onetos) := \left\{ \vk \in \mathbb{Z}^s \setminus \{\vzero\} : \vk^T \vh \equiv 0 \pmod{b^m} \right\}
+% \]
+\normalsize
+\end{itemize}
+% where 
+% \[
+% B(\vh,m,\onetos) := \left\{ \vk \in \mathbb{Z}^s \setminus \{\vzero\} : \vk^T \vh = 0 \pmod{b^m} \right\}
+% \]
+%\textbf{$P_\alpha$}: quality of the nodes
+\end{frame}
+
+
+\section{The figure of merit $P_\alpha$ for $n$ other than $b^m$}
+
+%\begin{frame}{Theoretical Bounds for Arbitrary $n$}
+\begin{frame}{$P_\alpha$ for arbitrary $n$}
+\begin{block}{Theorem 1}
+    % For fixed integer base $b \ge 2$, a fixed smoothness parameter $\alpha \ge 1$, a fixed vector of coordinate weights $\vgamma \in [0,\infty)^\infty$, and a fixed $\epsilon > 0$, there exists a generating vector for the lattice, $\vh$, for which the figure of merit, $P_\alpha$, has the following upper bound for arbitrary positive integer $n$:
+    \begin{multline*} 
+        P_\alpha(\vh,\vgamma,n,\onetos) 
+        \le \frac {C_{P}(\alpha,\vgamma,\epsilon,s)}{\textcolor {red}{n}} \frac{(b-1)}{1 - b^{1-\alpha}} \\
+        \times [\max(1, (\log n)^{\alpha(s+1)})]
+      [\max(1,\log \log (n+1))]^{\alpha(1+\epsilon)} \\
+      \forall n , s \in \naturals, \ \alpha > 1.
+    \end{multline*}
+        \begin{multline*} 
+         P_\alpha(\vh,\vgamma,\lambda b^p,\onetos) 
+         \le \frac{\textcolor{red}{\lambda^{\alpha -1}}{C}_{P}(\alpha, \vgamma,\epsilon,s)}{\textcolor {red}{n^{\alpha}}}  \frac {(b-1)} {1 - b^{1- \alpha}} \\
+         \times \max(1, (\log n )^{\alpha(s+1)}) [\max(1,\log \log (
+    n+1))]^{\alpha(1+\epsilon)} \\
+    \forall p \in \natzero, \ \lambda, s \in \naturals, \ \alpha > 1.
+    \end{multline*}
+    \end{block}
+    
+\end{frame}
+%\begin{frame}{$P_\alpha$ for $n = \lambda b^p$}
+
+
+%     \begin{block}{Theorem 1 (Part 2)}
+%     % This is the same power of logarithm as for $n = b^{m}$, but the power of $n$ is fixed at $-1$.
+
+%     % However, if $n$ is a (small) integer multiple of a power of the base, then $P_\alpha$ has an upper bound that is similar to the case of $n=b^m$:
+%     \begin{multline*} 
+%          P_\alpha(\vh,\vgamma,\lambda b^m,\onetos) 
+%          \le \frac{\lambda^{\alpha -1}{C}_{P}(\alpha, \vgamma,\epsilon,s)}{\textcolor {red}{n^{\alpha}}}  \frac {(b-1)} {1 - b^{1- \alpha}} \\
+%          \times \max(1, (\log n )^{\alpha(s+1)}) [\max(1,\log \log (
+%     n+1))]^{\alpha(1+\epsilon)} \\
+%     \forall m \in \natzero, \ \lambda, s \in \naturals.
+%     \end{multline*}
+%     \end{block}
+% \end{frame}
+
+\begin{frame}{$P_{\alpha}$ when the coordinate weights satisfy summability condition}
+\begin{block} {Theorem 2}
+   
+Suppose $\alpha > 1$.
+ If $\sum_{j = 1}^{\infty} \gamma_j ^{\alpha} < \infty$, then for any fixed $\delta > 0$ :
+\[
+  P_\alpha(\vh,\vgamma,n,\onetos)
+        \leq \frac{\tilde{C}_P(\alpha, \vgamma, \delta)}{n^{1-\delta}} \frac{b^{\delta}(b - 1) }{b^{\delta} - 1} 
+\] If $\sum_{j = 1}^{\infty} \gamma_j < \infty$, then for any fixed $\delta $ such that $0 < \delta < \alpha - 1  $:
+\[
+  P_\alpha(\vh,\vgamma,\lambda b^p,\onetos)
+        \leq \frac{\lambda^{\alpha - 1 - \delta }\tilde{C}_P(\alpha, \vgamma, \delta)}{n^{\alpha - \delta}}\frac{(b-1)}{1 - b^{1 - \alpha + \delta}}.
+\]
+\end{block}
+% (add citation for \cite[Theorem 2, case (iii)]{HicNie03a}) 
+\end{frame}
+
+
+
+\begin{frame}{Decay of the upper bound on $P_2$ for Different Sample Sizes}
+
+\begin{columns}
+\column{0.5\textwidth}
+\includegraphics[width=\linewidth]{thesis docs/plots/p_alpha_O.png}
+
+\vspace{0.5em}
+\small Upper bound on $P_2$ for $1 \leq n \leq 2^{10}$
+
+\begin{itemize}
+  \item Nearly $\Order(n^{-2})$ when $n = 2^m$
+  \item Slower $\Order(n^{-1})$ decay for general $n$
+\end{itemize}
+
+\column{0.5\textwidth}
+\includegraphics[width=\linewidth]{thesis docs/plots/p_alpha_lambda_O.png}
+
+\vspace{0.5em}
+\small Upper bound on $P_2$ for $n = \lambda 2^p$ for various small $\lambda$'s
+
+\begin{itemize}
+  \item Still achieves $\Order(n^{-2})$ decay
+  \item Smaller $\lambda$ tends to give smaller $P_2$
+\end{itemize}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Keister Example with $d = 6, \  1 \leq n \leq 2^{15}$}
+\[ f(\vx) = \pi^{d/2}\cos(\norm{\vx})\]
+    \begin{columns}
+        \column{0.5\textwidth} \includegraphics[width=\linewidth]{plots/keister_n.png}
+         % \centering \footnotesize Absolute error vs $n$
+         
+        \column{0.5\textwidth} \includegraphics[width=\linewidth]{plots/keister_lambdas.png}
+        % \centering \footnotesize $\lambda \in \{1,3,5,7\}$: error vs $n = \lambda 2^p$
+    \end{columns}
+    \vspace{0.5em}
+\centering
+\footnotesize %some observation maybe
+\end{frame}
+\section{$P_{\alpha,2}$ with optimal sample weights}
+\begin{frame}{Improving Cubature Error with Unequal Weights}
+
+\textbf{Standard approach:} Use equal weights $1/n$ for each sample point.
+
+\vspace{0.5em}
+\textbf{Question:} Can we improve the upper bound on the cubature error by assigning optimal sample weights?
+
+\vspace{0.5em}
+\textbf{Set-up:}
+\begin{itemize}
+    %\item We define a Hilbert space $\cf_{\alpha,2}$ of functions, with norm:
+    \item Hilbert space of functions:
+    \small
+    \[ \cf_{\alpha,2} = \{ f \in \cl_2[0,1)^{s} :
+\norm[\cf{\alpha},2]{f} < \infty \}, \quad
+    \norm[\cf{\alpha,2}]{f}^2 := \sum_{\vk} \left(\tr(\vk,\vgamma)^\alpha |\tilde{f}(\vk)|\right)^2
+    \]
+    % $$
+% \cf_{\alpha,2} = \{ f \in \cl_2[0,1)^{s} :
+% \norm[\cf{\alpha},2]{f} < \infty \}, \qquad
+% \norm[\cf{\alpha,2}]{f} := \left[\sum_{\vk \in \integers^s} \left(\tr(\vk,\vgamma)^{\alpha}\abs{\tilde{f}(\vk)}\right)^2 \right]^{\frac{1}{2}} .
+% $$
+     \vspace{-0.8em}
+    \item Let $\appxintn(f) = \sum_{i=0}^{n-1} w_i f(\vz_i)$
+    \vspace{0.5em}
+    \item Worst-case error becomes:
+    
+    \[
+     |\text{Error}|^2 \le \norm[\cf{\alpha,2}]{f}^2 \underbrace{ [ -1 + (\vw^T \mK \vw) ],}_{=: \textcolor{red}{ P_{\alpha,2}^2(\vh,\tilde{\vgamma},n,1:s)}}
+    \]
+    %   \[ 
+    % |\text{Error}|^2 \le \norm[\cf{\alpha,2}]{f}^2 \cdot P_{\alpha,2}^2(\vh,\tilde{\vgamma},n,1:s), \quad P_{\alpha,2}^2(\vh,\tilde{\vgamma},n,1:s) := [ -1 + (\vw^T \mK \vw) ]  \]
+    
+    % [ -1 + (\vw^T \mK \vw) ] =: \norm[\cf{\alpha,2}]{f}^2 \cdot P_{\alpha,2}^2
+   
+    % \[
+    % |\text{Error}|^2 \le \norm[\cf{\alpha,2}]{f}^2 [ -1 + (\vw^T \mK \vw) ] =: \norm[\cf{\alpha,2}]{f}^2 \cdot P_{\alpha,2}^2
+    % \] 
+    
+   \item[] where
+    \vspace{-1em}
+    \small
+    \[\mK   = \biggl( \prod_{\ell = 1}^s [1 + \tilde{\gamma}_{\ell}^{2 \alpha}B_{2\alpha}(x_{i,\ell} - x_{j, \ell} \bmod 1 )]\biggr)_{i,j=0}^{n-1} \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Computing Optimal Weights}
+% \[ \min_{\vw} \vw^T \mK \vw \quad \text{s.t.} \quad \vw^T \vone = 1. \]
+\textbf{Goal:} Minimize $\vw^T \mK \vw$
+
+\vspace{0.5em}
+\textbf{Subject to:} $\sum_{j=0}^{n-1} w_j = 1$
+
+\vspace{1em}
+\textbf{Solution (via Lagrange multipliers):}
+\[
+\vw = \frac{\mK^{-1} \vone}{\vone^T \mK^{-1} \vone}
+\]
+
+\textbf{Result:}
+\begin{itemize}
+    \item This choice of weights minimizes the cubature error bound
+    \item Unequal weights can improve $P_{\alpha,2}$ for arbitrary $n$
+    \item \textbf{Cost:} Can be reduced to $\Order(sn) + \Order(n^2)$ since $\mK$ is Toeplitz
+\end{itemize}
+\end{frame}
+
+% The cost of solving for the weights $\vw$ is $\Order(sn^2)$ to evaluate the kernel and $\Order(n^3)$ to invert the Gram matrix.  (We assume that evaluating one element of the Gram matrix is proportional to the dimension.)  However, since $\mK$ is Toeplitz, we can reduce the cost of solving for optimal sample weights to $\Order(sn) + \Order(n^2)$.
+
+\begin{frame}{$P_{\alpha,2}$ with Optimal Weights vs Equal Weights}
+
+% \begin{columns}
+% \column{0.5\textwidth}
+% \includegraphics[width=\linewidth]{thesis docs/plots/ssdisc_vs_ssdiscopt.png}
+
+% \vspace{0.2em}
+% \scriptsize
+% \textbf{$P_{1,2}$ with equal weight vs optimal weights}  
+% Optimal weights lead to smaller $P_{1,2}$, and non-increasing behavior with $n$.
+
+% \column{0.5\textwidth}
+% \includegraphics[width=\linewidth]{thesis docs/plots/ratio_floor.png}
+% \scriptsize
+% \textbf{The ratio $P_{1,2}(\vh,[1, 1/4],n,1:2)/P_{1,2} (\vh,[1, 1/4],2^{\lfloor \log_2(n) \rfloor},1:2)$} for $ 1 \leq n \leq 2^7$. This shows how much better (smaller than one) or worse (greater than one) the figure of merit is compared to the largest sample size that is a power of $2$ and no greater than $n$.
+
+% \column{0.5\textwidth}
+% \includegraphics[width=\linewidth]{thesis docs/plots/ratio_ceil.png}
+% \scriptsize
+
+%\end{columns}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{thesis docs/plots/ssdisc_vs_ssdiscopt.png}
+
+\end{figure}
+\textbf{$P_{1,2}$ with equal weight vs optimal weights} for $1 \le n \le 2^{12}$. Optimal weights lead to consistently smaller and non-increasing values. 
+\end{frame}
+
+\begin{frame}%{ }
+\begin{columns}
+\column{0.5\textwidth}
+\includegraphics[width=\linewidth]{thesis docs/plots/ratio_floor.png}
+\scriptsize
+\textbf{The ratio $P_{1,2}(n)/P_{1,2} (2^{\lfloor \log_2(n) \rfloor})$} for $ 1 \leq n \leq 2^7$. This shows how much better or worse the figure of merit is compared to the largest sample size that is a power of $2$ and no greater than $n$.
+
+\column{0.5\textwidth}
+\includegraphics[width=\linewidth]{thesis docs/plots/ratio_ceil.png}
+\scriptsize
+\textbf{The ratio $P_{1,2}(n)/P_{1,2} (2^{\lceil \log_2(n) \rceil})$} for $ 1 \leq n \leq 2^7$. This shows how much worse the figure of merit is compared to the smallest sample size that is a power of $2$ and no less than $n$.
+\end{columns}
+\end{frame}
+
+
+\section{Future Work}    
+\begin{frame}{Future Work}
+    \begin{itemize}
+        \item Establish a theoretical upper bound on the figure of merit $P_{\alpha,2}$ for all $n$
+        \item Numerically study the decay of the upper bound on $P_\alpha$ and decay of $P_{\alpha,2}$ for a wider range of $\alpha$ values. 
+        \item Evaluate the performance of lattices with arbitrary $n$ in practical examples such as option pricing.
+    \end{itemize}
+\end{frame}
+
+\section*{References}
+    \begin{frame}{References}
+
+	   {\fontsize{6}{6}\selectfont 
+	
+    %\bibliographystyle{plain}
+    \bibliographystyle{plainnat} 
+    \bibliography{FJH23,FJHown23,LarysaReferences}
+  }
+    \end{frame}
+
+% \section*{}  
+% \begin{frame}
+% \begin{center}
+% \textcolor {red} {\Huge Thank you!}
+% \end{center}
+% \end{frame}
+
+
+
+\end{document}
