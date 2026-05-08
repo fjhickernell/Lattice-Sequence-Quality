@@ -7,6 +7,7 @@
 \usepackage{esdiff}
 \usepackage{graphicx}
 \usepackage{xcolor}
+\usepackage{cleveref}
 
 \input{FJHDef.tex}
 
@@ -31,14 +32,14 @@
 
 \newcommand{\LarysaNote}[1]{{\color{violet}#1}}
 \newtheorem{theorem}{Theorem}
-\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{corollary}[theorem]{Corollary}
 
 \begin{document}
 \title{The Quality of Lattice Sequences}
 \author{Larysa Matiukha}
 \author{Yuhan Ding}
 \author{Fred J. Hickernell}
-\begin{abstract} Lattices are a common choice of 
+\begin{abstract} Extensible lattices are a common choice of 
 nodes for approximating multidimensional integrals by a sample mean, typically using sample sizes of the form $n = b^m$ for a prime base $b$ and non-negative integer $m$. However, a computational time budget or early termination due to hardware failure may prevent us from choosing the preferred number of samples. In this paper, we establish an upper bound on the figure of merit $P_\alpha$ for extensible lattice sequences with arbitrary $n$, derived in a Banach space setting. 
 We show that although the upper bound on $P_\alpha$ can decay no faster than $\Order(n^{-1})$ for general $n$, restricting $n$ to the form $n =\lambda b^p$, where $\lambda$ is a fixed integer, can recover the optimal decay of nearly $\Order(n^{-\alpha})$. We also investigate a related figure of merit $P_{\alpha,2}$ under equal and optimal sample weights, with numerical results suggesting optimal weights can improve the cubature error bound for arbitrary $n$.
 
@@ -70,11 +71,11 @@ where $\vh \in \{1, \ldots, n-1\}^s$ is the \emph{generating vector}. Note that 
     \{\vz_i = i \vh/n + \vDelta \pmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s.
 \end{equation}
 
-Since this construction depends on $n$, a new point set must be generated each time the sample size changes. To address this, lattices were later defined extensibly, i.e., not for a fixed $n$, allowing the lattice to be extended without discarding previously generated points. Extensible lattice sequences, proposed in \citep{HicEtal00,Mai81a}, take the form 
+Since this construction depends on $n$, a new point set must be generated each time the sample size changes. To address this, lattices were later defined extensibly, i.e., not for a fixed $n$, allowing the lattice to be extended without discarding previously generated points. Extensible lattice sequences, proposed in \cite{Mai81a} and \cite{HicEtal00}, take the form 
 \begin{equation} \label{eq:extlat}
     \{\vz_i = \vh\phi(i)+ \vDelta \pmod{\vone} : i=0,1, \ldots \} \in [0,1)^s,
 \end{equation}
-where $\{\phi_(\cdot)\}_{i=0}^\infty$ is the van der Corput sequence in base $b$. In this case $\vh$ must be a generalized integer as defined in \cite[Section 2]{HicNie03a}. An example of a two-dimensional shifted extensible lattice is shown in Figure \ref{fig:lattice-plot}. 
+where $\{\phi(\cdot)\}_{i=0}^\infty$ is the van der Corput sequence in base $b$.  (The base is suppressed in our notation fo simplicty.) In this case $\vh$ must be a generalized integer as defined in \cite[Section 2]{HicNie03a}. An example of a two-dimensional shifted extensible lattice is shown in \Cref{fig:lattice-plot}. 
 
 \begin{figure}[H]
 \centering
@@ -95,23 +96,23 @@ Note that the first ${b^m}$ points of the van der Corput sequence are just equal
 \begin{equation} \label{eq:phipropone}
 \{ \phi(i) : i = 0, \ldots, b^m-1 \} = \{0, b^{-m}, 2\times b^{-m}, \ldots, 1 - b^{-m} \}.
 \end{equation}
-Also note that
+Also note that the set of $b^m$ points starting at $\lambda b^m$ is a shift by $\phi(\lambda \times b^m)$ of the first $b^m$ points:
 \begin{multline} \label{eq:phiproptwo}
 \{ \phi(i) : i = \lambda \times b^m , \ldots, (\lambda+1)b^m-1 \} \\
 = \{\phi(\lambda \times b^m) + 0, \phi(\lambda \times b^m) + b^{-m}, \ldots, \phi(\lambda \times b^m) + 1 - b^{-m} \} , \\
 \lambda \in \natzero.
 \end{multline}
 
-\cite{HicNie03a} provided bounds on the worst-case cubature error using the first $n= b, b^2, \ldots$ points as sampling sites. Their result is quoted below in \eqref{eq:Niedbd}. The case of using the first \emph{arbitrary} $n$ nodes of a lattice sequence for cubature in a Hilbert space was discussed in \cite{HicEtal10a}[Corollary 1].  There it was shown that if a lattice sequence in base $b$ has the worst case error, no greater than $C(b^m)^{-\alpha}$ for the first $b^m$ points, for $m=0, 1, 2, \ldots$, for some constants $C, \alpha > 0$, then the worst case error of using the first $n \geq 2$ points of the lattice sequence is no greater than $ C \log_bn/{n^{\min(\alpha,1)}}$. 
+\cite{HicNie03a} provided bounds on the worst-case cubature error using the first $n= b, b^2, \ldots$ points as sampling sites. Their result is quoted below in \eqref{eq:Niedbd}. The case of using the first \emph{arbitrary} $n$ nodes of a lattice sequence for cubature in a Hilbert space was discussed in \cite{HicEtal10a}[Corollary 1].  There it was shown that if a lattice sequence in base $b$ has the worst case error, no greater than $C(b^m)^{-\alpha}$ for the first $b^m$ points, for $m=0, 1, 2, \ldots$, for some constants $C, \alpha > 0$, then the worst case error of using the first $n \geq 2$ points of the lattice sequence is no greater than $ C \log_b(n) \, {n^{-\min(\alpha,1)}}$. 
 
-We extend the bounds on $P_\alpha$ given in \cite{HicNie03a} to arbitrary $n$ in Theorem \ref{thm:one}.  Moreover, in the Hilbert space considered by \cite{HicEtal10a}, result in Theorem \ref{thm:one} we derive an error bound that does not include an additional logarithmic term for $\alpha > 1$ in Corollary ???.
+We extend the bounds on $P_\alpha$ given in \cite{HicNie03a} to arbitrary $n$ in \Cref{thm:one}.  Moreover, in the Hilbert space setting considered by \cite{HicEtal10a}, we derive an error bound that does not include their additional logarithmic term for $\alpha > 1$ in \Cref{thm:three}.
 
 
 \section{Worst case error analysis for arbitrary $n$}
 This section follows the traditional error analysis presented in \cite{DicEtal22a}. However, we extend the theory to the case where the nodeset is not a full lattice. 
 We first consider integrands, $f$, that have an absolutely summable Fourier series:
 \begin{equation} \label{eq:fseries}
-    f(\vx) = \sum_{\vk \in \integers^{s}} \tf(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vx}, \qquad \text{where } \tf(\vk) = \int_{[0,1)^{s}} f(\vx) \me^{-2 \pi \sqrt{-1} \vk^T \vx}\, \dif \vx
+    f(\vx) = \sum_{\vk \in \integers^{s}} \tf(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vx}, \qquad \text{where } \tf(\vk) = \int_{[0,1)^{s}} f(\vx) \me^{-2 \pi \sqrt{-1} \vk^T \vx}\, \dif \vx.
 \end{equation}
 Given the positive coordinate weights, $\gamma_1$, $\gamma_2$, \ldots, we define a Banach space of integrands by weighting the Fourier coefficients: 
 \begin{gather}
@@ -168,13 +169,14 @@ Thus it follows that
 where $B(\vh,m,\onetos) : = \{\vk \in  \integers^s \setminus \{\vzero\} : \vk^T \vh \pmod{b^m} = 0\}$ is the \emph{dual lattice} minus the origin.  This corresponds to \cite[(3)]{HicNie03a}.  
 
 Although \eqref{eq:Palphadual} is an infinite sum, $P_{2\alpha}$ for positive integer $\alpha$ can be converted to a finite sum in terms of Bernoulli polynomials:
-\begin{equation*}
+\begin{equation} \label{eq:P2alpha}
 P_{2\alpha}(\vh,\vgamma,b^m,\onetos) -1 + \frac{1}{n}\sum_{i = 0}^{n-1}  
 \prod_{\ell = 1}^s [1 + \tilde{\gamma}_{\ell}^{2\alpha}\Bern_{2\alpha}(x_{i,\ell})],
-\end{equation*}
-where
-\[ \tilde{\gamma}_{\ell}^{2\alpha} = \frac{(2\pi\gamma_{\ell} )^{2\alpha}}{(-1)^{\alpha +1}(2\alpha)!}.
-\]
+\end{equation}
+where 
+\begin{equation}  \label{eq:gammatilde}
+    \tilde{\gamma}_{\ell}^{2\alpha} = \frac{(2\pi\gamma_{\ell} )^{2\alpha}}{(-1)^{\alpha +1}(2\alpha)!}.
+\end{equation}
 This follows because according to \cite[Equation 24.8.3]{OlvEtal10a}, the even Bernoulli polynomials have an expansion of 
 \[
 \Bern_{2\alpha}(x) = \frac{(-1)^{\alpha+1} (2\alpha)!}{(2 \pi)^{2\alpha}} \sum_{k \in \mathbb{Z}, \ k \ne 0} \frac{\exp(2\pi\sqrt{-1} k x)}{k^{2\alpha}}, \quad 0 \le x \le 1, \ \alpha = 1, 2, \ldots.
@@ -375,7 +377,7 @@ which is an improvement on \eqref{eq:mainresultone}. However, for $\lambda/n$ bo
 
 \subsection{The figure of merit $P_{\alpha}(\vh,\vgamma,\lowercase{n},\onetos)$ when the coordinate weights satisfy summability condition }
 
-Theorem \ref{thm:one} makes no assumptions on the coordinate weights. In this section, we demonstrate how to eliminate the logarithmic terms in our upper bounds in Theorem \ref{thm:one}---which grow exponentially as $s \to \infty$---by assuming a summability condition of the coordinate weights. In fact, we eliminate the $s$-dependence completely.
+\Cref{thm:one} makes no assumptions on the coordinate weights. In this section, we demonstrate how to eliminate the logarithmic terms in our upper bounds in Theorem \Cref{thm:one}---which grow exponentially as $s \to \infty$---by assuming a summability condition of the coordinate weights. In fact, we eliminate the $s$-dependence completely.
 
 \begin{theorem} \label{thm:two}
 Suppose $\alpha > 1$.
@@ -401,7 +403,7 @@ By \cite[Theorem 2, case (iii)]{HicNie03a} we know that:
 \end{align*}
 for $a \in [1, \alpha]$, provided that  $\sum_{j = 1}^{\infty} \gamma_j^a < \infty$. There are two cases.
 
-We showed in Theorem \ref{thm:one} that the best decay we can get for arbitrary $n$ is nearly like $\Order(n^{-1 + \delta})$, so the weakest assumption on the coordinate weights we can make to achieve this decay is by taking $a = \alpha$.  Substituting this bound into \eqref{eq:Palphan} we get: %with $a = \alpha$ we get: %and following the same argument as in \eqref{eq:mainresultone}, we get the following upper bound on $P_{\alpha}$: 
+We showed in \Cref{thm:one} that the best decay we can get for arbitrary $n$ is nearly like $\Order(n^{-1 + \delta})$, so the weakest assumption on the coordinate weights we can make to achieve this decay is by taking $a = \alpha$.  Substituting this bound into \eqref{eq:Palphan} we get: %with $a = \alpha$ we get: %and following the same argument as in \eqref{eq:mainresultone}, we get the following upper bound on $P_{\alpha}$: 
 
 \begin{align*}
     P_\alpha(\vh, \vgamma, n, \onetos) 
@@ -413,7 +415,7 @@ We showed in Theorem \ref{thm:one} that the best decay we can get for arbitrary 
     &\leq \frac{\tilde{C}_P(\alpha, \vgamma, \delta)}{n^{1-\delta}} \frac{b^{\delta}(b - 1) }{b^{\delta} - 1}.
 \end{align*}
 
-For the case $n = \lambda b^p$, we proved in Theorem \ref{thm:one} we proved that the fastest decay we can achieve is $\Order(n^{-\alpha})$. The weakest assumption we can make on the coordinate weights in this case to achieve this decay is  $a = 1$. Then, the upper bound on $P_\alpha$ for $n = \lambda b^p$ becomes: 
+For the case $n = \lambda b^p$, we proved in \Cref{thm:one} we proved that the fastest decay we can achieve is $\Order(n^{-\alpha})$. The weakest assumption we can make on the coordinate weights in this case to achieve this decay is  $a = 1$. Then, the upper bound on $P_\alpha$ for $n = \lambda b^p$ becomes: 
 
 \begin{align*}
         P_\alpha(\vh, \vgamma, \lambda b^p, \onetos) 
@@ -437,15 +439,9 @@ The theorems above establish a theoretical upper bound on the figure of merit $P
 In this subsection, we present numerical experiments illustrating the decay of the upper bound on $P_\alpha$ derived in previous subsections, with $\alpha = 2$. All lattice samples 
 were generated using QMCPy \citep{QMCPy2020a} with the default generating vector $\vh$.
 
-In Figure~\ref{fig:p_alpha_O} we plot the upper bound on $P_2(\vh,[0.1,0.05],n,1\!\!:\!\!2)$ for all positive integers $n \leq 2^{10}$. The decay is nearly $\Order(n^{-2})$ when $n$ is a power of $2$, and closer to $\Order(n^{-1})$ for arbitrary $n$, as expected. For $n =\lambda 2^p$ with $\lambda = 1, 3, 5, 7$, Figure \ref{fig:/p_alpha_lambda_O} shows that the upper bound %on $P_2(\vh,[0.1, 0.05],\lambda 2^p,1:2)$  
-decays nearly like $\Order(n^{-2})$ in all cases, as proven in Theorem \ref{thm:one}, with generally smaller values for smaller $\lambda$.
+In \Cref{fig:p_alpha_O} we plot the upper bound on $P_2(\vh,[0.1,0.05],n,1\!\!:\!\!2)$ for all positive integers $n \leq 2^{10}$. The decay is nearly $\Order(n^{-2})$ when $n$ is a power of $2$, and closer to $\Order(n^{-1})$ for arbitrary $n$, as expected. For $n =\lambda 2^p$ with $\lambda = 1, 3, 5, 7$, \Cref{fig:/p_alpha_lambda_O} shows that the upper bound %on $P_2(\vh,[0.1, 0.05],\lambda 2^p,1:2)$  
+decays nearly like $\Order(n^{-2})$ in all cases, as proven in \Cref{thm:one}, with generally smaller values for smaller $\lambda$.
 
-
-% We first consider all positive integers $n \leq 2^{10}$ to study how the upper bound (behaves) across different sample sizes. Figure~\ref{fig:p_alpha_O} shows the decay of the upper bound on $P_2(\vh,[0.1,0.05],n,1:2)$, which is nearly $\Order(n^{-2})$ for values of $n$ that are powers of $2$, while for arbitrary $n$ it is closer to $\Order(n^{-1})$, as expected. We then focus on the decay for  $n = \lambda 2^p$, with $\lambda = 1, 3, 5, 7$.
-
-% Figure \ref{fig:/p_alpha_lambda_O} shows that the upper bound on $P_2(\vh,[0.1, 0.05],\lambda 2^p,1:2)$ decays nearly like $\Order(n^{-2})$ in all cases, as proven in Theorem \ref{thm:one}, with generally smaller values for smaller $\lambda$.  
-
-%show 2 plots side by side
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{thesis docs/plots/p_alpha_O.png}
@@ -453,9 +449,6 @@ decays nearly like $\Order(n^{-2})$ in all cases, as proven in Theorem \ref{thm:
     }
     \label{fig:p_alpha_O}
 \end{figure}
-
-% Next, we focus on the decay for $n = \lambda 2^p$ for different small $\lambda$'s.
-% We note that the decay is nearly $\Order(n^{-2})$ as proven in Theorem \ref{thm:one}.
 
 \begin{figure}[H]
     \centering
@@ -502,11 +495,12 @@ In Section \ref{sec:Palphabd} we only derived \emph{upper bounds} on the values 
 %add something before 
 
 We define a Hilbert space of functions, related to the Banach space defined in \eqref{eq:Banachspace} by taking the weighted $\ell_2$ norm of the Fourier coefficients rather than the $\ell_\infty$ norm: 
-$$
-\cf_{\alpha,2} = \{ f \in \cl_2[0,1)^{s} :
-\norm[\cf_{\alpha,2}]{f} < \infty \}, \;
+\begin{gather*}
+    \cf_{\alpha,2} = \{ f \in \cl_2[0,1)^{s} :
+\norm[\cf_{\alpha,2}]{f} < \infty \}, \\
 \norm[\cf_{\alpha,2}]{f} := \left[\sum_{\vk \in \integers^s} \left(\tr(\vk,\vgamma)^{\alpha}\abs{\tilde{f}(\vk)}\right)^2 \right]^{1/2} .
-$$
+\end{gather*}
+
 Note that this is a stronger norm, i.e., $\norm[\cf_{\alpha}]{f} \le \norm[\cf_{\alpha,2}]{f}$ for all $f \in \cf_{\alpha,2}$.  As a consequence
 \begin{multline} \label{Pa2Parelation}
 P_{\alpha,2}(\vh,\vgamma,n,\onetos) : = \sup_{\norm[F_{\alpha,2}]{f} \le 1 } \abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)} \\
@@ -517,53 +511,36 @@ Before proceeding with the derivation of $P_{\alpha,2}$, we generalize to arbitr
 \[
 \appxintn(f) =  \sum_{i=0}^{n-1} w_if(\vz_i),  
 \]
-We assume $\sum_j^{n} w_j = 1$ to ensure that constant functions are integrated exactly. 
-
 Then the tight bound on the error analogous to \eqref{eq:wcerrPalpha} becomes: 
 \begin{align*}
 \nonumber
-\MoveEqLeft{\abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)}^2} \\
-& \le \norm[\cf{\alpha},2]{f}^2 \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}^2\tr(\vk,\vgamma)^{-2\alpha} \\
-&= \norm[\cf{\alpha},2]{f}^2 \sum_{\vk \in \integers^s \setminus\{\vzero\}} \sum_{i,j = 0}^{n-1} \me^{2 \pi \sqrt{-1} (\vx_i - \vx_j)} w_i w_j \tr(\vk,\vgamma)^{-2\alpha} \\
-&=  \norm[\cf{\alpha},2]{f}^2 \underbrace{\left[ -1 + \sum_{i,j = 0}^{n-1} w_i w_j \sum_{\vk \in \integers^s} \me^{2 \pi \sqrt{-1} (\vx_i - \vx_j)} \tr(\vk,\vgamma)^{-2\alpha} \right]}_{P_{\alpha,2}^2(\vh,\vgamma,n,1:s, \vw)}.
+\MoveEqLeft{\sup_{\norm[\cf_{\alpha,2}]{f} \le 1} \abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)}^2} \\
+& = \sup_{\norm[\cf_{\alpha,2}]{f} \le 1} \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}^2\tr(\vk,\vgamma)^{-2\alpha} \\
+&=\sum_{\vk \in \integers^s \setminus\{\vzero\}} \sum_{i,j = 0}^{n-1} \me^{2 \pi \sqrt{-1} (\vx_i - \vx_j)} w_i w_j \tr(\vk,\vgamma)^{-2\alpha} \\
+&= \underbrace{ -1 + \sum_{i,j = 0}^{n-1} w_i w_j \sum_{\vk \in \integers^s} \me^{2 \pi \sqrt{-1} (\vx_i - \vx_j)} \tr(\vk,\vgamma)^{-2\alpha}}_{P_{\alpha,2}^2(\vh,\vgamma,n,1:s, \vw)},
 \end{align*}
+where $\vw = \bigl( w_i \bigr)_{i=0}^{n-1}$. 
 
 
+Note that for lattices, i.e., $n=b^m$ and for equal weights $\vw = b^{-m} \vone $, it follows that $P_{\alpha,2}^2(\vh,\vgamma,b^m,\onetos, b^{-m} \vone) = P_{2\alpha}(\vh,\vgamma,b^m,\onetos)$ by definition.
 
+
+For positive integer $\alpha$, we may again appeal to Bernoulli polynomials as we did in \eqref{eq:P2alpha}: \LarysaNote{correct equation?}
 \begin{align*}
 \nonumber
-\MoveEqLeft{\abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)}^2} \\
-& \le \norm[\cf{\alpha},2]{f}^2 \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}^2\tr(\vk,\vgamma)^{-2\alpha} \\
-&= \norm[\cf{\alpha},2]{f}^2 \sum_{\vk \in \integers^s \setminus\{\vzero\}} \sum_{i,j = 0}^{n-1} \me^{2 \pi \sqrt{-1} (\vx_i - \vx_j)} w_i w_j \tr(\vk,\vgamma)^{-2\alpha} \\
-&=  \norm[\cf{\alpha},2]{f}^2 \left[ -1 + \sum_{i,j = 0}^{n-1} w_i w_j \sum_{\vk \in \integers^s} \me^{2 \pi \sqrt{-1} (\vx_i - \vx_j)} \tr(\vk,\vgamma)^{-2\alpha} \right]\\
-&= \norm[\cf{\alpha},2]{f}^2 \\
-& \qquad \times \left[ -1 + \sum_{i,j = 0}^{n-1} w_i w_j  
-\prod_{\ell = 1}^s [1 + \tilde{\gamma}_{\ell}^{2\alpha}B_{2\alpha}(x_{i,\ell} - x_{j, \ell}\bmod 1)]\right],
+P_{\alpha,2}^2(\vh,\vgamma,n,\onetos, \vw)
+& = -1 + \sum_{i,j = 0}^{n-1} w_i w_j  
+\prod_{\ell = 1}^s [1 + \tilde{\gamma}_{\ell}^{2\alpha}B_{2\alpha}(x_{i,\ell} - x_{j, \ell}\bmod 1)] \\
+& = - 1 + \vw^T \mK \vw, \\
+\text{where } \mK  & = \biggl( \prod_{\ell = 1}^s [1 + \tilde{\gamma}_{\ell}^{2 \alpha}B_{2\alpha}(x_{i,\ell} - x_{j, \ell} \bmod 1 )]\biggr)_{i,j=0}^{n-1} 
 \end{align*}
-
-for positive integer $\alpha$ and for
-\[ \tilde{\gamma}_{\ell}^{2\alpha} = \frac{(2\pi\gamma_{\ell} )^{2\alpha}}{(-1)^{\alpha +1}(2\alpha)!},
-\]
-
-since according to \cite[Equation 24.8.3]{OlvEtal10a}, the even Bernoulli polynomials have an expansion of 
-\[
-B_{2\alpha}(x) = \frac{(-1)^{\alpha+1} (2\alpha)!}{(2 \pi)^{2\alpha}} \sum_{k \in \mathbb{Z}, \ k \ne 0} \frac{\exp(2\pi\sqrt{-1} k x)}{k^{2\alpha}}, \qquad 0 \le x \le 1, \ \alpha = 2, 3, \ldots
-\]
-Note that if $\vw = \vone/n$ and we have a full lattice, i.e., $n = b^m$, then $P_{\alpha,2}^2 = P_{2\alpha}$.
-
-It follows that 
-\begin{align*}
-\abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)}^2 &\leq \norm[\cf{\alpha},2]{f}^2 \underbrace{ \left[-1 + (\vw^T \mK \vw)\right],}_{=: P_{\alpha,2}^2(\vh,\tilde{\vgamma},n,1:s, \vw)} \\
-\text{where } \mK  & = \biggl( \prod_{\ell = 1}^s [1 + \tilde{\gamma}_{\ell}^{2 \alpha}B_{2\alpha}(x_{i,\ell} - x_{j, \ell} \bmod 1 )]\biggr)_{i,j=0}^{n-1} , \\
-\vw & = \bigl( w_i \bigr)_{i=0}^{n-1},
-\end{align*}
+where $\tilde{\gamma}_{\ell}$ was defined in \eqref{eq:gammatilde}.
 
 To find the optimal sample weights $\vw$, we solve the following minimization problem:
 
 \[ \min_{\vw} \vw^T \mK \vw \quad \text{s.t.} \quad \vw^T \vone = 1. \]
 
-
-We solve this problem using the method of Lagrange multipliers. 
+where the constraint ensures that constant functions are integrated exactly. This problem has a known solution but we derive it for the sake of completeness. We solve it using the method of Lagrange multipliers. 
 First, we define the Lagrangian:  
 \[
 \mathcal{L}(\vw, \lambda) = \vw^T \mK \vw - \lambda (\vw^T \vone - 1).
@@ -588,41 +565,45 @@ Substituting this expression for $\vw$ into the constraint to find the value of 
  \]
 Thus, the optimal sample weights are: 
 \[
-\vw = \frac{\mK^{-1}\vone}{\vone^T \mK^{-1}\vone }.
+\vw_{\opt} := \frac{\mK^{-1}\vone}{\vone^T \mK^{-1}\vone }.
 \]
-%\LarysaNote{[Should we keep the derivation here?]}
 
-This problem has a known solution but we derive it for the sake of completeness. The cost of solving for the weights $\vw$ is $\Order(sn^2)$ to evaluate the kernel and $\Order(n^3)$ to invert the Gram matrix.  (We assume that evaluating one element of the Gram matrix is proportional to the dimension.)  However, since $\mK$ is Toeplitz, we can reduce the cost of solving for optimal sample weights to $\Order(sn+n^2)$.   %$\Order(sn) + \Order(n^2)$.
-\begin{corollary}
-\LarysaNote{Since the Banach space $\mathcal{F}_\alpha$ contains more functions (more conservative norm in $\mathcal{F}_\alpha$ compared to $\mathcal{F}_{\alpha,2}$) than the Hilbert space $\mathcal{F}_{\alpha,2}$, the results in Theorems \ref{thm:one} and \ref{thm:two} hold for $\mathcal{F}_{\alpha,2}$. Therefore, $P_{\alpha,2}^2$ has the same upper bound as in \eqref{eq:mainresultone} for arbitrary positive integer $n$ and for fixed $\alpha > \frac{1}{2}$:
-% the upper bound on $P_\alpha$ in the Banach space ...
+The cost of solving for the weights $\vw$ is $\Order(sn^2)$ to evaluate the kernel and $\Order(n^3)$ to invert the Gram matrix, $\mK$.  (We assume that evaluating one element of the Gram matrix is proportional to the dimension.)  However, since $\mK$ is Toeplitz, we can reduce the cost of solving for optimal sample weights to $\Order(sn+n^2)$.   %$\Order(sn) + \Order(n^2)$.
 
-}
+\FredNote{I stopped here.}
 
-\begin{align*}
-P_{\alpha,2}^2(\vh,\tilde{\vgamma},n,1:s, \vw)
-&\le \frac {C_{P}(\alpha,\vgamma,\epsilon,s)}{n}
-   \frac{(b-1)}{1 - b^{1-\alpha}} \\
-&\qquad \times
-\max\!\bigl(1, (\log n)^{\alpha(s+1)}\bigr)
-\bigl[\max(1,\log \log (n+1))\bigr]^{\alpha(1+\epsilon)}
-\end{align*}
+\begin{theorem} \label{thm:three}% not corollary? 
+ \LarysaNote{
+ The upper bounds derived in Theorem \ref{thm:one} and Theorem \ref{thm:two} also hold for $P_{\alpha,2}$ by \eqref{Pa2Parelation}.
+ %Since the Banach space $\mathcal{F}_\alpha$ contains more functions (more conservative norm in $\mathcal{F}_\alpha$ compared to $\mathcal{F}_{\alpha,2}$) than the Hilbert space $\mathcal{F}_{\alpha,2}$, the results in Theorems \ref{thm:one} and \ref{thm:two} hold for $\mathcal{F}_{\alpha,2}$. Therefore, $P_{\alpha,2}^2$ has the same upper bound as in \eqref{eq:mainresultone} for arbitrary positive integer $n$ and for fixed $\alpha > \frac{1}{2}$:
 
-\LarysaNote{If the coordinate weights satisfy  $\sum_{j = 1}^{\infty} \gamma_j ^{\alpha} < \infty$, then for any fixed $\delta > 0$ the upper bound from Theorem \ref{thm:two} also holds for this Hilbert space case:
-\begin{equation*}
-    P_{\alpha,2}^2(\vh,\tilde{\vgamma},n,1:s, \vw)
-        \leq \frac{\tilde{C}_P(\alpha, \vgamma, \delta)}{n^{1-\delta}} \frac{b^{\delta}(b - 1) }{b^{\delta} - 1} \qquad
-        \forall s = 1,2,\ldots.
-\end{equation*}}
 
-\end{corollary}
+ }
+
+% \begin{align*}
+% P_{\alpha,2}^2(\vh,\tilde{\vgamma},n,1:s, \vw)
+% &\le \frac {C_{P}(\alpha,\vgamma,\epsilon,s)}{n}
+%    \frac{(b-1)}{1 - b^{1-\alpha}} \\
+% &\qquad \times
+% \max\!\bigl(1, (\log n)^{\alpha(s+1)}\bigr)
+% \bigl[\max(1,\log \log (n+1))\bigr]^{\alpha(1+\epsilon)}
+% \end{align*}
+
+% \LarysaNote{If the coordinate weights satisfy  $\sum_{j = 1}^{\infty} \gamma_j ^{\alpha} < \infty$, then for any fixed $\delta > 0$ the upper bound from Theorem \ref{thm:two} also holds for this Hilbert space case:
+% \begin{equation*}
+%     P_{\alpha,2}^2(\vh,\tilde{\vgamma},n,1:s, \vw)
+%         \leq \frac{\tilde{C}_P(\alpha, \vgamma, \delta)}{n^{1-\delta}} \frac{b^{\delta}(b - 1) }{b^{\delta} - 1} \qquad
+%         \forall s = 1,2,\ldots.
+% \end{equation*}}
+
+\end{theorem}
 % discuss improvement on result from Hickernell&friends
 \LarysaNote{}
 \LarysaNote{
 
 To illustrate how optimal weights affect the behavior of $P_{\alpha,2}$ we present several numerical results. Figure \ref{fig:ssdisc-vs-ssdiscopt} shows the decay of $P_{1,2}$ under optimal sample weights and under equal weights for $n \leq 2^{12}$. In both cases, the decay is nearly $\Order(n^{-1})$. However, the values of $P_{1,2}$ are consistently smaller and non-increasing for optimal weights. 
 % To illustrate the advantage of using optimally chosen sample weights 
-Figures \ref{fig:ratio-floor} and \ref{fig:ratio-ceil} compare $P_{1,2}$ at each positive integer $n \leq 2^7$ to its value at the nearest power-of-two sample sizes. %that are powers of 2. 
+Figures \Cref{fig:ratio-floor} and \ref{fig:ratio-ceil} compare $P_{1,2}$ at each positive integer $n \leq 2^7$ to its value at the nearest power-of-two sample sizes. %that are powers of 2. 
 Figure \ref{fig:ratio-floor} uses the largest such sample size no greater than $n$ % that is a power of 2 and no greater than $n$, 
 and shows that, with optimal sample weights the ratios remain at or below one as $n$ increases, while the ratios with equal weights fluctuate more and frequently exceed one. Figure \ref{fig:ratio-ceil} uses the smallest power-of-two sample size greater than or equal to $n$. %that is a power of $2$ and no less than $n$, 
  Although in both cases the ratios are greater than one, optimal weighs produce lower ratios than the equal weights. 
@@ -674,7 +655,7 @@ suggest that that even when the next full lattice is not attainable, we can get 
   %Comparing  $P_{1,2}$ at each $n$ to $P_{1,2}$ for the previous full lattice 
  %This suggests that we can obtain (pretty small) cubature error if we cannot have the next full lattice, provided that we use optimal weights. 
 
-Future work could explore the performance of lattices with arbitrary $n$ in concrete numerical test cases, such as option pricing or integration problems described in \cite[Integration]{simulationlib} and establish a theoretical upper bound on $P_{\alpha,2}$.
+Future work could explore the performance of lattices with arbitrary $n$ in concrete numerical test cases, such as option pricing or integration problems described in \cite[Integration]{simulationlib} and establish a theoretical upper bound on $P_{\alpha,2}$ (done).
 Additionally, further numerical experiments could investigate the decay of the upper bound on $P_\alpha$ and the decay of $P_{\alpha,2}$ for a wider range of $\alpha$ values. 
 
 
