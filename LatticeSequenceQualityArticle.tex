@@ -40,8 +40,8 @@
 \author{Yuhan Ding}
 \author{Fred J. Hickernell}
 \begin{abstract} Extensible lattices are a common choice of 
-nodes for approximating multidimensional integrals by a sample mean, typically using sample sizes of the form $n = b^m$ for a prime base $b$ and non-negative integer $m$. However, a computational time budget or early termination due to hardware failure may prevent us from choosing the preferred number of samples. In this paper, we establish an upper bound on the figure of merit $P_\alpha$ for extensible lattice sequences with arbitrary $n$, derived in a Banach space setting. 
-We show that although the upper bound on $P_\alpha$ can decay no faster than $\Order(n^{-1})$ for general $n$, restricting $n$ to the form $n =\lambda b^p$, where $\lambda$ is a fixed integer, can recover the optimal decay of nearly $\Order(n^{-\alpha})$. We also investigate a related figure of merit $P_{\alpha,2}$ under equal and optimal sample weights, with numerical results suggesting optimal weights can improve the cubature error bound for arbitrary $n$.
+nodes for approximating multidimensional integrals by a sample mean, typically using sample sizes of the form $n = b^m$ for a prime base $b$ and non-negative integer $m$. However, a computational time budget or early termination due to hardware failure may prevent us from choosing the preferred number of samples. In this paper, we establish an upper bound on the figure of merit $P_\alpha$ for extensible lattice sequences \emph{with arbitrary $n$}, derived as a worst-case error in a Banach space setting. 
+We show that although the upper bound on $P_\alpha$ can decay no faster than $\Order(n^{-1})$ for general $n$, restricting $n$ to the form $n =\lambda b^p$, where $\lambda$ is a fixed integer, can recover the optimal decay of nearly $\Order(n^{-\alpha})$. We also investigate a related figure of merit, $P_{\alpha,2}$, arising as a worst-case error for Hilbert spaces of integrands, under equal and optimal sample weights, with numerical results suggesting optimal weights can improve the cubature error bound for arbitrary $n$.
 
 \end{abstract}
 
@@ -75,7 +75,7 @@ Since this construction depends on $n$, a new point set must be generated each t
 \begin{equation} \label{eq:extlat}
     \{\vz_i = \vh\phi(i)+ \vDelta \pmod{\vone} : i=0,1, \ldots \} \in [0,1)^s,
 \end{equation}
-where $\{\phi(\cdot)\}_{i=0}^\infty$ is the van der Corput sequence in base $b$.  (The base is suppressed in our notation fo simplicty.) In this case $\vh$ must be a generalized integer as defined in \cite[Section 2]{HicNie03a}. An example of a two-dimensional shifted extensible lattice is shown in \Cref{fig:lattice-plot}. 
+where $\{\phi(\cdot)\}_{i=0}^\infty$ is the van der Corput sequence in base $b$.  (The base is suppressed in our notation for simplicity.) In this case $\vh$ must be a generalized integer as defined in \cite[Section 2]{HicNie03a}. An example of a two-dimensional shifted extensible lattice is shown in \Cref{fig:lattice-plot}. 
 
 \begin{figure}[H]
 \centering
@@ -96,7 +96,7 @@ Note that the first ${b^m}$ points of the van der Corput sequence are just equal
 \begin{equation} \label{eq:phipropone}
 \{ \phi(i) : i = 0, \ldots, b^m-1 \} = \{0, b^{-m}, 2\times b^{-m}, \ldots, 1 - b^{-m} \}.
 \end{equation}
-Also note that the set of $b^m$ points starting at $\lambda b^m$ is a shift by $\phi(\lambda \times b^m)$ of the first $b^m$ points:
+Also note that the set of $b^m$ points starting at $\lambda b^m$ for positive integer $\lambda$ is a shift by $\phi(\lambda \times b^m)$ of the first $b^m$ points:
 \begin{multline} \label{eq:phiproptwo}
 \{ \phi(i) : i = \lambda \times b^m , \ldots, (\lambda+1)b^m-1 \} \\
 = \{\phi(\lambda \times b^m) + 0, \phi(\lambda \times b^m) + b^{-m}, \ldots, \phi(\lambda \times b^m) + 1 - b^{-m} \} , \\
@@ -141,10 +141,13 @@ It then follows that the worst-case error in approximating the integral by the s
 & = \underbrace{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk,\vgamma)^{-\alpha}}_{=: P_\alpha(\vh,\vgamma,n,1:s) = \text{quality of the lattice nodes}},  %\qquad \forall f \in \cf_{\alpha} \\
 \end{align}
 where we take advantage of H\"older's inequality and where $\onetos$ means $\{1, \ldots, s\}$.
-This notation follows \cite[(4)]{HicNie03a} but we do not assume the first $n$ points form a lattice.
-
-
-For an extensible lattice with $n = b^m$, the quality measure $P_\alpha(\vh,\vgamma,n,\onetos)$ takes on a simple form.  Note that
+This notation follows \cite[(4)]{HicNie03a} but we 
+%replace 1:s in \cite.. by s, 2 bullets
+\begin{itemize}
+    \item do not assume the first $n$ points form a lattice
+    \item replace their $\onetos$ by $s$.
+\end{itemize}
+For an extensible lattice with $n = b^m$, the quality measure $P_\alpha(\vh,\vgamma,n, s)$ takes on a simple form.  Note that
 \begin{align}\label{Eq:DualLattice}
     \MoveEqLeft{\appxint_{b^m}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \\
     \nonumber
@@ -164,13 +167,13 @@ For an extensible lattice with $n = b^m$, the quality measure $P_\alpha(\vh,\vga
 \end{align}
 Thus it follows that
 \begin{equation} \label{eq:Palphadual}
-    P_\alpha(\vh,\vgamma,b^m,\onetos) = \sum_{\vk \in B(\vh,m,1:s)} \tr(\vk,\vgamma)^{-\alpha},
+    P_\alpha(\vh,\vgamma,b^m,s) = \sum_{\vk \in B(\vh,m,1:s)} \tr(\vk,\vgamma)^{-\alpha},
 \end{equation}
-where $B(\vh,m,\onetos) : = \{\vk \in  \integers^s \setminus \{\vzero\} : \vk^T \vh \pmod{b^m} = 0\}$ is the \emph{dual lattice} minus the origin.  This corresponds to \cite[(3)]{HicNie03a}.  
+where $B(\vh,m,s) : = \{\vk \in  \integers^s \setminus \{\vzero\} : \vk^T \vh \pmod{b^m} = 0\}$ is the \emph{dual lattice} minus the origin.  This corresponds to \cite[(3)]{HicNie03a}.  
 
 Although \eqref{eq:Palphadual} is an infinite sum, $P_{2\alpha}$ for positive integer $\alpha$ can be converted to a finite sum in terms of Bernoulli polynomials:
 \begin{equation} \label{eq:P2alpha}
-P_{2\alpha}(\vh,\vgamma,b^m,\onetos) = -1 + \frac{1}{n}\sum_{i = 0}^{n-1}  
+P_{2\alpha}(\vh,\vgamma,b^m,s) = -1 + \frac{1}{n}\sum_{i = 0}^{n-1}  
 \prod_{\ell = 1}^s [1 + \tilde{\gamma}_{\ell}^{2\alpha}\Bern_{2\alpha}(x_{i,\ell})],
 \end{equation}
 where 
@@ -185,7 +188,7 @@ However, for $n \ne b^m$ such a finite sum does not exist.
 
 We know by \cite[Theorem 5]{HicNie03a} that  there exists $\vh$ with
 \begin{multline} \label{eq:Niedbd}
-    P_{\alpha}(\vh,\vgamma,b^m,\onetos) \le C_{P}(b,\alpha,\vgamma,\epsilon,s)
+    P_{\alpha}(\vh,\vgamma,b^m,s) \le C_{P}(b,\alpha,\vgamma,\epsilon,s)
     b^{-m\alpha} (\log b^{m})^{\alpha(s+1)} [\log \log (
     b^m+1)]^{\alpha(1+\epsilon)}, \\ m = 1, 2,\ldots, \quad \alpha \ge 1.
 \end{multline}
@@ -193,7 +196,7 @@ We emphasize that the generating vector, $\vh$ does not depend on $m$.
 
 This result can be extended to the case when $m = 0$ by noting that
 \begin{align*}
-    \MoveEqLeft{P_{\alpha}(\vh,\vgamma,1,\onetos)} \\
+    \MoveEqLeft{P_{\alpha}(\vh,\vgamma,1,s)} \\
     & = \sum_{\vk \ne \vzero} \tr(\vk, \vgamma)^{-\alpha} = -1 + \sum_{\vk \in \integers^s} \tr(\vk,\vgamma)^{-\alpha} \\
     & = -1 + \sum_{k_1 =-\infty}^{\infty} \cdots \sum_{k_s  =-\infty}^{\infty} \frac{1}{\prod_{j=1}^s[\max(1,\gamma_j^{-1}\abs{k_j})]^\alpha} \\
     & = -1 + \sum_{k_1 =-\infty}^{\infty} \frac{1}{[\max(1,\gamma_1^{-1}\abs{k_1})]^\alpha} \cdots \sum_{k_s  =-\infty}^{\infty} \frac{1}{[\max(1,\gamma_s^{-1}\abs{k_s})]^\alpha} \\
@@ -205,15 +208,15 @@ where $\zeta$ is the Riemann zeta function.
 
 Therefore, the above formula \eqref{eq:Niedbd} can be extended to the case of $m=0$ as follows:
 \begin{multline} \label{eq:Palphaextm}
-    P_{\alpha}(\vh,\vgamma,b^m,\onetos) \\
+    P_{\alpha}(\vh,\vgamma,b^m,s) \\
     \le C_{P}(b,\alpha,\vgamma,\epsilon,s)
     b^{-m\alpha}\max(1, (\log b^{m})^{\alpha(s+1)})[\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)}, \\ m =0, 1, 2,\ldots, \quad \alpha > 1.
 \end{multline} 
 In the next section, we extend this upper bound to all positive $n$. 
 
-\section{The figure of merit $P_{\alpha}(\vh,\vgamma,n,\onetos)$ for  $n$ other than $b^m$} \label{sec:Palphabd}
-Starting from the upper bound for $P_{\alpha}(\vh,\vgamma,n,\onetos)$ for $n$ a non-negative power of the base, $b$, it is possible to obtain an analogous result arbitrary $n$: 
+\section{The figure of merit $P_{\alpha}(\vh,\vgamma,n,s)$ for  $n$ other than $b^m$} \label{sec:Palphabd}
+Starting from the upper bound for $P_{\alpha}(\vh,\vgamma,n,s)$ for $n$ a non-negative power of the base, $b$, it is possible to obtain an analogous result arbitrary $n$: 
 
 \begin{theorem} \label{thm:one}
     For fixed integer base $b \ge 2$, a fixed smoothness parameter $\alpha > 1$, a fixed vector of coordinate weights $\vgamma \in [0,\infty)^\infty$, and a fixed $\epsilon > 0$, 
@@ -226,7 +229,7 @@ Starting from the upper bound for $P_{\alpha}(\vh,\vgamma,n,\onetos)$ for $n$ a 
         \renewcommand{\labelenumii}{\roman{enumii}.}
             \item There exists a generating vector for the lattice, $\vh$, for which the figure of merit, $P_\alpha$, has the following upper bound for arbitrary positive integer $n$:
     \begin{multline} \label{eq:mainresultone}
-        P_\alpha(\vh,\vgamma,n,\onetos) 
+        P_\alpha(\vh,\vgamma,n,s) 
         \le \frac {C_{P}(b,\alpha,\vgamma,\epsilon,s)}{n} \frac{(b-1)}{1 - b^{1-\alpha}} \\
         \times 
   \max(1, (\log n)^{\alpha(s+1)})
@@ -237,40 +240,42 @@ Starting from the upper bound for $P_{\alpha}(\vh,\vgamma,n,\onetos)$ for $n$ a 
 
     \item The powers of log may be eliminated in favor of a larger constant, as follows:
     \begin{equation} \label{eq:mainresultoneb}
-        P_\alpha(\vh,\vgamma,n,\onetos) 
-        \le \frac {\widehat{C}_{P}(b,\alpha,\vgamma,\epsilon,s)}{n} \qquad
-      \forall n , s \in \naturals.
+        P_\alpha(\vh,\vgamma,n,s) 
+        \le \frac {C_{P}(b,\alpha,\vgamma,\epsilon,s) S(b, \alpha, \epsilon, s)}{n} \qquad
+      \forall n , s \in \naturals,
     \end{equation}
+    where the constant $S(b, \alpha, \epsilon, s)$ is defined in \eqref{eq:infseries}.
 
     \end{enumerate}
 
-    \item However, if $n = \lambda b^p$, where $\lambda$ is a fixed integer, 
-    
-    \begin{enumerate}
-        \renewcommand{\labelenumii}{\roman{enumii}.}
-
-    \item However, if $n = \lambda b^p$, where $\lambda$ is a fixed integer, then $P_\alpha$, has an upper bound that is similar to the case of $n=b^m$.
+    \item However, if $n = \lambda b^p$ for some positive integer $p$ and some positive integer  $\lambda$ that is relatively prime with respect to $b$, then,%
+%    \begin{enumerate}
+%        \renewcommand{\labelenumii}{\roman{enumii}.}
+%   \item 
+$P_\alpha$, has an upper bound that is similar to the case of $n=b^m$:
     \begin{multline} \label{eq:mainresulttwo}
-         P_\alpha(\vh,\vgamma,\lambda b^p,\onetos)
-         \le \frac{\lambda^{\alpha -1}{C}_{P}(\alpha, \vgamma,\epsilon,s)}{n^{\alpha}}  \frac {(b-1)} {1 - b^{1- \alpha}}  \\
+         P_\alpha(\vh,\vgamma,n,s)
+         \le \frac{\lambda^{\alpha -1}{C}_{P}(b,\alpha, \vgamma,\epsilon,s)}{n^{\alpha}}  \frac {(b-1)} {1 - b^{1- \alpha}}  \\
          \times \max(1, (\log n )^{\alpha(s+1)})) [\max(1,\log \log (
     n+1))]^{\alpha(1+\epsilon)} \\
-    \forall b \in \natzero, \ \lambda, s \in \naturals.
+    \forall b \in \natzero, \ n, \lambda, s \in \naturals.
     \end{multline} 
-    Again, the constant $C_{P}(b,\alpha,\vgamma,\epsilon,s)$ and the powers of the logarithms are the same as in \eqref{eq:Palphaextm}. Now, the power of $n$ is similar to that in \eqref{eq:Palphaextm} but there is an extra factor of $\lambda^{\alpha -1}(b-1)/(1 - b^{1-\alpha})$.  Thus it is especially useful for small $\lambda$. (The parameter $p = \log_b(n/\lambda)$ does not appear above because it can be written in terms of $n$ and $\lambda$.)
+    Again, the constant $C_{P}(b,\alpha,\vgamma,\epsilon,s)$ and the powers of the logarithms are the same as in \eqref{eq:Palphaextm}. Now, the power of $n$ is similar to that in \eqref{eq:Palphaextm}, but there is an extra factor of $\lambda^{\alpha -1}(b-1)/(1 - b^{1-\alpha})$.  Thus it is especially useful for small $\lambda$. (The parameter $p = \log_b(n/\lambda)$ does not appear above because it can be written in terms of $n$ and $\lambda$.)
 
-    \item Moreover, 
+%    \item Moreover, the powers of log may be eliminated in favor of a larger constant, as follows:
+%    \begin{equation} \label{eq:mainresulttwob}
+%       P_\alpha(\vh,\vgamma,\lambda b^p,s)
+%         \le \frac{\lambda^{\alpha -1}{C}_{P}(b,\alpha, \vgamma,\epsilon,s) S(b, \alpha, \epsilon, s)}{n^{\alpha-\delta}} \qquad
+%      \forall n , s \in \naturals.
+%    \end{equation}
 
-    \end{enumerate}
+%    \end{enumerate}
 
      \end{enumerate}
-
-     
-
     
 \end{theorem}
 
-Before giving the proof of this theorem, we not that 
+Before giving the proof of this theorem, we note that 
 
 \begin{itemize}
     \item In \eqref{eq:mainresultone} the logarithmic terms are the same as for $n=b^m$, but the power of $n$ is only $-1$ for all $\alpha > 1$.  This degradation is inevitable as noted in \cite{HicEtal10a} and elsewhere.
@@ -297,14 +302,14 @@ Let any non-negative integer $n$ be expressed as  its $b$-ary expansion, i.e., $
     \abs{\appxint_{n}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \bbone_{B(\vh,m-\ell, 1:s)}(\vk).
 \end{equation}
 
-The figure of merit, $P_\alpha(\vh,\vgamma,n,\onetos)$, depends on how small these quantities can be made by a good choice of $\vh$, namely,
+The figure of merit, $P_\alpha(\vh,\vgamma,n,s)$, depends on how small these quantities can be made by a good choice of $\vh$, namely,
 \begin{align} \label{eq:Palphan}
       \nonumber
-      P_\alpha(\vh,\vgamma,n,\onetos) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk,\vgamma)^{-\alpha} \qquad \text{by \eqref{eq:wcerrPalpha}} \\
+      P_\alpha(\vh,\vgamma,n,s) & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk,\vgamma)^{-\alpha} \qquad \text{by \eqref{eq:wcerrPalpha}} \\
       \nonumber
-      & \le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \sum_{\vk \in B(\vh,m-\ell,\onetos)} \tr(\vk,\vgamma)^{-\alpha}
+      & \le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \sum_{\vk \in B(\vh,m-\ell,s)} \tr(\vk,\vgamma)^{-\alpha}
       \qquad \text{by \eqref{eq:ihatarbn}}\\
-      & = \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} P_\alpha(\vh,\vgamma,b^{m-\ell},\onetos)
+      & = \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} P_\alpha(\vh,\vgamma,b^{m-\ell},s)
       \qquad \text{by \eqref{eq:Palphadual}}.
 \end{align}
 Note that $P_\alpha$ for arbitrary $n$ has now been bounded above by a sum of $P_\alpha$ for powers of the base.  
@@ -314,15 +319,15 @@ The next part of the proof proceeds by substituting in the upper bounds for thes
 \begin{align} \label{eq:sameargument}
       \nonumber
       \MoveEqLeft
-      P_\alpha(\vh,\vgamma,n,\onetos) \\ & 
+      P_\alpha(\vh,\vgamma,n,s) \\ & 
       \nonumber 
-       \le  \frac {1}{n} \left\{ b^m n_m P_\alpha(\vh,\vgamma,b^m,\onetos) + b^{m-1} n_{m-1} P_\alpha(\vh,\vgamma,b^{m-1},\onetos) \right . \\
+       \le  \frac {1}{n} \left\{ b^m n_m P_\alpha(\vh,\vgamma,b^m,s) + b^{m-1} n_{m-1} P_\alpha(\vh,\vgamma,b^{m-1},s) \right . \\
        \nonumber
-       & \left . \qquad + \cdots + b^0 n_0 P_\alpha(\vh,\vgamma,b^0,\onetos)  \right\} \\
+       & \left . \qquad + \cdots + b^0 n_0 P_\alpha(\vh,\vgamma,b^0,s)  \right\} \\
        \nonumber
-       &\le \frac {(b-1)}{n} \left\{ b^m  P_\alpha(\vh,\vgamma,b^m,\onetos) + b^{m-1}  P_\alpha(\vh,\vgamma,b^{m-1},\onetos) \right . \\
+       &\le \frac {(b-1)}{n} \left\{ b^m  P_\alpha(\vh,\vgamma,b^m,s) + b^{m-1}  P_\alpha(\vh,\vgamma,b^{m-1},s) \right . \\
        \nonumber
-       & \qquad \left . + \cdots + b^0  P_\alpha(\vh,\vgamma,b^0,\onetos)  \right\} 
+       & \qquad \left . + \cdots + b^0  P_\alpha(\vh,\vgamma,b^0,s)  \right\} 
       \qquad \text{since $n_m \le b-1$}\\
       \nonumber
       & \le \frac {(b-1)C_{P}(b,\alpha,\vgamma,\epsilon,s)}{n} \\
@@ -342,7 +347,7 @@ The next part of the proof proceeds by substituting in the upper bounds for thes
 
 Finally, we factor out the largest logarithmic factors and sum the geometric series:
 \begin{align*}
-\MoveEqLeft P_\alpha(\vh,\vgamma,n,\onetos) \\
+\MoveEqLeft P_\alpha(\vh,\vgamma,n,s) \\
       & \le \frac {(b-1)C_{P}(b,\alpha,\vgamma,\epsilon,s)}{n} \frac{(1 - b^{(m+1)(1-\alpha)})}{1 - b^{1-\alpha}}
       \max(1, (\log b^{m})^{\alpha(s+1)}) \\
       & \qquad \qquad \times [\max(1,\log \log (
@@ -373,25 +378,25 @@ Next, suppose $n = \lambda b^p$, where $\lambda$ is an integer that is relativel
 The  $b$-ary expansion of $n$ takes the form:  $n = b^pn_p + b^{p+1}n_{p+1} + \cdots + b^m n_m$. 
 Since the lattice rule cubature is bounded above \eqref{eq:ihatarbn}, it follows that $P_\alpha$ for $n = \lambda b^p$ can also be bounded above by a sum of $P_\alpha$ for powers of the base: 
 \begin{align*}
-    P_\alpha(\vh,\vgamma,\lambda b^p,\onetos)
+    P_\alpha(\vh,\vgamma,\lambda b^p,s)
     & = \sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_{\lambda b^p}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk,\vgamma)^{-\alpha} \qquad \text{by \eqref{eq:wcerrPalpha}} \\
-    & \le \frac {1}{\lambda b^p} \sum_{\ell = 0}^{m-p} b^{m-\ell} n_{m -\ell} P_\alpha(\vh,\vgamma,b^{m-\ell},\onetos) \qquad \text{by \eqref{eq:Palphadual}}
+    & \le \frac {1}{\lambda b^p} \sum_{\ell = 0}^{m-p} b^{m-\ell} n_{m -\ell} P_\alpha(\vh,\vgamma,b^{m-\ell},s) \qquad \text{by \eqref{eq:Palphadual}}
 \end{align*}
 Similarly to the proof for arbitrary $n$, we substitute in the upper bounds for $P_\alpha$:  
 \begin{align} \label{eq:sameargument1}
     \nonumber
     \MoveEqLeft[1]
-   P_\alpha(\vh,\vgamma,\lambda b^p,\onetos)  \\
-    &\le \frac {1}{\lambda b^p} \left\{ b^m n_m P_\alpha(\vh,\vgamma,b^m,\onetos) + b^{m-1} n_{m-1} P_\alpha(\vh,\vgamma,b^{m-1},\onetos) \right. \\
+   P_\alpha(\vh,\vgamma,\lambda b^p,s)  \\
+    &\le \frac {1}{\lambda b^p} \left\{ b^m n_m P_\alpha(\vh,\vgamma,b^m,s) + b^{m-1} n_{m-1} P_\alpha(\vh,\vgamma,b^{m-1},s) \right. \\
      \nonumber
-    &\qquad + \cdots + b^p n_p P_\alpha(\vh,\vgamma,b^p,\onetos) 
+    &\qquad + \cdots + b^p n_p P_\alpha(\vh,\vgamma,b^p,s) 
     \bigg\} \\ 
      \nonumber
     & \le \frac {(b-1)}{\lambda b^p}  
     \left\{
-    b^m  P_\alpha(\vh,\vgamma,b^m,\onetos) + b^{m-1}  P_\alpha(\vh,\vgamma,b^{m-1},\onetos) \right. \\
+    b^m  P_\alpha(\vh,\vgamma,b^m,s) + b^{m-1}  P_\alpha(\vh,\vgamma,b^{m-1},s) \right. \\
      \nonumber
-    &\qquad + \cdots + b^p  P_\alpha(\vh,\vgamma,b^p,\onetos) 
+    &\qquad + \cdots + b^p  P_\alpha(\vh,\vgamma,b^p,s) 
     \bigg\} \\
      \nonumber
     & \le \frac {(b-1)}{\lambda b^p} C_{P}(b,\alpha,\vgamma,\epsilon,s) \\
@@ -406,14 +411,14 @@ Similarly to the proof for arbitrary $n$, we substitute in the upper bounds for 
 \end{align}
 Next, we factor out the largest logarithmic term and compute the sum of the geometric series: 
 \begin{align*}
-     P_\alpha(\vh,\vgamma,\lambda b^p,\onetos)
-     & \le \frac { (b-1) C_{P}(\alpha, \vgamma, \epsilon,s)}{\lambda b^p} \left\{ b^{p(1-\alpha)} \cdot \frac{(1 - b^{(m-p+1)(1- \alpha )})}{1 - b^{1- \alpha}}\right\} \\
+     P_\alpha(\vh,\vgamma,\lambda b^p,s)
+     & \le \frac { (b-1) C_{P}(b,\alpha, \vgamma, \epsilon,s)}{\lambda b^p} \left\{ b^{p(1-\alpha)} \cdot \frac{(1 - b^{(m-p+1)(1- \alpha )})}{1 - b^{1- \alpha}}\right\} \\
     & \qquad  \times \max(1, (\log b^{m})^{\alpha(s+1)})) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)} \\
-    &\leq  \frac {(b-1)C_{P}(\alpha, \vgamma, \epsilon,s)}{\lambda b^{p\alpha}}  \frac{1 - b^{(m-p+1)(1- \alpha )}}{1 - b^{1- \alpha}} \\
+    &\leq  \frac {(b-1)C_{P}(b,\alpha, \vgamma, \epsilon,s)}{\lambda b^{p\alpha}}  \frac{1 - b^{(m-p+1)(1- \alpha )}}{1 - b^{1- \alpha}} \\
     &\qquad \times \max(1, (\log b^{m})^{\alpha(s+1)})) [\max(1,\log \log (
     b^m+1))]^{\alpha(1+\epsilon)} \\
-    &\le \frac{\lambda^{\alpha -1}{C}_{P}(\alpha, \vgamma,\epsilon,s)}{n^{\alpha}}  \frac {(b-1)} {1 - b^{1- \alpha}} \\
+    &\le \frac{\lambda^{\alpha -1}{C}_{P}(b,\alpha, \vgamma,\epsilon,s)}{n^{\alpha}}  \frac {(b-1)} {1 - b^{1- \alpha}} \\
     &\qquad \times \max(1, (\log n )^{\alpha(s+1)})) [\max(1,\log \log (
     n+1))]^{\alpha(1+\epsilon)}   
 \end{align*}
@@ -421,25 +426,26 @@ Next, we factor out the largest logarithmic term and compute the sum of the geom
 This completes the proof of \eqref{eq:mainresulttwo}. In this case of fixed $\lambda$, the upper bound decays nearly like $\Order(n^{- \alpha})$ as $n \rightarrow \infty$, i.e, $p \to \infty$,  
 which is an improvement on \eqref{eq:mainresultone}. However, for $\lambda/n$ bounded away from zero as $n \to \infty$ the decay of $P_\alpha$ is the same as that in \eqref{eq:mainresultone}.
 
-\subsection{The figure of merit $P_{\alpha}(\vh,\vgamma,\lowercase{n},\onetos)$ when the coordinate weights satisfy summability condition }
 
-\Cref{thm:one} makes no assumptions on the coordinate weights. In this section, we demonstrate how to eliminate the logarithmic terms in our upper bounds in Theorem \Cref{thm:one}---which grow exponentially as $s \to \infty$---by assuming a summability condition of the coordinate weights. In fact, we eliminate the $s$-dependence completely.
+\subsection{The figure of merit $P_{\alpha}(\vh,\vgamma,\lowercase{n},s)$ when the coordinate weights satisfy summability condition }
 
-\begin{theorem} \label{thm:two} \textbf{new version}
+\Cref{thm:one} makes no assumptions on the coordinate weights. In this section, we demonstrate how to eliminate the logarithmic terms in our upper bounds in \Cref{thm:one}---which grow exponentially as $s \to \infty$---by assuming a summability condition of the coordinate weights. In fact, we eliminate the $s$-dependence completely.
+
+\begin{theorem} \label{thm:two}
 Suppose $\alpha > 1$.
 \begin{enumerate}\renewcommand{\labelenumi}{\alph{enumi}.}
     \item If $\sum_{j = 1}^{\infty} \gamma_j ^{\alpha/(1+2\delta)} < \infty$ for some $\delta$ satisfying $0 < \delta < (\alpha -1)/2$, then
-\begin{equation*}
-     P_\alpha(\vh,\vgamma,n,\onetos)
-        \leq \frac{\widetilde{C}_P(\alpha, \vgamma, \delta)}{n^{1-\delta}} \frac{b^{\delta}(b - 1) }{b^{\delta} - 1} \qquad
-        \forall s = 1,2,\ldots.
-\end{equation*}
+\begin{equation} \label{eq:thmtwoa}
+     P_\alpha(\vh,\vgamma,n,s)
+        \leq \frac{\widetilde{C}_P(b,\alpha, \alpha/(1 + 2\delta), \vgamma, \delta)}{n} \frac{b - 1 }{1 - b^{-\delta}} \qquad
+        \forall n, s \in \naturals.
+\end{equation}
 
 \item If $\sum_{j = 1}^{\infty} \gamma_j < \infty$, then for any fixed $\delta $ such that $0 < \delta < \alpha - 1$ and any fixed $\lambda \in \naturals$:
 \begin{equation*}
-     P_\alpha(\vh,\vgamma,\lambda b^p,\onetos)
-        \leq \frac{\lambda^{\alpha - 1 - \delta }\widetilde{C}_P(\alpha, \vgamma, \delta)}{n^{\alpha - \delta}}\frac{(b-1)}{1 - b^{1 - \alpha + \delta}} \qquad 
-        \forall s = 1,2,\ldots.
+     P_\alpha(\vh,\vgamma,\lambda b^p,s)
+        \leq \frac{\lambda^{\alpha - 1 - \delta }\widetilde{C}_P(b,\alpha, \vgamma, \delta)}{n^{\alpha - \delta}}\frac{(b-1)}{1 - b^{1 - \alpha + \delta}} \qquad 
+        \forall \lambda, n, s \in \naturals.
 \end{equation*}
 \end{enumerate}
 
@@ -447,93 +453,40 @@ Suppose $\alpha > 1$.
 
 \begin{proof}
 By \cite[Theorem 2, case (iii)]{HicNie03a} we know that:
-\begin{align*}
-      P_\alpha(\vh,\vgamma,b^m,\onetos)
+\begin{equation} \label{eq:nosbd}
+      P_\alpha(\vh,\vgamma,b^m,s)
         \leq \widetilde{C}_P(\alpha, a, \vgamma, \delta) (b^m)^{-\alpha/a + \delta},
-\end{align*}
+\end{equation}
 for $a \in [1, \alpha]$, provided that  $\sum_{j = 1}^{\infty} \gamma_j^a < \infty$. There are two cases.
 
-We showed in \Cref{thm:one} that the best decay we can get for arbitrary $n$ is nearly like $\Order(n^{-1 + \delta})$, so the weakest assumption on the coordinate weights we can make to achieve this decay is by taking $a = \alpha$.  Substituting this bound into \eqref{eq:Palphan} we get: %with $a = \alpha$ we get: %and following the same argument as in \eqref{eq:mainresultone}, we get the following upper bound on $P_{\alpha}$: 
+The first case is to recover the $\Order(n^{-1})$ decay as in \eqref{eq:mainresultoneb} but without the dimension dependence.  Choose a small positive $\delta$ that is less than $(\alpha -1)/2$, and let $a = \alpha/(1 + 2\delta)$.   
+Substituting \eqref{eq:nosbd} into \eqref{eq:Palphan} we get: %with $a = \alpha$ we get: %and following the same argument as in \eqref{eq:mainresultone}, we get the following upper bound on $P_{\alpha}$: 
 
 \begin{align*}
-    P_\alpha(\vh, \vgamma, n, \onetos) 
-    &\leq \frac{(b - 1)}{n} \widetilde{C}_P(\alpha, \vgamma, \delta)  \Bigg\{ 
-        b^{m(1-\alpha/\alpha + \delta)} + b^{(m-1)(1-\alpha/\alpha + \delta)} + \cdots \\
+    \MoveEqLeft{P_\alpha(\vh, \vgamma, n, s)} \\
+    &\leq \frac{(b - 1)}{n} \widetilde{C}_P(b,\alpha, \alpha/(1 + 2\delta), \vgamma, \delta)  \Bigl[
+        b^{m(1-\alpha/a + \delta)} + b^{(m-1)(1-\alpha/a + \delta)} + \cdots \\
         & \qquad \qquad 
-     + b^{0(1-\alpha/\alpha + \delta)}
-    \Bigg\} \\
-    &= \frac{(b - 1)}{n} \widetilde{C}_P(\alpha, \vgamma, \delta) \Bigg\{\frac{b^{(m+1)\delta} -1 }{b^{\delta} - 1} \Bigg\} \\
-    &\leq \frac{\widetilde{C}_P(\alpha, \vgamma, \delta)}{n^{1-\delta}} \frac{b^{\delta}(b - 1) }{b^{\delta} - 1}.
+     + b^{0(1-\alpha/a+ \delta)} \Bigr] \\
+    &\leq \frac{(b - 1)}{n} \widetilde{C}_P(b,\alpha, \alpha/(1 + 2\delta), \vgamma, \delta)  \Bigg[ 
+        b^{-m \delta} + b^{-(m-1)\delta} + \cdots + 1 \Big] \\
+    &\leq \frac{\widetilde{C}_P(b,\alpha, \alpha/(1 + 2\delta), \vgamma, \delta)}{n} \frac{b - 1 }{1 - b^{-\delta}}.
 \end{align*}
 
-For the case $n = \lambda b^p$, we proved in \Cref{thm:one} we proved that the fastest decay we can achieve is $\Order(n^{-\alpha})$. The weakest assumption we can make on the coordinate weights in this case to achieve this decay is  $a = 1$. Then, the upper bound on $P_\alpha$ for $n = \lambda b^p$ becomes: 
+For the case $n = \lambda b^p$, we proved in \Cref{thm:one} we proved that the fastest decay we can achieve is nearly $\Order(n^{-\alpha})$. The weakest assumption we can make on the coordinate weights in this case to achieve this decay is  $a = 1$. Then, from \eqref{eq:nosbd}, the upper bound on $P_\alpha$ for $n = \lambda b^p$ becomes: 
 
 \begin{align*}
-        P_\alpha(\vh, \vgamma, \lambda b^p, \onetos) 
-    &\leq \frac{(b - 1)}{\lambda b^p} \widetilde{C}_P(\alpha, \vgamma, \delta)  \Bigg\{ 
+        P_\alpha(\vh, \vgamma, \lambda b^p, s) 
+    &\leq \frac{(b - 1)}{\lambda b^p} \widetilde{C}_P(b,\alpha, 1, \vgamma, \delta)  \Bigg\{ 
         b^{m(1-\alpha + \delta)} + b^{(m-1)(1-\alpha + \delta)} + \cdots \\
         & \qquad \qquad 
      + b^{p(1-\alpha + \delta)} \Bigg\} \\
-    &= \frac{(b - 1)}{\lambda b^p} \widetilde{C}_P(\alpha,  \vgamma, \delta) \Bigg\{ \frac{b^{p( 1 - \alpha + \delta)}(1 - b^{(m-p+1)(1-\alpha +\delta)})}{1 - b^{1 - \alpha + \delta}} \Bigg\} \\
-    &= \frac{(b - 1)}{\lambda b^{p\alpha - \delta}} \widetilde{C}_P(\alpha, \vgamma, \delta) \Bigg\{ \frac{1 - b^{(m-p+1)(1-\alpha+\delta)}}{1 - b^{1 - \alpha + \delta}} \Bigg\} \\
-    &\leq \frac{\lambda^{\alpha - 1 - \delta }\widetilde{C}_P(\alpha, \vgamma, \delta)}{n^{\alpha - \delta}} \frac{(b-1)}{1 - b^{1 - \alpha + \delta}}. 
+    &= \frac{(b - 1)}{\lambda b^p} \widetilde{C}_P(b,\alpha, 1, 1, \vgamma, \delta) \Bigg\{ \frac{b^{p( 1 - \alpha + \delta)}(1 - b^{(m-p+1)(1-\alpha +\delta)})}{1 - b^{1 - \alpha + \delta}} \Bigg\} \\
+    &= \frac{(b - 1)}{\lambda b^{p\alpha - \delta}} \widetilde{C}_P(b,\alpha, 1, \vgamma, \delta) \Bigg\{ \frac{1 - b^{(m-p+1)(1-\alpha+\delta)}}{1 - b^{1 - \alpha + \delta}} \Bigg\} \\
+    &\leq \frac{\lambda^{\alpha - 1 - \delta }\widetilde{C}_P(b,\alpha, 1, \vgamma, \delta)}{n^{\alpha - \delta}} \frac{(b-1)}{1 - b^{1 - \alpha + \delta}}. 
 \end{align*}
 We emphasize that these upper bounds on $P_\alpha$ are independent of $s$.
 \end{proof}
-
-
-\begin{theorem} \label{thm:two}
-Suppose $\alpha > 1$.
- If $\sum_{j = 1}^{\infty} \gamma_j ^{\alpha} < \infty$, then for any fixed $\delta > 0$ :
-\begin{equation*}
-     P_\alpha(\vh,\vgamma,n,\onetos)
-        \leq \frac{\widetilde{C}_P(\alpha, \vgamma, \delta)}{n^{1-\delta}} \frac{b^{\delta}(b - 1) }{b^{\delta} - 1} \qquad
-        \forall s = 1,2,\ldots.
-\end{equation*}
-If $\sum_{j = 1}^{\infty} \gamma_j < \infty$, then for any fixed $\delta $ such that $0 < \delta < \alpha - 1$ and any fixed $\lambda \in \naturals$:
-\begin{equation*}
-     P_\alpha(\vh,\vgamma,\lambda b^p,\onetos)
-        \leq \frac{\lambda^{\alpha - 1 - \delta }\widetilde{C}_P(\alpha, \vgamma, \delta)}{n^{\alpha - \delta}}\frac{(b-1)}{1 - b^{1 - \alpha + \delta}} \qquad 
-        \forall s = 1,2,\ldots.
-\end{equation*}
-\end{theorem}
-
-\begin{proof}
-By \cite[Theorem 2, case (iii)]{HicNie03a} we know that:
-\begin{align*}
-      P_\alpha(\vh,\vgamma,b^m,\onetos)
-        \leq \widetilde{C}_P(\alpha, a, \vgamma, \delta) (b^m)^{-\alpha/a + \delta},
-\end{align*}
-for $a \in [1, \alpha]$, provided that  $\sum_{j = 1}^{\infty} \gamma_j^a < \infty$. There are two cases.
-
-We showed in \Cref{thm:one} that the best decay we can get for arbitrary $n$ is nearly like $\Order(n^{-1 + \delta})$, so the weakest assumption on the coordinate weights we can make to achieve this decay is by taking $a = \alpha$.  Substituting this bound into \eqref{eq:Palphan} we get: %with $a = \alpha$ we get: %and following the same argument as in \eqref{eq:mainresultone}, we get the following upper bound on $P_{\alpha}$: 
-
-\begin{align*}
-    P_\alpha(\vh, \vgamma, n, \onetos) 
-    &\leq \frac{(b - 1)}{n} \widetilde{C}_P(\alpha, \vgamma, \delta)  \Bigg\{ 
-        b^{m(1-\alpha/\alpha + \delta)} + b^{(m-1)(1-\alpha/\alpha + \delta)} + \cdots \\
-        & \qquad \qquad 
-     + b^{0(1-\alpha/\alpha + \delta)}
-    \Bigg\} \\
-    &= \frac{(b - 1)}{n} \widetilde{C}_P(\alpha, \vgamma, \delta) \Bigg\{\frac{b^{(m+1)\delta} -1 }{b^{\delta} - 1} \Bigg\} \\
-    &\leq \frac{\widetilde{C}_P(\alpha, \vgamma, \delta)}{n^{1-\delta}} \frac{b^{\delta}(b - 1) }{b^{\delta} - 1}.
-\end{align*}
-
-For the case $n = \lambda b^p$, we proved in \Cref{thm:one} we proved that the fastest decay we can achieve is $\Order(n^{-\alpha})$. The weakest assumption we can make on the coordinate weights in this case to achieve this decay is  $a = 1$. Then, the upper bound on $P_\alpha$ for $n = \lambda b^p$ becomes: 
-
-\begin{align*}
-        P_\alpha(\vh, \vgamma, \lambda b^p, \onetos) 
-    &\leq \frac{(b - 1)}{\lambda b^p} \widetilde{C}_P(\alpha, \vgamma, \delta)  \Bigg\{ 
-        b^{m(1-\alpha + \delta)} + b^{(m-1)(1-\alpha + \delta)} + \cdots \\
-        & \qquad \qquad 
-     + b^{p(1-\alpha + \delta)} \Bigg\} \\
-    &= \frac{(b - 1)}{\lambda b^p} \widetilde{C}_P(\alpha,  \vgamma, \delta) \Bigg\{ \frac{b^{p( 1 - \alpha + \delta)}(1 - b^{(m-p+1)(1-\alpha +\delta)})}{1 - b^{1 - \alpha + \delta}} \Bigg\} \\
-    &= \frac{(b - 1)}{\lambda b^{p\alpha - \delta}} \widetilde{C}_P(\alpha, \vgamma, \delta) \Bigg\{ \frac{1 - b^{(m-p+1)(1-\alpha+\delta)}}{1 - b^{1 - \alpha + \delta}} \Bigg\} \\
-    &\leq \frac{\lambda^{\alpha - 1 - \delta }\widetilde{C}_P(\alpha, \vgamma, \delta)}{n^{\alpha - \delta}} \frac{(b-1)}{1 - b^{1 - \alpha + \delta}}. 
-\end{align*}
-We emphasize that these upper bounds on $P_\alpha$ are independent of $s$.
-\end{proof}
-
 
 
 The theorems above establish a theoretical upper bound on the figure of merit $P_\alpha$ for $n$ other than $b^m$, showing a slower decay of $\Order(n^{-1})$ for arbitrary $n$. However, when $n = \lambda b^m$ for a fixed $\lambda$, the decay is similar to that for the preferred values $n = b^m$. In the next subsection, we study this decay numerically for specific parameter choices to evaluate how well the theoretical bounds hold in practice.
@@ -593,9 +546,9 @@ f(\vz) = \pi^{s/2}\cos(\|\vz\|_2), \quad s = 6
 So far, we have analyzed the figure of merit $P_\alpha$ for $n$ other than $b^m$ in this Banach space setting. In the next section, we consider a related Hilbert space and introduce unequal sample weights in our cubature formula. We also investigate a quantity related to $P_\alpha$, which allows these unequal weights. 
 
 \section{The Hilbert space setting with $P_{\alpha,2}$ and optimal sample weights}
-\FredNote{Do we make a comparison to the other result?}
 In \Cref{sec:Palphabd} we only derived \emph{upper bounds} on the values of $P_{\alpha}$ for arbitrary $n$.  The exact formula for $P_{\alpha}$ for arbitrary $n$ involves an infinite sum over the wavenumbers that cannot be reduced to a finite sum.  However, if we switch from the Banach space, $\mathcal{F}_\alpha$, defined in \eqref{eq:Banachspace}, to a Hilbert space, $\mathcal{F}_{\alpha,2}$, then we can evaluate the corresponding figure of merit, $P_{\alpha,2}$ for arbitrary values of $n$ in terms of a finite sum.  
 %add something before 
+
 
 We define a Hilbert space of functions, related to the Banach space defined in \eqref{eq:Banachspace} by taking the weighted $\ell_2$ norm of the Fourier coefficients rather than the $\ell_\infty$ norm: 
 \begin{gather*}
@@ -606,13 +559,14 @@ We define a Hilbert space of functions, related to the Banach space defined in \
 
 Note that this is a stronger norm, i.e., $\norm[\cf_{\alpha}]{f} \le \norm[\cf_{\alpha,2}]{f}$ for all $f \in \cf_{\alpha,2}$.  As a consequence
 \begin{multline} \label{Pa2Parelation}
-P_{\alpha,2}(\vh,\vgamma,n,\onetos) : = \sup_{\norm[F_{\alpha,2}]{f} \le 1 } \abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)} \\
-\le \sup_{\norm[F_{\alpha}]{f} \le 1 } \abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)} = P_{\alpha}(\vh,\vgamma,n,\onetos)
+P_{\alpha,2}(\vh,\vgamma,n,s) : = \sup_{\norm[F_{\alpha,2}]{f} \le 1 } \abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)} \\
+\le \sup_{\norm[F_{\alpha}]{f} \le 1 } \abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)} = P_{\alpha}(\vh,\vgamma,n,s)
 \end{multline}
 
+\subsection{Derivation of exact formulae involving arbitrary sample weights}
 Before proceeding with the derivation of $P_{\alpha,2}$, we generalize to arbitrary sample weights for cubature, i.e., 
 \[
-\appxintn(f) =  \sum_{i=0}^{n-1} w_if(\vz_i),  
+\appxintn(f) =  \sum_{i=0}^{n-1} w_if(\vz_i).
 \]
 Then the tight bound on the error analogous to \eqref{eq:wcerrPalpha} becomes: 
 \begin{align*}
@@ -625,13 +579,13 @@ Then the tight bound on the error analogous to \eqref{eq:wcerrPalpha} becomes:
 where $\vw = \bigl( w_i \bigr)_{i=0}^{n-1}$. 
 
 
-Note that for lattices, i.e., $n=b^m$, and for equal weights $\vw = b^{-m} \vone $, it follows that $P_{\alpha,2}^2(\vh,\vgamma,b^m,\onetos, b^{-m} \vone) = P_{2\alpha}(\vh,\vgamma,b^m,\onetos)$ by definition.
+Note that for lattices, i.e., $n=b^m$, and for equal weights $\vw = b^{-m} \vone $, it follows that $P_{\alpha,2}^2(\vh,\vgamma,b^m,s, b^{-m} \vone) = P_{2\alpha}(\vh,\vgamma,b^m,s)$ by definition.
 
 
 For positive integer $\alpha$, we may again appeal to Bernoulli polynomials as we did in \eqref{eq:P2alpha}:
 \begin{align*}
 \nonumber
-P_{\alpha,2}^2(\vh,\vgamma,n,\onetos, \vw)
+P_{\alpha,2}^2(\vh,\vgamma,n,s, \vw)
 & = -1 + \sum_{i,j = 0}^{n-1} w_i w_j  
 \prod_{\ell = 1}^s [1 + \tilde{\gamma}_{\ell}^{2\alpha}B_{2\alpha}(x_{i,\ell} - x_{j, \ell}\bmod 1)] \\
 & = - 1 + \vw^T \mK \vw, \\
@@ -671,31 +625,19 @@ Thus, the optimal sample weights are:
 
 The cost of solving for the weights $\vw$ is $\Order(sn^2)$ to evaluate the kernel and $\Order(n^3)$ to invert the Gram matrix, $\mK$.  (We assume that evaluating one element of the Gram matrix is proportional to the dimension.)  However, since $\mK$ is Toeplitz, we can reduce the cost of solving for optimal sample weights to $\Order(sn+n^2)$.   %$\Order(sn) + \Order(n^2)$.
 
+\subsection{Error bounds in the Hilbert space setting}
 
-\begin{theorem} \label{thm:three}% not corollary? 
-The upper bounds derived in \Cref{thm:one} and \Cref{thm:two} also hold for $P_{\alpha,2}$ 
+\begin{theorem} \label{thm:three}
+The upper bounds derived in \Cref{thm:one} and \Cref{thm:two} also hold for $P_{\alpha,2}$.
 \end{theorem}
 
 \begin{proof}
     This follows immediately by the inequality in \eqref{Pa2Parelation}.
 \end{proof}
 
-Corollary 1 in \cite{HicEtal10a} states that if the worst case error bound for a Hilbert space like the one we have defined, and for the preferred sample size, $n = 1, b, b^2, \ldots$ is $\Order (b^{-m \alpha'})$ and $\alpha' > 1$, then for arbitrary sample size it is $\Order \bigl (n^{-1} \log(n) \bigr)$.  
+Corollary 1 in \cite{HicEtal10a} states that if the worst case error bound for a Hilbert space like those we consider here is $Cb^{-m \alpha})$ for $\alpha \ge 1$ for the preferred sample size, $n = 1, b, b^2, \ldots$, then for arbitrary sample size it is $C n^{-1} \log(n)$. In  \Cref{thm:three} our hypothesis is not on the error bound but on the parameter $\alpha$ defining the Hilbert space.  The corresponding result in \eqref{eq:thmtwoa} avoids the extra $\log(n)$ factor for $\alpha > 1$, granted by inflating the leading constant.
 
-$P_{\alpha,2}^2(\vh,\vgamma,b^m,\onetos) \le C b^{-m \alpha'}$ for $m =0, 1, 2, \ldots$, then $P_{\alpha,2}^2(\vh,\vgamma,n,\onetos) \le C n^{-\alpha'}$ for $n =2, 3, \ldots$.
-Let S = (xk)k#0 be a lattice sequence in base b for which the worst
-case error in a shift-invariant reproducing kernel Hilbert space H(K) satisf ies
-e (Sb( , K) + C
-,
-b(-−! for all ( = 0, 1, . . . ,
-for some constants C, ! > 0. Then for every N # 2, the quasi-Monte Carlo rule
-using the f irst N points of the lattice sequence has the worst case error satisfying
-e(SN, K) + C
-logb N
-Nmin(!,1)
-.
-% discuss improvement on result from Hickernell&friends
-\LarysaNote{
+\subsection{Numerical results}
 
 To illustrate how optimal weights affect the behavior of $P_{\alpha,2}$ we present several numerical results. Figure \ref{fig:ssdisc-vs-ssdiscopt} shows the decay of $P_{1,2}$ under optimal sample weights and under equal weights for $n \leq 2^{12}$. In both cases, the decay is nearly $\Order(n^{-1})$. However, the values of $P_{1,2}$ are consistently smaller and non-increasing for optimal weights. 
 % To illustrate the advantage of using optimally chosen sample weights 
@@ -735,14 +677,14 @@ and shows that, with optimal sample weights the ratios remain at or below one as
 % These numerical results illustrate the advantage of using optimally chosen sample weights as opposed to equal weights. In Figure \ref{fig:ssdisc-vs-ssdiscopt} we note that $P_{1,2}$ decays nearly like $\Order(n^{-1})$ in both cases, but the values are consistently smaller and non-increasing for optimal weights. Figure \ref{fig:ratio-floor} compares 
 % $P_{1,2}$ at each $n$ to its value at the largest power of 2 and no greater than $n$. For optimal sample weights, the ratios do not exceed one as $n$ increases, while the ratios for equal weights demonstrate more fluctuations and are often greater than one. Figure \ref{fig:ratio-ceil} compares $P_{1,2}$ at each $n$ to its value at the smallest power of 2 and no less  than $n$. Although in both cases the ratios are generally above one, optimal weighs produce lower values than the equal weighs. 
 % 
-}
+
 \section{Discussion and Future Work} %explain more what it all means 
 % The results in this paper...
-\LarysaNote{ 
+
 %In this work, we derived an upper bound on the figure of merit $P_\alpha$ for extensible lattice sequences for arbitrary $n$ in the Banach space setting. It was motivated by situations in which a computational time budget may prevent us from choosing the preferred $n = b^m$. For general $n$, the error decays nearly like $\Order(n^{-1 + \delta})$, while for $n = \lambda b^p$, a decay is similar to the that of the preferred $n = b^m$ for a fixed $\lambda$.
 %the upper bound under summability condition - slower, independant of dimension -> error doesnt increase polynominally/exponentionally 
 
-The results in this paper illustrate that the figure of merit $P_\alpha$ does have a worse upper bound for general $n$ compared to the preferred $n = b^m$ for a fixed prime $b$, as expected. However, we also found that we can still attain the optimal decay of $\Order(n^{-\alpha})$ for $n =\lambda b^p$ for a fixed integer $\lambda$ with the upper bound having some additional constant terms. This suggests that even if we cannot obtain a full lattice due to early termination or computational time budget, sample sizes of the form $n = \lambda b^p$ could still be useful in practice.
+The results in this paper illustrate that the figure of merit $P_\alpha$ does have a worse upper bound for general $n$ compared to the preferred $n = b^m$ for a fixed prime $b$, as expected. However, this is not a handicap if the smoothness of the integrand is limited.  Moreover, we can still attain the optimal decay of $\Order(n^{-\alpha})$ for $n =\lambda b^p$ for a fixed integer $\lambda$ with the upper bound having some additional constant terms. This suggests that even if we cannot obtain a full lattice due to early termination or computational time budget, sample sizes of the form $n = \lambda b^p$ could still be useful in practice.
 
 To investigate if unequal sample weights can improve the cubature error for arbitrary $n$, we
 analyzed a related quantity $P_{\alpha,2}$. Numerical experiments with $\alpha=1$ 
@@ -755,7 +697,7 @@ Future work could explore the performance of lattices with arbitrary $n$ in conc
 Additionally, further numerical experiments could investigate the decay of the upper bound on $P_\alpha$ and the decay of $P_{\alpha,2}$ for a wider range of $\alpha$ values. 
 
 
-}
+
 
 
 % \section{Lattice Sequences and Toeplitz Matrices} %are we keeping this section?
