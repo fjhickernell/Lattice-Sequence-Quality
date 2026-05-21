@@ -1,8 +1,9 @@
-\documentclass[authoryear]{elsarticle}
+\documentclass[]{cas-sc}
+% \usepackage[numbers]{natbib}
 %https://assets.ctfassets.net/o78em1y1w4i4/3ro3yQff1q67JHmLi1sAqV/1348e3852f277867230fc4b84a801734/elsdoc-1.pdf
 \usepackage{mathtools,upref,siunitx,upquote,fancyvrb,bbm,xspace,color,amsmath,amssymb, bm,amsthm}
 \allowdisplaybreaks
-\usepackage[hyphens]{url}
+% \usepackage[hyphens]{url}
 \usepackage[utf8]{inputenc}
 \usepackage{esdiff}
 \usepackage{graphicx}
@@ -41,7 +42,8 @@
 \author{Fred J. Hickernell}
 \begin{abstract} Extensible lattices are a common choice of 
 nodes for approximating multidimensional integrals by a sample mean, typically using sample sizes of the form $n = b^m$ for a prime base $b$ and non-negative integer $m$. However, a computational time budget or early termination due to hardware failure may prevent us from choosing the preferred number of samples. In this paper, we establish an upper bound on the figure of merit $P_\alpha$ for extensible lattice sequences \emph{with arbitrary $n$}, derived as a worst-case error in a Banach space setting. 
-We show that although the upper bound on $P_\alpha$ can decay no faster than $\Order(n^{-1})$ for general $n$, restricting $n$ to the form $n =\lambda b^p$, where $\lambda$ is a fixed integer, can recover the optimal decay of nearly $\Order(n^{-\alpha})$. We also investigate a related figure of merit, $P_{\alpha,2}$, arising as a worst-case error for Hilbert spaces of integrands, under equal and optimal sample weights, with numerical results suggesting optimal weights can improve the cubature error bound for arbitrary $n$.
+We show that although the upper bound on $P_\alpha$ can decay no faster than $\Order(n^{-1})$ for general $n$, restricting $n$ to the form $n =\lambda b^p$, where $\lambda$ is a fixed integer, we can recover the optimal decay of nearly $\Order(n^{-\alpha})$ as $p \to \infty$. We also investigate a related figure of merit, $P_{\alpha,2}$, arising as a worst-case error for Hilbert spaces of integrands. We obtain a theoretical upper bound on $P_{\alpha,2}$ in terms of $P_{\alpha}$ for equal sample weights and show numerically that optimal sample weights can improve the cubature error bound even further.
+
 
 \end{abstract}
 
@@ -144,8 +146,8 @@ where we take advantage of H\"older's inequality and where $\onetos$ means $\{1,
 This notation follows \cite[(4)]{HicNie03a} but we 
 %replace 1:s in \cite.. by s, 2 bullets
 \begin{itemize}
-    \item do not assume the first $n$ points form a lattice
-    \item replace their $\onetos$ by $s$.
+    \item Do not assume the first $n$ points form a lattice and
+    \item Replace their $\onetos$ by $s$.
 \end{itemize}
 For an extensible lattice with $n = b^m$, the quality measure $P_\alpha(\vh,\vgamma,n, s)$ takes on a simple form.  Note that
 \begin{align}\label{Eq:DualLattice}
