@@ -1,0 +1,16 @@
+The paper investigates the convergence of the classical figure of merit P_\alpha for extensible lattice rules. Extensible lattice rules have previously been introduced by Hickernell and Niederreiter. In that paper the authors studied the convergence rates when the number of points is of the form N = b^m. The present paper asks what happens to the worst-case error (i.e. P_\alpha), when N is of a more general form. It is known that in general this limits the convergence rate (for instance consider f(x) = \exp(2\pi i x_1) for x = (x_1, x_2, ..., x_s). Then the first b^m points yield integration error 0, whereas N = b^m+1 points yield error \exp(2\pi i x_{b^m,1}) / (b^m+1). Hence in general we cannot expect a better rate than O(1/N) for all N \in \mathbb{N}.
+
+The proofs in this paper are therefore not surprising and are relatively straight forward to derive from the known literature. In my opinion this does not reach the level sufficient for publication in J. Complexity.
+
+Comments:
+- Eq. (8): \alpha > 1; this should be already mentioned around Eq. (3)
+- Eq. (11): there is a factor (b-1) missing in the upper bound.
+- Page 6, lines 4 and 5: This is only true when \gamma_j \in (0, 1]. 
+- Eq. (12): there are too many ')'
+- Page 8, line 2: i/b^m should be i/b^{m-\ell}
+- Page 8, line 2: I think this line is not correct: take b = 3, n = 2, s = 1, h = 1, k = 1, \Delta = 0: then we should get 1/2 + \exp(2\pi i/3)/2, but this line only gives 1.
+- Theorem 2 a: it needs to state that, there exists a generating vector h such that ...
+- Page 15, line -5: There is a k missing in the complex exponential.
+- Page 15, line -6: In order to remove the 0'th coefficient, one needs \sum_i w_i = 1.
+- Page 16, line -2: In the stated ordering, K is not generally Toeplitz: Say b=2, s=1,h=1,\alpha=1,\gamma=1, then the first 3 points are 0, 1/2, 1/4, so the successive differences are not equal.
+- Page 18, line -3: ... nearly O(n^{-\alpha}) ...
