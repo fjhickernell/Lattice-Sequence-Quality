@@ -1,9 +1,8 @@
-\documentclass[]{cas-sc}
-% \usepackage[numbers]{natbib}
+\documentclass[authoryear]{elsarticle}
 %https://assets.ctfassets.net/o78em1y1w4i4/3ro3yQff1q67JHmLi1sAqV/1348e3852f277867230fc4b84a801734/elsdoc-1.pdf
 \usepackage{mathtools,upref,siunitx,upquote,fancyvrb,bbm,xspace,color,amsmath,amssymb, bm,amsthm}
 \allowdisplaybreaks
-% \usepackage[hyphens]{url}
+\usepackage[hyphens]{url}
 \usepackage[utf8]{inputenc}
 \usepackage{esdiff}
 \usepackage{graphicx}
@@ -36,10 +35,18 @@
 \newtheorem{corollary}[theorem]{Corollary}
 
 \begin{document}
-\title{The Quality of Lattice Sequences}
-\author{Larysa Matiukha}
-\author{Yuhan Ding}
-\author{Fred J. Hickernell}
+\title{The Quality of Lattice Sequences for \\ Arbitrary Sample Size}
+\author[inst1]{Larysa Matiukha\corref{cor1}}
+\ead{larysa.matiukha@gmail.com}
+\cortext[cor1]{Corresponding author}
+\author[inst1]{Yuhan Ding}
+\author[inst1]{Fred J. Hickernell}
+\affiliation[inst1]{
+organization = {Illinois Institute of Technology, Chicago, IL 60616, USA},
+  city={Chicago},
+  state={IL},
+  country={USA}
+}
 \begin{abstract} Extensible lattices are a common choice of 
 nodes for approximating multidimensional integrals by a sample mean, typically using sample sizes of the form $n = b^m$ for a prime base $b$ and non-negative integer $m$. However, a computational time budget or early termination due to hardware failure may prevent us from choosing the preferred number of samples. In this paper, we establish an upper bound on the figure of merit $P_\alpha$ for extensible lattice sequences \emph{with arbitrary $n$}, derived as a worst-case error in a Banach space setting. 
 We show that although the upper bound on $P_\alpha$ can decay no faster than $\Order(n^{-1})$ for general $n$, restricting $n$ to the form $n =\lambda b^p$, where $\lambda$ is a fixed integer, we can recover the optimal decay of nearly $\Order(n^{-\alpha})$ as $p \to \infty$. We also investigate a related figure of merit, $P_{\alpha,2}$, arising as a worst-case error for Hilbert spaces of integrands. We obtain a theoretical upper bound on $P_{\alpha,2}$ in terms of $P_{\alpha}$ for equal sample weights and show numerically that optimal sample weights can improve the cubature error bound even further.
@@ -65,18 +72,18 @@ The remainder of the paper is organized as follows. Section 2 reviews the backgr
 
 \section{Background} % main things + previous results 
 Historically, lattice points were constructed as sets with fixed cardinality, $n$, and took the form
-\begin{equation} \label{eq:lat}
+\begin{equation*} %\label{eq:lat}
     \{\vz_i = i \vh/n \bmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s,
-\end{equation}
+\end{equation*}
 where $\vh \in \{1, \ldots, n-1\}^s$ is the \emph{generating vector}. Note that this set is closed under addition modulo $\vone$. A (random) shift, $\vDelta \in [0,1)^s$, is often added:
-\begin{equation} \label{eq:shlat}
+\begin{equation*}% \label{eq:shlat}
     \{\vz_i = i \vh/n + \vDelta \pmod{\vone} : i=0,1, \ldots, n-1 \} \in [0,1)^s.
-\end{equation}
+\end{equation*}
 
 Since this construction depends on $n$, a new point set must be generated each time the sample size changes. To address this, lattices were later defined extensibly, i.e., not for a fixed $n$, allowing the lattice to be extended without discarding previously generated points. Extensible lattice sequences, proposed in \cite{Mai81a} and \cite{HicEtal00}, take the form 
-\begin{equation} \label{eq:extlat}
+\begin{equation*} \label{eq:extlat}
     \{\vz_i = \vh\phi(i)+ \vDelta \pmod{\vone} : i=0,1, \ldots \} \in [0,1)^s,
-\end{equation}
+\end{equation*}
 where $\{\phi(\cdot)\}_{i=0}^\infty$ is the van der Corput sequence in base $b$.  (The base is suppressed in our notation for simplicity.) In this case $\vh$ must be a generalized integer as defined in \cite[Section 2]{HicNie03a}. An example of a two-dimensional shifted extensible lattice is shown in \Cref{fig:lattice-plot}. 
 
 \begin{figure}[H]
@@ -113,10 +120,10 @@ We extend the bounds on $P_\alpha$ given in \cite{HicNie03a} to arbitrary $n$ in
 \section{Worst case error analysis for arbitrary $n$}
 This section follows the traditional error analysis presented in \cite{DicEtal22a}. However, we extend the theory to the case where the nodeset is not a full lattice. 
 We first consider integrands, $f$, that have an absolutely summable Fourier series:
-\begin{equation} \label{eq:fseries}
+\begin{equation*} %\label{eq:fseries}
     f(\vx) = \sum_{\vk \in \integers^{s}} \tf(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vx}, \qquad \text{where } \tf(\vk) = \int_{[0,1)^{s}} f(\vx) \me^{-2 \pi \sqrt{-1} \vk^T \vx}\, \dif \vx.
-\end{equation}
-Given the positive coordinate weights, $\gamma_1$, $\gamma_2$, \ldots, we define a Banach space of integrands by weighting the Fourier coefficients: 
+\end{equation*}
+Given the positive coordinate weights, $\gamma_1$, $\gamma_2, \ldots$, we define a Banach space of integrands by weighting the Fourier coefficients: 
 \begin{gather}
 \nonumber
 \tr(\vk,\vgamma) = \prod_{j=1}^{s} r(k_{j},\gamma_{j}),
@@ -138,11 +145,10 @@ It then follows that the worst-case error in approximating the integral by the s
 &
 \nonumber
 = \sup_{\norm[\cf_{\alpha}]{f} \le 1} \abs{\sum_{\vk \in \integers^{s}} \tf(\vk) \left[\int_{[0,1)^{s}} \me^{2 \pi \sqrt{-1} \vk^T \vx} \, \dif \vx - \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
-\nonumber
-& = \sup_{\norm[\cf_{\alpha}]{f} \le 1} \abs{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \tf(\vk) \left[ \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
-& = \underbrace{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk,\vgamma)^{-\alpha}}_{=: P_\alpha(\vh,\vgamma,n,1:s) = \text{quality of the lattice nodes}},  %\qquad \forall f \in \cf_{\alpha} \\
-\end{align}
-where we take advantage of H\"older's inequality and where $\onetos$ means $\{1, \ldots, s\}$.
+& \nonumber= \sup_{\norm[\cf_{\alpha}]{f} \le 1} \abs{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \tf(\vk) \left[ \appxintn(\me^{2 \pi \sqrt{-1} \vk^T \cdot})\right]} \\
+& = \underbrace{\sum_{\vk \in \integers^s \setminus\{\vzero\}} \abs{\appxint_n(\me^{2 \pi \sqrt{-1} \vk^T \cdot})}\tr(\vk,\vgamma)^{-\alpha}}_{=: P_\alpha(\vh,\vgamma,n,s) = \text{quality of the lattice nodes}}, \\
+\nonumber\end{align}
+where we take advantage of H\"older's inequality and note that the error term vanishes for $\vk = \vzero$, and the integral itself vanishes for all $\vk \ne \vzero$.
 This notation follows \cite[(4)]{HicNie03a} but we 
 %replace 1:s in \cite.. by s, 2 bullets
 \begin{itemize}
@@ -150,7 +156,7 @@ This notation follows \cite[(4)]{HicNie03a} but we
     \item Replace their $\onetos$ by $s$.
 \end{itemize}
 For an extensible lattice with $n = b^m$, the quality measure $P_\alpha(\vh,\vgamma,n, s)$ takes on a simple form.  Note that
-\begin{align}\label{Eq:DualLattice}
+\begin{align*}\label{Eq:DualLattice}
     \MoveEqLeft{\appxint_{b^m}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \\
     \nonumber
     &= \frac 1{b^m} \sum_{i=0}^{b^m-1} \me^{2 \pi \sqrt{-1} \vk^T (\vh\phi(i) + \vDelta \bmod{\vone})} \\
@@ -165,11 +171,11 @@ For an extensible lattice with $n = b^m$, the quality measure $P_\alpha(\vh,\vga
     b^m, & \vk^T \vh \pmod{b^m} = 0
     \end{cases} \\
     \nonumber
-    & = \me^{2 \pi \sqrt{-1} \vk^T \vDelta} \bbone_{B(\vh,m,1:s)}(\vk).
-\end{align}
+    & = \me^{2 \pi \sqrt{-1} \vk^T \vDelta} \bbone_{B(\vh,m,s)}(\vk).
+\end{align*}
 Thus it follows that
 \begin{equation} \label{eq:Palphadual}
-    P_\alpha(\vh,\vgamma,b^m,s) = \sum_{\vk \in B(\vh,m,1:s)} \tr(\vk,\vgamma)^{-\alpha},
+    P_\alpha(\vh,\vgamma,b^m,s) = \sum_{\vk \in B(\vh,m,s)} \tr(\vk,\vgamma)^{-\alpha},
 \end{equation}
 where $B(\vh,m,s) : = \{\vk \in  \integers^s \setminus \{\vzero\} : \vk^T \vh \pmod{b^m} = 0\}$ is the \emph{dual lattice} minus the origin.  This corresponds to \cite[(3)]{HicNie03a}.  
 
@@ -250,28 +256,16 @@ Starting from the upper bound for $P_{\alpha}(\vh,\vgamma,n,s)$ for $n$ a non-ne
 
     \end{enumerate}
 
-    \item However, if $n = \lambda b^p$ for some positive integer $p$ and some positive integer  $\lambda$ that is relatively prime with respect to $b$, then,%
-%    \begin{enumerate}
-%        \renewcommand{\labelenumii}{\roman{enumii}.}
-%   \item 
-$P_\alpha$, has an upper bound that is similar to the case of $n=b^m$:
+    \item However, if $n = \lambda b^p$ for some positive integer $p$ and some positive integer  $\lambda$ that is relatively prime with respect to $b$, then, %
+    $P_\alpha$ has an upper bound that is similar to the case of $n=b^m$:
     \begin{multline} \label{eq:mainresulttwo}
          P_\alpha(\vh,\vgamma,n,s)
-         \le \frac{\lambda^{\alpha -1}{C}_{P}(b,\alpha, \vgamma,\epsilon,s)}{n^{\alpha}}  \frac {(b-1)} {1 - b^{1- \alpha}}  \\
+         \le \frac{{C}_{P}(b,\alpha, \vgamma,\epsilon,s)}{n^{\alpha}}  \frac {\lambda^{\alpha -1}(b-1)} {1 - b^{1- \alpha}}  \\
          \times \max(1, (\log n )^{\alpha(s+1)})) [\max(1,\log \log (
     n+1))]^{\alpha(1+\epsilon)} \\
-    \forall b \in \natzero, \ n, \lambda, s \in \naturals.
+ \ n, \lambda, s \in \naturals.
     \end{multline} 
     Again, the constant $C_{P}(b,\alpha,\vgamma,\epsilon,s)$ and the powers of the logarithms are the same as in \eqref{eq:Palphaextm}. Now, the power of $n$ is similar to that in \eqref{eq:Palphaextm}, but there is an extra factor of $\lambda^{\alpha -1}(b-1)/(1 - b^{1-\alpha})$.  Thus it is especially useful for small $\lambda$. (The parameter $p = \log_b(n/\lambda)$ does not appear above because it can be written in terms of $n$ and $\lambda$.)
-
-%    \item Moreover, the powers of log may be eliminated in favor of a larger constant, as follows:
-%    \begin{equation} \label{eq:mainresulttwob}
-%       P_\alpha(\vh,\vgamma,\lambda b^p,s)
-%         \le \frac{\lambda^{\alpha -1}{C}_{P}(b,\alpha, \vgamma,\epsilon,s) S(b, \alpha, \epsilon, s)}{n^{\alpha-\delta}} \qquad
-%      \forall n , s \in \naturals.
-%    \end{equation}
-
-%    \end{enumerate}
 
      \end{enumerate}
     
@@ -297,11 +291,11 @@ Let any non-negative integer $n$ be expressed as  its $b$-ary expansion, i.e., $
     &= \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} \, n_{m-\ell}
     \sum_{i=0 }^{b^{m-\ell}  -1} \me^{2 \pi \sqrt{-1} \vk^T \vh[i/b^m + \phi(n - \trun(n,m-\ell))]} \\
     & \hspace{30ex} \text{by \eqref{eq:phiproptwo}} \\
-    & = \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \bbone_{B(\vh,m-\ell,1:s)}(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(n - \trun(n,m-\ell))}.
+    & = \frac {\me^{2 \pi \sqrt{-1} \vk^T \vDelta}}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \bbone_{B(\vh,m-\ell,s)}(\vk) \me^{2 \pi \sqrt{-1} \vk^T \vh\phi(n - \trun(n,m-\ell))}.
 \end{align*}
  The absolute value of this lattice rule cubature is then bounded above by the triangle inequality as 
 \begin{equation} \label{eq:ihatarbn}
-    \abs{\appxint_{n}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \bbone_{B(\vh,m-\ell, 1:s)}(\vk).
+    \abs{\appxint_{n}(\me^{2 \pi \sqrt{-1} \vk^T \cdot})} \le \frac {1}{n} \sum_{\ell = 0}^{m} b^{m-\ell} n_{m - \ell} \bbone_{B(\vh,m-\ell, s)}(\vk).
 \end{equation}
 
 The figure of merit, $P_\alpha(\vh,\vgamma,n,s)$, depends on how small these quantities can be made by a good choice of $\vh$, namely,
@@ -438,16 +432,16 @@ Suppose $\alpha > 1$.
 \begin{enumerate}\renewcommand{\labelenumi}{\alph{enumi}.}
     \item If $\sum_{j = 1}^{\infty} \gamma_j ^{\alpha/(1+2\delta)} < \infty$ for some $\delta$ satisfying $0 < \delta < (\alpha -1)/2$, then
 \begin{equation} \label{eq:thmtwoa}
-     P_\alpha(\vh,\vgamma,n,s)
+     P_\alpha(\vh,\vgamma,n, s)
         \leq \frac{\widetilde{C}_P(b,\alpha, \alpha/(1 + 2\delta), \vgamma, \delta)}{n} \frac{b - 1 }{1 - b^{-\delta}} \qquad
         \forall n, s \in \naturals.
 \end{equation}
 
-\item If $\sum_{j = 1}^{\infty} \gamma_j < \infty$, then for any fixed $\delta $ such that $0 < \delta < \alpha - 1$ and any fixed $\lambda \in \naturals$:
+\item If $\sum_{j = 1}^{\infty} \gamma_j < \infty$ and $n = \lambda b^p$ for some positive integer $p$ and some positive integer $\lambda$ that is relatively prime with respect to $b$, then for any fixed $\delta $ such that $0 < \delta < \alpha - 1$:
 \begin{equation*}
-     P_\alpha(\vh,\vgamma,\lambda b^p,s)
+     P_\alpha(\vh,\vgamma,n,s)
         \leq \frac{\lambda^{\alpha - 1 - \delta }\widetilde{C}_P(b,\alpha, \vgamma, \delta)}{n^{\alpha - \delta}}\frac{(b-1)}{1 - b^{1 - \alpha + \delta}} \qquad 
-        \forall \lambda, n, s \in \naturals.
+        \forall  n, \lambda, s \in \naturals.
 \end{equation*}
 \end{enumerate}
 
@@ -475,7 +469,7 @@ Substituting \eqref{eq:nosbd} into \eqref{eq:Palphan} we get: %with $a = \alpha$
     &\leq \frac{\widetilde{C}_P(b,\alpha, \alpha/(1 + 2\delta), \vgamma, \delta)}{n} \frac{b - 1 }{1 - b^{-\delta}}.
 \end{align*}
 
-For the case $n = \lambda b^p$, we proved in \Cref{thm:one} we proved that the fastest decay we can achieve is nearly $\Order(n^{-\alpha})$. The weakest assumption we can make on the coordinate weights in this case to achieve this decay is  $a = 1$. Then, from \eqref{eq:nosbd}, the upper bound on $P_\alpha$ for $n = \lambda b^p$ becomes: 
+For the case $n = \lambda b^p$, in \Cref{thm:one} we proved that the fastest decay we can achieve is nearly $\Order(n^{-\alpha})$. The weakest assumption we can make on the coordinate weights in this case to achieve this decay is  $a = 1$. Then, from \eqref{eq:nosbd}, the upper bound on $P_\alpha$ for $n = \lambda b^p$ becomes: 
 
 \begin{align*}
         P_\alpha(\vh, \vgamma, \lambda b^p, s) 
@@ -496,14 +490,14 @@ The theorems above establish a theoretical upper bound on the figure of merit $P
 \subsection{Numerical Experiments}
 
 In this subsection, we present numerical experiments illustrating the decay of the upper bound on $P_\alpha$ derived in previous subsections, with $\alpha = 2$. All lattice samples 
-were generated using QMCPy \citep{QMCPy2020a} with the default generating vector $\vh$.
+were generated using QMCPy \citep{QMCPy2026a} with the default generating vector $\vh$.
 
 In \Cref{fig:p_alpha_O} we plot the upper bound on $P_2(\vh,[0.1,0.05],n,1\!\!:\!\!2)$ for all positive integers $n \leq 2^{10}$. The decay is nearly $\Order(n^{-2})$ when $n$ is a power of $2$, and closer to $\Order(n^{-1})$ for arbitrary $n$, as expected. For $n =\lambda 2^p$ with $\lambda = 1, 3, 5, 7$, \Cref{fig:/p_alpha_lambda_O} shows that the upper bound %on $P_2(\vh,[0.1, 0.05],\lambda 2^p,1:2)$  
 decays nearly like $\Order(n^{-2})$ in all cases, as proven in \Cref{thm:one}, with generally smaller values for smaller $\lambda$.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{thesis docs/plots/p_alpha_O.png}
+    \includegraphics[width=0.6\linewidth]{p_alpha_O.png}
     \caption{The decay of the upper bound on $P_2(\vh,[0.1, 0.05],n,1:2)$ for $ 1 \leq n \leq 2^{10}$.  %for the default $\vh$ in QMCPy. For values of $n$ that are powers of $2$, the decay is nearly $\Order(n^{-2})$, while for arbitrary $n$ it is closer to  $\Order(n^{-1})$. 
     }
     \label{fig:p_alpha_O}
@@ -511,7 +505,7 @@ decays nearly like $\Order(n^{-2})$ in all cases, as proven in \Cref{thm:one}, w
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{thesis docs/plots/p_alpha_lambda_O.png}
+    \includegraphics[width=0.6\linewidth]{p_alpha_lambda_O.png}
     \caption{The decay of the upper bound on $P_2(\vh,[0.1, 0.05],\lambda 2^p,1:2)$ for $ 1 \leq \lambda 2^p \leq 2^{10}$. 
     %for the default $\vh$ in QMCPy. Note the $\Order(n^{-2})$ decay in all cases.  The values are generally smaller for smaller $\lambda$.
     }
@@ -520,26 +514,32 @@ decays nearly like $\Order(n^{-2})$ in all cases, as proven in \Cref{thm:one}, w
 
 % We now explore how lattices with arbitrary $n$ perform in a numerical integration example. 
 % to complement 
-To further explore the performance of lattices for  arbitrary $n$, we consider a numerical integration example using a six-dimensional Keister integrand,
+To further explore the performance of lattices for  arbitrary $n$, we consider a numerical integration example using the $s$-dimensional Keister integral \citep{Kei96},
+\begin{equation*}
+    \mu = \int_{\reals^{s}} \cos(\|\vx\|_2) \exp{(-\|\vx\|_2^2}) \, \dif \vx = \mathbb{E}[f(\vX)]
+\end{equation*}
+where $f(\vx) = \pi^{s/2}\cos(\|\vx\|_2)$ for all $\vx \in \reals^s$ and $\vX \sim \mathcal{N}(\vzero_s, \mathbf{I}_{s\times s}/2)$. Then
 \[
-f(\vz) = \pi^{s/2}\cos(\|\vz\|_2), \quad s = 6
+\mu = \int_{[0,1]^{s}} \cos\left(\sqrt{\frac{1}{2}\sum_{j=1}^{s}\Phi^{-1}(z_j)^2} \ \right) \, \dif \vz,
 \]
- \citep{Kei96}.
- We approximate its integral using the sample mean over the first  $n = 1, 2, \ldots, 2^{15}$ points of a shifted lattice. In \Cref{fig:keister_n} we plot absolute errors for all positive integers $n \leq 2^{15}$, while \Cref{fig:keister_lambda} focuses  on $n = \lambda 2^p$ with the same values of $\lambda$ as in \Cref{fig:/p_alpha_lambda_O}.
+where $\Phi$ is the standard normal cumulative distribution function, and the last equality follows substituting $x_j = \Phi^{-1}(z_j)/\sqrt{2}$ for each $j = 1, \ldots, s$. %inverve transform sampling
+
+  We consider $s = 6$ and approximate $\mu$ using the sample mean over the first  %$n = 1, 2, \ldots, 2^{15}$ 
+ $n$ points of a shifted lattice. In \Cref{fig:keister_n} we plot absolute errors for all positive integers $n \leq 2^{15}$, while \Cref{fig:keister_lambda} focuses  on $n = \lambda 2^p$ with the same values of $\lambda$ as in \Cref{fig:/p_alpha_lambda_O}.
  
  
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{plots/keister_n_lines.png}
-    \caption{The decay of the absolute error in approximating six-dimensional Keister integrand by a sample mean with for $1 \le n \le 2^{15}$. }
+    \includegraphics[width=0.6\linewidth]{keister_n_lines.png}
+    \caption{The decay of the absolute error in approximating six-dimensional Keister integrand by a sample mean over the first $1 \le n \le 2^{15}$ points. }
     \label{fig:keister_n}
 \end{figure}
 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{plots/keister_lambda.png}
-    \caption{The decay of the absolute error in approximating 6-dimensional Keister integrand by a sample mean with, for $1 \le \lambda 2^p \le 2^{15}$. %The errors are generally smaller for smaller $\lambda$.
+    \includegraphics[width=0.6\linewidth]{keister_lambda.png}
+    \caption{The decay of the absolute error in approximating 6-dimensional Keister integrand by a sample mean over the first $1 \le \lambda 2^p \le 2^{15}$ points. %The errors are generally smaller for smaller $\lambda$.
     }
     \label{fig:keister_lambda}
 \end{figure}
@@ -562,7 +562,7 @@ We define a Hilbert space of functions, related to the Banach space defined in \
 Note that this is a stronger norm, i.e., $\norm[\cf_{\alpha}]{f} \le \norm[\cf_{\alpha,2}]{f}$ for all $f \in \cf_{\alpha,2}$.  As a consequence
 \begin{multline} \label{Pa2Parelation}
 P_{\alpha,2}(\vh,\vgamma,n,s) : = \sup_{\norm[F_{\alpha,2}]{f} \le 1 } \abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)} \\
-\le \sup_{\norm[F_{\alpha}]{f} \le 1 } \abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)} = P_{\alpha}(\vh,\vgamma,n,s)
+\le \sup_{\norm[F_{\alpha}]{f} \le 1 } \abs{\int_{[0,1)^{s}} f(\vx) \, \dif \vx - \appxint_n(f)} = P_{\alpha}(\vh,\vgamma,n,s).
 \end{multline}
 
 \subsection{Derivation of exact formulae involving arbitrary sample weights}
@@ -656,7 +656,7 @@ and shows that, with optimal sample weights the ratios remain at or below one as
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{thesis docs/plots/ssdisc_vs_ssdiscopt.png}
+    \includegraphics[width=0.6\linewidth]{ssdisc_vs_ssdiscopt.png}
     \caption{The decay of $P_{1,2}(\vh, [1, 2^{-2}, \cdots, 6^{-2}], n, 1:6)$ with equal sample weights vs unequal sample weights for $ 1 \leq n \leq 2^{12}$ for the default $\vh$ in QMCPy. The quantity $P_{1,2}$ decays nearly like $\Order(n^{-1})$, and for optimal weights it is non-increasing.}
     \label{fig:ssdisc-vs-ssdiscopt}
 \end{figure}
@@ -665,14 +665,14 @@ and shows that, with optimal sample weights the ratios remain at or below one as
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{thesis docs/plots/ratio_floor.png}
+    \includegraphics[width=0.6\linewidth]{ratio_floor.png}
     \caption{The ratio $P_{1,2}(\vh,[1, 1/4],n,1:2)/P_{1,2} (\vh,[1, 1/4],2^{\lfloor \log_2(n) \rfloor},1:2)$ for $ 1 \leq n \leq 2^7$. This shows how much better (smaller than one) or worse (greater than one) the figure of merit is compared to the largest sample size that is a power of $2$ and no greater than $n$. }
     \label{fig:ratio-floor}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{thesis docs/plots/ratio_ceil.png}
+    \includegraphics[width=0.6\linewidth]{ratio_ceil.png}
     \caption{The ratio $P_{1,2}(\vh,[1, 1/4],n,1:2)/P_{1,2} (\vh,[1, 1/4],2^{\lceil \log_2(n) \rceil},1:2)$ for $ 1 \leq n \leq 2^7$. This shows how much worse (greater than one) the figure of merit is compared to the smallest sample size that is a power of $2$ and no less than $n$.}
     \label{fig:ratio-ceil}
 \end{figure}
@@ -681,30 +681,16 @@ and shows that, with optimal sample weights the ratios remain at or below one as
 % 
 
 \section{Discussion and Future Work} %explain more what it all means 
-% The results in this paper...
 
-%In this work, we derived an upper bound on the figure of merit $P_\alpha$ for extensible lattice sequences for arbitrary $n$ in the Banach space setting. It was motivated by situations in which a computational time budget may prevent us from choosing the preferred $n = b^m$. For general $n$, the error decays nearly like $\Order(n^{-1 + \delta})$, while for $n = \lambda b^p$, a decay is similar to the that of the preferred $n = b^m$ for a fixed $\lambda$.
-%the upper bound under summability condition - slower, independant of dimension -> error doesnt increase polynominally/exponentionally 
+The results in this paper illustrate that the figure of merit $P_\alpha$ does have a worse upper bound for general $n$ compared to the preferred $n = b^m$ for a fixed prime $b$, as expected. However, this is not a handicap if the smoothness of the integrand is limited.  Moreover, we can still attain the optimal decay of $\Order(n^{-\alpha})$ for $n =\lambda b^p$ for a fixed integer $\lambda$ and $p \to \infty$. This suggests that even if we cannot obtain a full lattice due to early termination or computational time budget, sample sizes of the form $n = \lambda b^p$ could still be useful in practice.
 
-The results in this paper illustrate that the figure of merit $P_\alpha$ does have a worse upper bound for general $n$ compared to the preferred $n = b^m$ for a fixed prime $b$, as expected. However, this is not a handicap if the smoothness of the integrand is limited.  Moreover, we can still attain the optimal decay of $\Order(n^{-\alpha})$ for $n =\lambda b^p$ for a fixed integer $\lambda$ with the upper bound having some additional constant terms. This suggests that even if we cannot obtain a full lattice due to early termination or computational time budget, sample sizes of the form $n = \lambda b^p$ could still be useful in practice.
-
-To investigate if unequal sample weights can improve the cubature error for arbitrary $n$, we
-analyzed a related quantity $P_{\alpha,2}$. Numerical experiments with $\alpha=1$ 
-suggest that that even when the next full lattice is not attainable, we can get a smaller cubature error for arbitrary $n$ compared to the previous full lattice by using optimal weights. 
+To investigate whether unequal sample weights can improve the cubature error for arbitrary $n$, we analyzed a related quantity $P_{\alpha,2}$. Numerical experiments with $\alpha=1$ 
+demonstrate that by using optimal sample weights, even when the next full lattice is not attainable, we obtain a smaller cubature error for arbitrary $n$ compared to the full lattice with sample size $b^m < n$. 
 
   %Comparing  $P_{1,2}$ at each $n$ to $P_{1,2}$ for the previous full lattice 
  %This suggests that we can obtain (pretty small) cubature error if we cannot have the next full lattice, provided that we use optimal weights. 
 
-Future work could explore the performance of lattices with arbitrary $n$ in concrete numerical test cases, such as option pricing or integration problems described in \cite[Integration]{simulationlib} and establish a theoretical upper bound on $P_{\alpha,2}$ (done).
-Additionally, further numerical experiments could investigate the decay of the upper bound on $P_\alpha$ and the decay of $P_{\alpha,2}$ for a wider range of $\alpha$ values. 
-
-
-
-
-
-% \section{Lattice Sequences and Toeplitz Matrices} %are we keeping this section?
-
-% Consider the lattice sequence defined in \eqref{eq:extlat} and the formula for $P_{\alpha}(\vh,\gamma, n, 1:s)$ given in \eqref{eq:wcerrPalpha}
+Future work could explore the performance of lattices with arbitrary $n$ for concrete numerical test cases, such as option pricing or integration problems described in \cite[Integration]{simulationlib}. Additionally, further numerical experiments could investigate the decay of the upper bound on $P_\alpha$ and the decay of $P_{\alpha,2}$ for a wider range of $\alpha$ values. 
 
 
 % \left\{\right\}
