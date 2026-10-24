@@ -1,0 +1,526 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,array,enumitem}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\allowdisplaybreaks
+\setlist{itemsep=3pt,topsep=5pt}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}[proposition]{Theorem}
+\newtheorem{corollary}[proposition]{Corollary}
+\newcommand{\ii}{\mathrm{i}}
+\newcommand{\bbone}{\boldsymbol{1}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\bk}{\boldsymbol{k}}
+\newcommand{\bh}{\boldsymbol{h}}
+\newcommand{\bx}{\boldsymbol{x}}
+\newcommand{\by}{\boldsymbol{y}}
+\newcommand{\bDelta}{\boldsymbol{\Delta}}
+\newcommand{\cH}{\mathcal H}
+\title{Using the Surplus Points in a Lattice Sequence\\
+\large A proposed direction for revision and discussion}
+\author{Working note for the authors}
+\date{October 24, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The most promising revision combines referee Z's suggestions 2 and 3:
+make the use of surplus points computationally practical, prove a precise
+improvement over truncation, and test that improvement for smoothness
+$\alpha>1$. Megan Millet's proposed weights, constant on each binary block,
+are a natural starting point. However, that class, its power weights, and
+its optimal weights already appear in Hickernell--Kritzer--Kuo--Nuyens
+(2012; HKKN12). This note derives a specialized binary covariance
+identity and a scalar recursion for the same optimal block rule.
+For a positive-spectrum periodic Korobov kernel, the recursion gives
+strictly positive weights at every available point and a strictly smaller
+Hilbert-space worst-case error than truncation at every non-dyadic
+sample size. This is a candidate contribution, not a verified claim of
+novelty. It does not remove every truncation constant or establish the
+analogous Banach-space improvement. Small exact examples clarify
+those limitations.
+\end{abstract}
+
+\section{The revision should answer a different main question}
+Referees Y and Z identify a substantive issue: an arbitrary-$n$ rate
+does not by itself justify using all $n$ values.
+Put $M=\lfloor\log_2n\rfloor$ and $N=2^M$.
+Keeping only the first $N$ values already gives the known dyadic bound,
+while discarding fewer than half the evaluations.
+Full nodewise optimized weights can reproduce that rule with zero
+weights on the surplus points. Their non-increasing optimal error is
+therefore an immediate feasibility fact.
+
+A more focused question is:
+\begin{quote}
+Can all completed values be given positive weights, with inexpensive
+postprocessing, and can their error reduction over truncation
+be quantified and demonstrated for smooth functions?
+\end{quote}
+I recommend centering the revision on the periodic Hilbert-space
+quantity $P_{\alpha,2}$, retaining corrected equal-weight Banach analysis
+as context. Keep the two spaces and their smoothness parameters explicit:
+an improvement in one is not a theorem about the other.
+
+\paragraph{What is already in HKKN12.}
+Sections 3.1, 3.3, 4.2 and 4.3 of \cite{HKKN12} give optimal compound
+weights, explicit power weights, the base-$b$ block partition, and optimal
+compound lattice rules. Proposition 2, pp.~174--176, already reduces a
+block covariance from a double sum to a sum over the larger block.
+Neither $13=8+4+1$ nor solving the small quadratic optimization problem
+is a new construction. The possible additional contribution below is
+the binary specialization, a positive-weight scalar recursion, an exact
+gain over truncation, and a reproducible computational study.
+Further literature checking is needed before calling even that
+specialization new.
+
+\section{Set-up and the binary covariance identity}
+For this note, $\alpha>1$ and $\gamma_j>0$.
+Consider the manuscript's periodic Korobov Hilbert space, with
+\[
+ K(\bx,\by)=\kappa(\bx-\by),\qquad
+ \kappa(\bx)=1+\sum_{\bk\ne0}\rho_{\bk}
+                e^{2\pi\ii\bk^\top\bx},\qquad
+ \rho_{\bk}=\widetilde r(\bk,\boldsymbol{\gamma})^{-2\alpha}>0.
+\]
+Here $\widetilde r(\bk,\boldsymbol{\gamma})=\prod_{j:k_j\ne0}(|k_j|/\gamma_j)$,
+with empty product one. The sum is absolutely convergent and $\int K(\bx,\by)\,d\bx=1$.
+Let $e(Q)=\sup_{\|f\|_{\cH}\le1}|Q(f)-I(f)|$.
+For node weights summing to one,
+\begin{equation}\label{eq:fourier}
+ e(Q)^2=\sum_{\bk\ne0}\rho_{\bk}
+ \left|\sum_iw_i e^{2\pi\ii\bk^\top\bx_i}\right|^2.
+\end{equation}
+A common shift $\bDelta$ does not affect this error.
+
+Let $\bx_i=\{\bh\phi_2(i)+\bDelta\}$ be a binary rank-1 lattice sequence,
+with an odd coordinate of $\bh$, say $h_1$.
+On the finite horizon through $2^{M+1}$ points, take a coherent integer
+representative of the generator modulo $2^{M+1}$.
+An existence theorem for a good infinite generator is not a guarantee
+for every software default.
+Define
+\[
+ H_m=\{\bh j/2^m\bmod1:0\le j<2^m\},\qquad
+ \mathcal D_m=\{\bk\ne0:\bk^\top\bh=0\bmod2^m\}.
+\]
+Then $|H_m|=2^m$ and $H_m\subset H_{m+1}$.
+For the full equal-weight rule, write
+\begin{equation}\label{eq:dm}
+ d_m=e(Q_{2^m})^2
+ =2^{-m}\sum_{j=0}^{2^m-1}\kappa(\bh j/2^m)-1
+ =\sum_{\bk\in\mathcal D_m}\rho_{\bk}.
+\end{equation}
+Here $d_m>d_{m+1}>0$. For strict decrease, the positive coefficient
+at $\bk=2^m\boldsymbol e_1$ is in
+$\mathcal D_m\setminus\mathcal D_{m+1}$.
+
+Write the nonzero binary digits of $n$ as
+\[
+ n=N_1+\cdots+N_L,\quad N_r=2^{m_r},\quad
+ m_1>\cdots>m_L\ge0,\quad a_r=\sum_{q<r}N_q.
+\]
+Set $B_r=\{a_r,\ldots,a_r+N_r-1\}$ and
+$Q_r(f)=N_r^{-1}\sum_{i\in B_r}f(\bx_i)$.
+Megan's block-constant rule is
+\begin{equation}\label{eq:compound}
+ Q_{\btheta}(f)=\sum_{r=1}^L\theta_rQ_r(f),\qquad
+ \sum_r\theta_r=1,\qquad w_i=\theta_r/N_r\quad(i\in B_r).
+\end{equation}
+The $\theta_r$ are \emph{block masses}, not individual sample weights.
+Equal point weights have $\theta_r=N_r/n$;
+HKKN12 power weights have $\theta_r=N_r^a/\sum_qN_q^a$;
+truncation has $\btheta=(1,0,\ldots,0)$.
+
+\begin{proposition}[Binary block covariance]\label{prop:cov}
+Let $A_{rq}=\langle Q_r-I,Q_q-I\rangle_{\cH^*}$.
+In decreasing block-size order,
+\begin{equation}\label{eq:cov}
+ A_{rr}=d_{m_r},\quad
+ A_{rq}=c_{m_r}:=2d_{m_r+1}-d_{m_r}\quad(r<q),\quad A_{qr}=A_{rq}.
+\end{equation}
+Thus $e(Q_{\btheta})^2=\btheta^\top A\btheta$.
+Every off-diagonal entry in a given upper row is the same.
+\end{proposition}
+\begin{proof}
+Each block is a shift of $H_{m_r}$. For $r<q$, averaging the kernel over
+$H_{m_r}$ and $H_{m_q}$ reduces to an average over $H_{m_r}$,
+since $H_{m_q}\subset H_{m_r}$.
+
+There is a further binary simplification. The start of any later block
+lies in the other half of the same aligned $2N_r$ interval.
+Radical inversion gives
+\[
+ \phi_2(a_q)-\phi_2(a_r)
+ \equiv\frac1{2N_r}\pmod{1/N_r}.
+\]
+The higher binary digits are unchanged, the digit at level $m_r$
+changes from zero to one, and the lower digits contribute multiples
+of $1/N_r$. Therefore the cross covariance is
+\[
+ \frac1{N_r}\sum_{j=0}^{N_r-1}
+ \kappa\!\left(\bh\frac{j+1/2}{N_r}\right)-1.
+\]
+The full $2N_r$ lattice splits into $H_{m_r}$ and this other coset.
+Averaging the two cosets proves the off-diagonal formula.
+The diagonal follows from shift invariance.
+\end{proof}
+This specializes HKKN12's Proposition 2 and must be acknowledged as
+such. It gives the relevant structure without a Toeplitz assumption on
+the pointwise Gram matrix in van der Corput order.
+
+\section{An explicit positive-weight recursion}
+The usual HKKN12 expression is
+$A^{-1}\bbone/(\bbone^\top A^{-1}\bbone)$.
+Equation~\eqref{eq:cov} allows the same optimum to be found without
+an inverse or even forming $A$.
+
+\begin{theorem}[Optimal binary block rule]\label{thm:recursion}
+The unique minimum of $\btheta^\top A\btheta$ over real $\btheta$ with
+$\bbone^\top\btheta=1$ has every component positive.
+Define $E_L=d_{m_L}$. For $r=L-1,\ldots,1$, compute
+\begin{align}
+ D_r&=d_{m_r}+E_{r+1}-2c_{m_r},\label{eq:denom}\\
+ t_r&=\frac{E_{r+1}-c_{m_r}}{D_r},\label{eq:tr}\\
+ E_r&=\frac{d_{m_r}E_{r+1}-c_{m_r}^{\,2}}{D_r}.\label{eq:Er}
+\end{align}
+Recover the masses in a forward pass:
+\[
+ p=1;\quad \theta_r=p\,t_r,\quad p\leftarrow p(1-t_r)
+ \quad(r=1,\ldots,L-1);\quad\theta_L=p.
+\]
+For $L=1$, take $\theta_1=1$. The optimum squared error is $E_1$.
+\end{theorem}
+\begin{proof}
+Let $R$ be any normalized rule supported on blocks after $r$.
+All its nodes lie in one shifted other coset of $H_{m_r}$ inside
+$H_{m_r+1}$. For each $\bk\in\mathcal D_{m_r}$ the characters at
+these nodes have the same phase. Normalization, even for signed weights,
+implies $|R(e^{2\pi\ii\bk^\top\cdot})|=1$.
+Consequently
+\begin{equation}\label{eq:tail}
+ e(R)^2\ge d_{m_r}.
+\end{equation}
+Also $\langle Q_r-I,R-I\rangle=c_{m_r}$, independently of its tail masses.
+
+If the best normalized tail has squared error $v=E_{r+1}$, then the
+best error with mass $t$ on block $r$ is
+\[
+ t^2d_{m_r}+2t(1-t)c_{m_r}+(1-t)^2v.
+\]
+Since $v\ge d_{m_r}>c_{m_r}$, its quadratic coefficient $D_r$ is
+positive, and its minimizer is~\eqref{eq:tr}, strictly between zero and
+one. Substitution gives~\eqref{eq:Er}. A tail of total mass zero has
+zero cross term with $Q_r$ and nonnegative squared norm; it cannot
+improve on $d_{m_r}$ and cannot invalidate this interior optimum.
+Backward induction proves the recursion and positivity.
+
+For uniqueness, $A$ is positive definite. A vanishing nonzero combination
+of block error representers would give a finite atomic signed measure
+with all nonconstant Fourier coefficients zero. It would equal a
+multiple of Lebesgue measure, which is impossible for a nonzero finite
+atomic measure. Strictly positive $\rho_{\bk}$ and distinct nodes
+justify this argument.
+\end{proof}
+
+\begin{corollary}[Precise gain over truncation]\label{cor:gain}
+If $n$ is non-dyadic, so $L\ge2$, and $M=m_1$, then
+\begin{equation}\label{eq:gain}
+ e(Q_{\rm block})^2
+ =d_M-\frac{4(d_M-d_{M+1})^2}
+ {d_M+E_2-2(2d_{M+1}-d_M)}
+ <d_M=e(Q_{\rm trunc})^2.
+\end{equation}
+All $n$ sample weights are positive. Also
+\[
+ e(Q_{\rm full\ opt})\le e(Q_{\rm block})
+ \le e(Q_{\rm HKKN}(a)),\qquad
+ e(Q_{\rm block})\le e(Q_{\rm equal}).
+\]
+If $e(Q_{2^m})\le C\,2^{-\beta m}$ for all relevant $m$, then
+$e(Q_{\rm block})\le C\,2^\beta n^{-\beta}$.
+\end{corollary}
+\begin{proof}
+Subtract~\eqref{eq:Er} from $d_M$ and use
+$d_M-c_M=2(d_M-d_{M+1})$.
+The comparisons follow from feasible weight classes.
+For the rate use $2^M>n/2$.
+\end{proof}
+The rate is already available by truncation and HKKN12.
+The useful statements here are positive use of all points, a
+\emph{quantified} strict gain, and inexpensive computation.
+Worst-case-error inequalities do not order actual errors for every
+individual integrand. Nor do they imply that unrestricted nodewise
+optimal weights are positive.
+
+\subsection{Cost and interrupted computation}
+The backward recursion and forward pass cost $O(L)$ arithmetic and
+$O(L)$ storage, where $L\le M+1=O(\log n)$.
+The values $d_0,\ldots,d_{M+1}$ depend on the kernel and generator,
+not on $f$ or the final binary digits of $n$.
+Direct use of~\eqref{eq:dm} costs
+\[
+ O\!\left(s\sum_{m=0}^{M+1}2^m\right)=O(sn),
+\]
+assuming one kernel evaluation costs $O(s)$.
+This includes kernel evaluations on the \emph{next} full lattice;
+no extra integrand evaluations are required there.
+Cached values give $O(\log n)$ postprocessing at a requested $n$.
+
+Keep one function-value sum per active binary block, merging adjacent
+equal-sized blocks as new completed values arrive.
+Aggregate storage is $O(\log n)$, and a requested estimate takes
+$O(\log n)$ once the weights are known.
+Reporting after every point costs $O(n\log n)$ overall, apart from
+precomputation and integrand evaluation.
+These are arithmetic counts, not a stability theorem.
+The kernel-average-minus-one formula for $d_m$ and small differences
+may need higher precision or a positive spectral calculation.
+
+The data must form a completed sequence prefix; a failure that loses
+values or leaves an arbitrary asynchronous subset is a different
+problem. The final prefix length need not be known in advance.
+
+\section{What this accomplishes, and what it does not}
+\subsection{A thirteen-point example}
+In one dimension with $h=1$ and Hilbert smoothness $\alpha=2$,
+\[
+ d_m=C\,2^{-4m},\qquad C=2\gamma^4\zeta(4).
+\]
+For $13=8+4+1$, the optimal block masses are
+\[
+ (\theta_1,\theta_2,\theta_3)
+ =\left(\frac{613}{682},\frac{137}{1364},\frac1{1364}\right).
+\]
+Each of the first eight points has weight $613/5456$,
+each of the next four has weight $137/5456$,
+and the last point has weight $4/5456$. Exactly,
+\[
+ e(Q_{\rm block})^2=C\,\frac{4421}{22347776},\qquad
+ \frac{e(Q_{\rm block})}{e(Q_{\rm trunc})}
+ =\sqrt{\frac{4421}{5456}}\approx0.9002.
+\]
+This is a sanity check, not high-dimensional evidence.
+Positive weights on surplus points can be very small; report that
+rather than equating positive use with a large practical benefit.
+
+\subsection{Do not promise a universal factor-free bound}
+For the same one-dimensional kernel at $n=3$, optimal block masses
+are $(9/10,1/10)$ and point weights are $(9/20,9/20,1/10)$.
+The squared error is $13C/256$.
+The exact dyadic law has leading constant $\sqrt C$ in
+$e(Q_{2^m})=\sqrt C\,(2^m)^{-2}$.
+Keeping that \emph{same} constant for $n=3$ would require squared
+error at most $C/81$, but $13/256>1/81$.
+
+Thus~\eqref{eq:gain} improves the actual truncated Hilbert error;
+it does not remove the entire $(n/2^M)^\alpha$ loss in the strongest
+sense. Referee Z's displayed (T) concerns $P_\alpha$ and the quoted
+Banach bound. This note addresses its Hilbert analogue; it does not
+prove a sharper $P_\alpha$ bound by changing notation.
+
+\subsection{A Banach-space obstruction}
+In the one-dimensional Banach space of the manuscript, put
+$C_\alpha=2\gamma^\alpha\zeta(\alpha)$ and
+$q=2^{-\alpha}<1/2$.
+For $n=3$, assign mass $1-t$ to the first two points and $t$ to
+the singleton. Split Fourier modes into odd integers, integers
+divisible by two but not four, and multiples of four. This gives
+\begin{equation}\label{eq:banach}
+ P_\alpha(t)=C_\alpha
+ [q^2+q(1-q)|1-2t|+(1-q)|t|].
+\end{equation}
+On $0\le t\le1/2$ its increase from $t=0$ is
+$C_\alpha(1-q)(1-2q)t>0$.
+For $t<0$ it decreases towards zero; for $t>1/2$ it increases.
+The unique minimum over real $t$ is truncation, $t=0$.
+This block family cannot strictly improve the exact Banach truncation
+error at every non-dyadic $n$, even though it can in the Hilbert space.
+That distinction should shape the revised paper.
+
+\section{Experiments that would make the revision persuasive}
+This is a proposed protocol, not completed large-scale experimentation.
+The companion exact-arithmetic check validates only the small identities
+and examples.
+
+\begin{enumerate}
+\item \textbf{Methods.}
+Use identical nodes and the same kernel for equal point weights;
+truncation at $2^{\lfloor\log_2n\rfloor}$; HKKN12 power masses with
+$a=2,3,4$; the recursive optimal block rule; and, at smaller $n$,
+the full nodewise optimum with weights summing to one.
+Also compare the recursion with the dense $L\times L$ HKKN12 solve.
+They must agree: these are two computations of the same rule.
+
+\item \textbf{Smoothness, dimensions and budgets.}
+Use Hilbert $\alpha=2$ as the primary case, add $\alpha=3$, and retain
+$\alpha=1$ only as context.
+For example, use $s=2,6,20$ with two declared coordinate-weight decays.
+Scan every $n$ to a modest horizon such as $2^{12}$, then prespecify
+larger budgets. Include $2^M+1$, $2^{M+1}-1$, $13\cdot2^p$, and
+different binary digit counts, rather than favorable prefixes only.
+A common finite generator need not be good for every kernel:
+report the common-generator comparison and, if available,
+tuned-generator comparisons separately.
+
+\item \textbf{Worst-case-error outputs.}
+Plot $e_{\rm method}/e_{\rm trunc}$ against both $n$ and
+$n/2^{\lfloor\log_2n\rfloor}$, marking powers of two.
+Include ratios to HKKN12 power weights and to the full nodewise
+optimum. Report ratio distributions and maxima, not only chosen curves.
+Separate $e$ and $e^2$. Time precomputation, weight calculation, and
+application separately; record memory and arithmetic precision.
+Agreement with the old optimum is verification; the gain in cost is
+the computational comparison.
+
+\item \textbf{Integrands and uncertainty.}
+Use smooth periodic products
+$f(\bx)=\prod_j[1+\eta_j\cos(2\pi x_j)]$, with integral one and finite
+Fourier support, and a broader-spectrum periodic example with a
+checked finite Hilbert norm.
+For actual-integrand comparisons use paired common random shifts,
+for example at least 32 independent shifts, with absolute-error
+summaries. Shifts do not change this periodic worst-case error,
+so they are not replicate worst-case-error experiments.
+Keister may be an application illustration, but the transformed
+integrand's endpoint regularity and norm must be checked before
+claiming it belongs to the theoretical space.
+Protect actual-error ratios against a zero truncated denominator.
+
+\item \textbf{Reproducibility and numerical checks.}
+Record generator entries or an archived file and checksum, residue
+horizon, ordering, kernel scaling, coordinate weights, seeds, software,
+precision, and scripts.
+Check $\sum_iw_i=1$, positivity,~\eqref{eq:cov}, and
+$A\btheta-E_1\bbone$.
+Validate tiny discrepancies in higher precision; do not silently clip
+negative roundoff discrepancies to zero.
+\end{enumerate}
+
+\section{Changes needed to address all three reports}
+\paragraph{Positioning (Y and Z).}
+State truncation and the trivial full-optimum monotonicity at the start.
+Treat the rate alone as background. Explain the distinction from HKKN12
+at both theorem and algorithm levels, why the Hilbert norm is relevant,
+and what practical gain warrants weighted surplus values.
+A small improvement in one example does not establish readiness
+for resubmission.
+
+\paragraph{Correctness and scope (X and Y).}
+Specify $\alpha>1$ where Banach Fourier summability is required.
+The replacement of $r(k,\gamma_j)$ by $\max(1,|k|/\gamma_j)$
+needs $\gamma_j\le1$; retain that assumption or remove the replacement.
+Restore the missing $(b-1)$ in the logarithm-free bound.
+State existence and generator quantifiers consistently in inherited
+bounds, and audit base restrictions against HN03 \cite{HN03}.
+
+For general base $b$, a repeated digit represents several blocks with
+different shifts, not a single phase times a digit.
+With $a_\ell=\sum_{t>\ell}n_tb^t$, the correct character decomposition is
+\[
+ \frac{e^{2\pi\ii\bk^\top\bDelta}}{n}
+ \sum_{\ell=0}^M\sum_{q=0}^{n_\ell-1}
+ b^\ell\bbone_{\{\bk^\top\bh=0\bmod b^\ell\}}
+ e^{2\pi\ii\bk^\top\bh\phi_b(a_\ell+qb^\ell)}.
+\]
+This preserves the triangle bound and covers Y's $b=3,n=2$ example.
+Correct the misplaced power in the denominator, extra parentheses,
+duplicated alignment end, and missing wavenumber inner product
+in the Hilbert Fourier expansion.
+
+\paragraph{Normalization and the visible numerical code.}
+For unnormalized weights the identity is
+$e(w)^2=1-2\bbone^\top w+w^\top Kw$.
+Only with $\bbone^\top w=1$ may it become $w^\top Kw-1$.
+The visible \texttt{Programs/discrepancy.m} currently solves
+$u=K^{-1}\bbone$ and uses the former expression without normalization.
+That differs from the constrained optimum derived in the manuscript.
+Audit figure provenance before interpreting existing plots.
+The constrained optimum uses $w=u/(\bbone^\top u)$;
+solve a system rather than explicitly forming an inverse.
+
+Also, \texttt{GramMat.m} uses a $B_2$ factor with coefficient
+$\texttt{coordwts}_j/2$.
+Under the manuscript's $\alpha=1$ convention the coefficient is
+$2\pi^2\gamma_j^2$. They agree only when
+$\texttt{coordwts}_j=4\pi^2\gamma_j^2$.
+For integer Hilbert $\alpha$, the intended factor is
+\[
+ 1+\frac{(-1)^{\alpha+1}(2\pi\gamma_j)^{2\alpha}}{(2\alpha)!}
+ B_{2\alpha}(\{x_j-y_j\}).
+\]
+The existing $B_2$ routine does not supply an $\alpha=2$ experiment.
+
+\paragraph{Presentation and reproducibility (especially X).}
+Describe rank-1 rules as a class of lattice rules, rather than their
+historical definition.
+Explain generalized integers through coherent residues, and distinguish
+one-dimensional radical inversion from its multidimensional image.
+Define the dual set before using it.
+Use a declared $\ii^2=-1$ and consistent arguments and brackets.
+H\"older alone gives an inequality; retain a worst-case equality only
+after a Fourier-phase attainability argument. For $\alpha>1$ the
+candidate coefficients are absolutely summable, so this can be done.
+Replace the unsupported assertion that no finite formula exists by a
+statement about the unavailable formula used here.
+
+Give actual generators, shifts, dimensions, and plotted quantities.
+Improve Figure 1's fonts and contrast; make captions consistent.
+Distinguish existence from construction, stronger norm from larger
+unit ball, exact formula from bound, and illustration from general
+evidence. End experiments with supported conclusions.
+Remove the false generic Toeplitz claim and the cost derived from it:
+a dense nodewise calculation costs $O(sn^2+n^3)$;
+a full dyadic lattice has circulant structure after permutation.
+The block recursion has a different, explicitly justified cost.
+
+\section{Suggested manuscript structure and decision point}
+A possible title is \emph{Positive Block Weights for Lattice Sequence
+Prefixes: Exact Error Reduction and Fast Computation}.
+An outline is:
+\begin{enumerate}
+\item Arbitrary stopping, the truncation baseline, and the specific
+gap beyond existing compound rules.
+\item Binary blocks and the periodic Hilbert setting, with HN03 and
+HKKN12 positioned explicitly.
+\item Covariance identity, positive recursion, exact gain over
+truncation, limitations, and numerical stability.
+\item Reproducible $\alpha>1$ comparisons with old compound rules
+and full nodewise weights.
+\item Practical consequences and open Banach-space questions.
+Move long equal-weight bounds to an appendix if useful.
+\end{enumerate}
+Megan's current work could connect to the covariance calculation,
+stable evaluation of $d_m$, and the $\alpha>1$ benchmarks.
+This is a proposed connection, not an assumption about her results,
+an assignment, or an authorship decision.
+
+Before choosing a resubmission venue, jointly verify the proofs,
+check whether the specialization and positivity result are already
+known, and establish whether computational and empirical gains are
+substantial. If this is only a short specialization with small gains,
+a shorter paper or a more extensive application study may be more
+convincing than retaining the original scope.
+
+\begin{thebibliography}{9}
+\bibitem{HN03}
+F.\ J.\ Hickernell and H.\ Niederreiter,
+The existence of good extensible rank-1 lattices,
+\emph{Journal of Complexity} \textbf{19} (2003), 286--300.
+\bibitem{HKKN12}
+F.\ J.\ Hickernell, P.\ Kritzer, F.\ Y.\ Kuo and D.\ Nuyens,
+Weighted compound integration rules with higher order convergence
+for all $N$,
+\emph{Numerical Algorithms} \textbf{59} (2012), 161--183.
+\href{https://doi.org/10.1007/s11075-011-9482-5}{doi:10.1007/s11075-011-9482-5}.
+\end{thebibliography}
+\paragraph{Sources and validation status.}
+Prepared from the current manuscript, all three reports in
+\texttt{Referee\_Reports}, and the published article supplied as
+\begin{quote}\small\texttt{relevant articles/WeightedCompoundIntegration.pdf}\end{quote}
+The proofs are drafts for author review.
+The companion \texttt{verify\_binary\_blocks.py} checks small
+Bernoulli-kernel cases in exact rational arithmetic; it does not
+replace proofs, a novelty search, or the proposed numerical study.
+\end{document}
