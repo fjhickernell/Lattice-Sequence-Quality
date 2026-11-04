@@ -74,8 +74,10 @@ is a new construction. Path I specializes this existing class; its possible cont
 the binary covariance identity, positive scalar recursion and exact
 gain over truncation. Path II concerns the larger class of unrestricted
 point weights and a recursive FFT computation. Full-lattice FFT solves
-are established~\cite{KKKNS22}; the prefix construction below still
-needs a literature check. Neither path carries a verified novelty claim.
+are established~\cite{ZLH06,ZKH09,JH19,KKKNS22}; the prefix construction
+below must also be compared with earlier odd--even reduction
+methods~\cite{Madsen83,TAK07,BM09}. Neither path carries a verified
+novelty claim.
 
 \paragraph{The two paths at a glance.}
 Path I chooses one block mass and shares it equally among that block's
@@ -113,6 +115,64 @@ The general HKKN12 block class is recalled in Path I; later references
 to other bases concern inherited results and manuscript corrections.
 Neither the binary scalar formulas nor the recursive FFT proof is
 asserted for arbitrary bases or arbitrary asynchronous subsets.
+
+\subsection{Literature map and reading priorities}\label{sec:literature}
+For Path I, HKKN12~\cite{HKKN12} is the direct antecedent for the
+block class and its optimal masses. Karvonen and S\"arkk\"a~\cite{KS18}
+show how actual symmetries of a kernel, measure and node set can
+reduce an optimal kernel-quadrature system. That is a useful comparison,
+but it does not justify imposing equal point weights within every
+HKKN block: the complete prefix need not preserve the required
+symmetries. The positivity and weight-magnitude results of Karvonen,
+Kanagawa and S\"arkk\"a~\cite{KKS19} also help position the positive
+binary block result. Their hypotheses and weight normalization must
+be checked before importing a conclusion into either path.
+
+For Path II, the lattice-spline papers of Zeng, Leung and
+Hickernell~\cite{ZLH06} and Zeng, Kritzer and Hickernell~\cite{ZKH09}
+are early antecedents for periodic kernel approximation on lattice
+designs. They belong alongside the later full-lattice FFT analysis
+in~\cite{KKKNS22}. Jagadeeswaran and Hickernell~\cite{JH19} match
+shift-invariant kernels with lattice designs for fast Bayesian cubature;
+their fast lattice analysis uses dyadic full grids, and their
+Section~4.4 gives a relevant centered-kernel remedy for cancellation.
+These full-grid results are not, by themselves, a proof of the
+arbitrary-prefix elimination below.
+
+The recent work of Kaarnioja, Klebanov, Schillings and
+Suzuki~\cite{KKSS26} is a close comparison for optimizing individual
+lattice cubature weights. It studies a nonperiodic Sobolev setting
+and does not require its weights to sum to one. Its kernel-mean
+system must therefore be distinguished from the normalized periodic
+problem here. Consult the latest author manuscript as well as the
+published proceedings chapter.
+
+For the linear algebra in Path II, Madsen's paper on cyclic odd--even
+reduction for symmetric circulant matrices~\cite{Madsen83} is a
+particularly important prior-art check. Its full method has not yet
+been exhaustively compared with this construction. Section~III,
+pp.~23--30, treats complete symmetric circulants of order $2^q$:
+it uses the same odd--even block structure, then successive diagonal
+eliminations and recursion on a complete half-size circulant.
+The arbitrary principal-prefix problem and FFT Schur recursion below
+are not explicitly presented there. This preliminary comparison does
+not establish novelty or floating-point stability. Tsitsas, Alivizatos and
+Kalogeropoulos~\cite{TAK07} develop recursive inversion for matrices
+with complete, equal-size circulant blocks: they Fourier-diagonalize
+the blocks, then apply recursive Schur-complement inverse formulas
+(pp.~879--882). This is a direct antecedent for FFT-plus-Schur
+computation. Path II additionally needs the selector-coupled block
+identities and preservation of a single remaining partial prefix;
+that distinction still requires a detailed prior-art comparison.
+Bini and Meini~\cite{BM09} give broader cyclic-reduction
+background. Titles, abstracts and the derivation below do not settle
+whether this prefix solver is new.
+
+The reading-copy inventory, versions and access status are recorded in
+\begin{quote}\small\texttt{relevant articles/LITERATURE.md}\end{quote}
+This map identifies
+comparison targets and selected relevant results; it is not a claim
+that every listed method has received a complete review.
 
 \section{Common Hilbert-space problem and binary nodes}\label{sec:setup}
 For the binary analysis, $b=2$, $\alpha>1$ and $\gamma_j>0$.
@@ -422,6 +482,29 @@ average $1+d_{14}$ rounds to one in binary64 arithmetic.
 Compensated summation alone does not recover a residual already lost
 in the rounded average.
 
+A practical first remedy is already available in
+Jagadeeswaran--Hickernell~\cite[Section~4.4]{JH19}: evaluate the
+centered product kernel directly. If
+$\kappa(\bx)=\prod_{j=1}^s[1+a_j(x_j)]$, compute the coordinate
+residuals $a_j$ directly and use
+\begin{equation}\label{eq:centeredproduct}
+ r_1=a_1,\qquad
+ r_j=r_{j-1}(1+a_j)+a_j\quad(2\le j\le s),\qquad
+ r_s=\kappa-1.
+\end{equation}
+Instead of forming a near-unit kernel average and subtracting one,
+accumulate
+\[
+ d_m=2^{-m}\sum_{i=0}^{2^m-1}
+ r_s\!\left(\{\bh i/2^m\}\right).
+\]
+The same nested-node pass can accumulate these residuals with
+$O(sH)$ arithmetic and the same scalar cache size. This addresses
+the unit-baseline subtraction; the residuals can have either sign,
+so cancellation in their lattice average and the accuracy of small
+differences still require validation. Do not recover $a_j$ by
+subtracting one from an already rounded coordinate factor.
+
 The determinant subtraction in~\eqref{eq:Er} and the forward
 subtraction $1-t_r$ are additional risks. A cancellation-reducing
 form of the binary recursion is obtained by setting
@@ -561,7 +644,8 @@ For the requested prefix, put $H=2^{\lceil\log_2n\rceil}$ and evaluate
  C_H=(c_{(i-j)\bmod H})_{i,j=0}^{H-1}.
 \]
 The full-grid matrix $C_H$ is positive definite and circulant;
-full-lattice FFT diagonalization is standard~\cite{KKKNS22}.
+full-lattice FFT diagonalization is established
+in~\cite{ZLH06,ZKH09,JH19,KKKNS22}.
 Let $\operatorname{rev}_H(i)$ reverse the $\log_2H$ binary digits
 of $i$. The original sequence prefix selects natural-grid indices
 $\operatorname{rev}_H(0),\ldots,\operatorname{rev}_H(n-1)$.
@@ -661,6 +745,16 @@ conditioning or cancellation. Computed nonpositive eigenvalues must
 be diagnosed, not silently clipped. Accurate positive spectra or
 higher precision may be required, increasing the cost per operation
 or the kernel-precomputation cost.
+
+The centered-kernel evaluation in~\eqref{eq:centeredproduct} also
+applies to the initial FFT column~\cite[Section~4.4]{JH19}.
+If $r_j=\kappa(\bh j/H)-1$ is evaluated directly and $\widehat r$
+is its unnormalized DFT, then
+$\lambda_0=H+\widehat r_0$ and $\lambda_k=\widehat r_k$ for
+$1\le k<H$. This avoids adding a unit baseline to every sampled
+entry before transformation. Cancellation within the residual FFT,
+small spectral values and the recursive solve still need separate
+precision checks; this change is not a stability proof for Path II.
 
 There is also a positive error-evaluation identity. Embed normalized
 weights into the full grid as $z=P_{n,H}^\top w$, and let $\widehat z$
@@ -892,7 +986,7 @@ substantial. If this is only a short specialization with small gains,
 a shorter paper or a more extensive application study may be more
 convincing than retaining the original scope.
 
-\begin{thebibliography}{9}
+\begin{thebibliography}{99}
 \bibitem{HN03}
 F.\ J.\ Hickernell and H.\ Niederreiter,
 The existence of good extensible rank-1 lattices,
@@ -909,11 +1003,68 @@ Fast approximation by periodic kernel-based lattice-point interpolation
 with application in uncertainty quantification,
 \emph{Numerische Mathematik} \textbf{150} (2022), 33--77.
 \href{https://doi.org/10.1007/s00211-021-01242-3}{doi:10.1007/s00211-021-01242-3}.
+\bibitem{ZLH06}
+X.\ Zeng, K.-T.\ Leung and F.\ J.\ Hickernell,
+Error analysis of splines for periodic problems using lattice designs,
+in H.\ Niederreiter and D.\ Talay (eds.),
+\emph{Monte Carlo and Quasi-Monte Carlo Methods 2004},
+Springer, Berlin, Heidelberg (2006), 501--514.
+\href{https://doi.org/10.1007/3-540-31186-6_31}{doi:10.1007/3-540-31186-6\_31}.
+\bibitem{ZKH09}
+X.\ Zeng, P.\ Kritzer and F.\ J.\ Hickernell,
+Spline methods using integration lattices and digital nets,
+\emph{Constructive Approximation} \textbf{30} (2009), 529--555.
+\href{https://doi.org/10.1007/s00365-009-9072-0}{doi:10.1007/s00365-009-9072-0}.
+\bibitem{JH19}
+R.\ Jagadeeswaran and F.\ J.\ Hickernell,
+Fast automatic Bayesian cubature using lattice sampling,
+\emph{Statistics and Computing} \textbf{29} (2019), 1215--1229.
+\href{https://doi.org/10.1007/s11222-019-09895-9}{doi:10.1007/s11222-019-09895-9}.
+\bibitem{KKSS26}
+V.\ Kaarnioja, I.\ Klebanov, C.\ Schillings and Y.\ Suzuki,
+Lattice rules meet kernel cubature,
+in C.\ Lemieux and B.\ Feng (eds.),
+\emph{Monte Carlo and Quasi-Monte Carlo 2024},
+Springer Proceedings in Mathematics and Statistics \textbf{522},
+Springer (2026), 277--295.
+\href{https://doi.org/10.1007/978-3-032-10590-5_12}{doi:10.1007/978-3-032-10590-5\_12}.
+Latest author manuscript:
+\href{https://arxiv.org/abs/2501.09500v3}{arXiv:2501.09500v3},
+June 30, 2026.
+\bibitem{KS18}
+T.\ Karvonen and S.\ S\"arkk\"a,
+Fully symmetric kernel quadrature,
+\emph{SIAM Journal on Scientific Computing} \textbf{40} (2018), A697--A720.
+\href{https://doi.org/10.1137/17M1121779}{doi:10.1137/17M1121779}.
+\bibitem{KKS19}
+T.\ Karvonen, M.\ Kanagawa and S.\ S\"arkk\"a,
+On the positivity and magnitudes of Bayesian quadrature weights,
+\emph{Statistics and Computing} \textbf{29} (2019), 1317--1333.
+\href{https://doi.org/10.1007/s11222-019-09901-0}{doi:10.1007/s11222-019-09901-0}.
+\bibitem{Madsen83}
+N.\ K.\ Madsen,
+Cyclic odd-even reduction for symmetric circulant matrices,
+\emph{Linear Algebra and its Applications} \textbf{51} (1983), 17--35.
+\href{https://doi.org/10.1016/0024-3795(83)90147-7}{doi:10.1016/0024-3795(83)90147-7}.
+\bibitem{TAK07}
+N.\ L.\ Tsitsas, E.\ G.\ Alivizatos and G.\ H.\ Kalogeropoulos,
+A recursive algorithm for the inversion of matrices with circulant blocks,
+\emph{Applied Mathematics and Computation} \textbf{188} (2007), 877--894.
+\href{https://doi.org/10.1016/j.amc.2006.10.044}{doi:10.1016/j.amc.2006.10.044}.
+\bibitem{BM09}
+D.\ A.\ Bini and B.\ Meini,
+The cyclic reduction algorithm: from Poisson equation to stochastic
+processes and beyond,
+\emph{Numerical Algorithms} \textbf{51} (2009), 23--60.
+\href{https://doi.org/10.1007/s11075-008-9253-0}{doi:10.1007/s11075-008-9253-0}.
 \end{thebibliography}
 \paragraph{Sources and validation status.}
 Prepared from the current manuscript, all three reports in
 \texttt{Referee\_Reports}, and the published article supplied as
 \begin{quote}\small\texttt{relevant articles/WeightedCompoundIntegration.pdf}\end{quote}
+The additional references and reading priorities are described in
+Section~\ref{sec:literature}; reading-copy versions and access information
+are listed in \texttt{relevant articles/LITERATURE.md}.
 The proofs for both paths are drafts for author review.
 \texttt{verify\_binary\_blocks.py} checks small Bernoulli-kernel
 block cases in exact rational arithmetic.
