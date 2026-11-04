@@ -2,3 +2,18 @@
 
 # MATLAB autosave files
 *.asv
+
+# LaTeX build intermediates
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.spl
+*.synctex.gz
+*.toc
+
+# Local manuscript preview; regenerate from the tracked source.
+/LatticeSequenceQualityArticle.pdf

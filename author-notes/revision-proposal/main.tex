@@ -1,4 +1,4 @@
- \documentclass[11pt]{article}
+\documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,array,enumitem}
 \usepackage[T1]{fontenc}
@@ -33,6 +33,9 @@ are a natural starting point. However, that class, its power weights, and
 its optimal weights already appear in Hickernell--Kritzer--Kuo--Nuyens
 (2012; HKKN12). This note derives a specialized binary covariance
 identity and a scalar recursion for the same optimal block rule.
+The proposed covariance identity, recursion, positivity and strict-gain
+results in this note are specialized to base $b=2$; HKKN12's underlying
+compound-rule framework applies to general base $b$.
 For a positive-spectrum periodic Korobov kernel, the recursion gives
 strictly positive weights at every available point and a strictly smaller
 Hilbert-space worst-case error than truncation at every non-dyadic
@@ -75,8 +78,46 @@ gain over truncation, and a reproducible computational study.
 Further literature checking is needed before calling even that
 specialization new.
 
+\paragraph{Equal point weights within HKKN blocks: general base $b$.}
+For any integer base $b\ge2$, write
+$n=\sum_{m=0}^M n_m b^m$, with $0\le n_m<b$, and set
+$a_m=\sum_{\ell>m}n_\ell b^\ell$.
+There are $n_m$ separate blocks of size $b^m$ at level $m$, with
+normalized block rules
+\[
+ Q_{m,q}(f)=\frac1{b^m}
+ \sum_{i=a_m+q b^m}^{a_m+(q+1)b^m-1}f(\bx_i),
+ \qquad 0\le q<n_m.
+\]
+Assign a total mass $\theta_{m,q}$ to each block and use
+\[
+ Q_{\btheta}=\sum_{m=0}^M\sum_{q=0}^{n_m-1}
+ \theta_{m,q}Q_{m,q},\qquad
+ \sum_{m,q}\theta_{m,q}=1.
+\]
+Every point in block $(m,q)$ then has the same weight
+$\theta_{m,q}/b^m$; point weights may differ between blocks.
+This is the HKKN12 compound-rule class, with
+$R=\sum_m n_m\le(b-1)(M+1)$ block masses.
+Let $A$ be the Gram matrix of the block error functionals
+$Q_{m,q}-I$ in the dual Hilbert space. Then
+$e(Q_{\btheta})^2=\btheta^\top A\btheta$; for positive definite $A$,
+solve $Au=\bbone$ and normalize $\btheta=u/(\bbone^\top u)$
+to obtain the block optimum.
+HKKN12's Proposition~2 reduces each covariance to one kernel average
+over the larger block, rather than a double sum.
+
+\paragraph{Scope of the analysis below: $b=2$.}
+The covariance identity, scalar recursion, positivity, strict gain
+and associated cost and precomputation analysis below are proved
+only for $b=2$, where there is at most one block of each size.
+For general $b$, repeated blocks have different shifts whose cross
+covariances must be retained; extending the binary formulas requires
+a separate argument. Later general-base references concern inherited
+results and manuscript corrections, rather than extensions of these proofs.
+
 \section{Set-up and the binary covariance identity}
-For this note, $\alpha>1$ and $\gamma_j>0$.
+For the binary analysis, $b=2$, $\alpha>1$ and $\gamma_j>0$.
 Consider the manuscript's periodic Korobov Hilbert space, with
 \[
  K(\bx,\by)=\kappa(\bx-\by),\qquad
@@ -96,8 +137,9 @@ A common shift $\bDelta$ does not affect this error.
 
 Let $\bx_i=\{\bh\phi_2(i)+\bDelta\}$ be a binary rank-1 lattice sequence,
 with an odd coordinate of $\bh$, say $h_1$.
-On the finite horizon through $2^{M+1}$ points, take a coherent integer
-representative of the generator modulo $2^{M+1}$.
+On a finite dyadic horizon containing all prefixes under consideration,
+take one coherent integer representative of the generator modulo
+that horizon's size; the required horizon is specified below.
 An existence theorem for a good infinite generator is not a guarantee
 for every software default.
 Define
@@ -254,29 +296,116 @@ Worst-case-error inequalities do not order actual errors for every
 individual integrand. Nor do they imply that unrestricted nodewise
 optimal weights are positive.
 
-\subsection{Cost and interrupted computation}
+\subsection{Cost of the binary recursion and interrupted computation}
+\paragraph{Scalar recursion versus dense solves.}
 The backward recursion and forward pass cost $O(L)$ arithmetic and
 $O(L)$ storage, where $L\le M+1=O(\log n)$.
-The values $d_0,\ldots,d_{M+1}$ depend on the kernel and generator,
-not on $f$ or the final binary digits of $n$.
-Direct use of~\eqref{eq:dm} costs
+These counts assume the required $d_m$ values are already available
+and produce the $L$ block masses, which represent all point weights
+through $w_i=\theta_r/N_r$ on block $r$.
+Materializing the full $n$-vector of point weights would itself cost $O(n)$
+arithmetic and storage.
+
+For comparison, the same block optimum can always be computed by
+solving $Au=\bbone$ and normalizing
+$\btheta=u/(\bbone^\top u)$, without explicitly forming $A^{-1}$.
+A generic dense Cholesky solve nevertheless costs $O(L^3)$ arithmetic
+and $O(L^2)$ matrix storage. The scalar recursion exploits
+\eqref{eq:cov} to reduce these to $O(L)$ and $O(L)$, without assembling
+$A$. A dense solve for the unrestricted $n$-node optimum costs
+$O(n^3)$ arithmetic and $O(n^2)$ matrix storage, and can produce a
+different rule. These dense-solve counts exclude matrix assembly;
+avoiding an explicit inverse alone does not remove the cubic cost.
+
+\paragraph{One reusable precomputation through $n_{\max}$.}
+For a maximum prefix length $n_{\max}\ge1$, set
 \[
- O\!\left(s\sum_{m=0}^{M+1}2^m\right)=O(sn),
+ J=\lceil\log_2 n_{\max}\rceil,\qquad H=2^J.
+\]
+Fix a coherent generator through the $H$-point lattice.
+The single cache $d_0,\ldots,d_J$ supports every
+$1\le n\le n_{\max}$. If $n_{\max}=2^J$, that endpoint has only
+one block, and all smaller prefixes use cross covariances involving
+at most $d_J$; no value on the next larger lattice is needed.
+If $n_{\max}$ is non-dyadic, $H$ is the next larger dyadic size.
+
+The lattices are nested, so evaluate the kernel only on newly added
+nodes. With unshifted kernel arguments, accumulate
+\[
+ S_0=\kappa(\boldsymbol0),\qquad
+ S_{m+1}=S_m+\sum_{j=0}^{2^m-1}
+ \kappa\!\left(\bh\frac{2j+1}{2^{m+1}}\right),\qquad
+ d_m=2^{-m}S_m-1.
+\]
+Thus the entire cache requires exactly
+$1+\sum_{m=0}^{J-1}2^m=H$ kernel evaluations and
+\[
+ O(sH)=O(sn_{\max})\quad\text{arithmetic},\qquad
+ O(J+1)\quad\text{cached scalar storage},
 \]
 assuming one kernel evaluation costs $O(s)$.
-This includes kernel evaluations on the \emph{next} full lattice;
-no extra integrand evaluations are required there.
-Cached values give $O(\log n)$ postprocessing at a requested $n$.
+Stream the sums and discard individual kernel values; including the
+generator, kernel parameters and one current point, total working
+storage is $O(s+J+1)$. Neither all nodes nor a kernel matrix need be
+stored. The cache depends on the fixed kernel and generator, not on
+$f$, the common shift or the requested prefix length, and is reused
+across prefixes and integrands. The kernel evaluations through $H$
+require no additional integrand evaluations beyond the completed
+prefix. After this precomputation, each requested set of block masses
+costs only $O(L)=O(\log n)$ arithmetic and storage.
 
+\paragraph{Integrand sums and requested estimates.}
 Keep one function-value sum per active binary block, merging adjacent
 equal-sized blocks as new completed values arrive.
-Aggregate storage is $O(\log n)$, and a requested estimate takes
-$O(\log n)$ once the weights are known.
-Reporting after every point costs $O(n\log n)$ overall, apart from
-precomputation and integrand evaluation.
-These are arithmetic counts, not a stability theorem.
-The kernel-average-minus-one formula for $d_m$ and small differences
-may need higher precision or a positive spectral calculation.
+Through $n_{\max}$ samples, these merges cost $O(n_{\max})$
+arithmetic in total and require $O(1+\log n_{\max})$ aggregate storage.
+A requested estimate takes $O(L)=O(\log n)$ once the weights are known.
+Reporting after every point through $n_{\max}$ costs
+$O(n_{\max}\log n_{\max})$ overall, apart from the reusable
+$O(sn_{\max})$ precomputation and integrand evaluation.
+Streaming the reports requires no archive of earlier weights or estimates.
+
+\paragraph{Cancellation and numerical validation remain unresolved.}
+The operation counts above are for arithmetic at a chosen precision;
+they do not establish numerical stability. In particular,
+$d_m=2^{-m}S_m-1$ extracts a small residual from an average close to
+one. An absolute error $\eta$ in that average can become a relative
+error of size $|\eta|/d_m$. This is a practical issue: in the
+one-dimensional example with $h=1$, $\alpha=2$ and $\gamma=1$,
+$d_{14}=2\zeta(4)2^{-56}\approx3.0\times10^{-17}$, so even the exact
+average $1+d_{14}$ rounds to one in binary64 arithmetic.
+Compensated summation alone does not recover a residual already lost
+in the rounded average.
+
+The determinant subtraction in~\eqref{eq:Er} and the forward
+subtraction $1-t_r$ are additional risks. A cancellation-reducing
+form of the binary recursion is obtained by setting
+\[
+ d=d_{m_r},\quad d_+=d_{m_r+1},\quad
+ g=d-d_+>0,\quad \delta=E_{r+1}-d\ge0,\quad D=\delta+4g.
+\]
+Then, equivalently,
+\[
+ t_r=\frac{\delta+2g}{D},\qquad
+ q_r:=1-t_r=\frac{2g}{D},\qquad
+ E_r=d_++g\left(\frac{\delta}{D}\right).
+\]
+Compute $q_r$ directly and use $p\leftarrow p q_r$ in the forward
+pass. This avoids the determinant subtraction and the subtraction
+of a mass near one. It does not ensure accurate inputs: small
+differences $g=d-d_+$ and $\delta=E_{r+1}-d$ still require sufficiently
+accurate cached values and tail errors, and tiny masses may underflow.
+Possible remedies include higher-precision precomputation or positive
+spectral sums, using~\eqref{eq:dm} and
+\[
+ d_m-d_{m+1}
+ =\sum_{\bk\in\mathcal D_m\setminus\mathcal D_{m+1}}\rho_{\bk}>0,
+\]
+with controlled spectral truncation error. Such remedies may increase
+the precomputation cost or the cost per arithmetic operation.
+A stable implementation and precision-convergence checks are needed
+before claiming reliable floating-point weights or error estimates;
+the equivalent formulas alone are not a stability theorem.
 
 The data must form a completed sequence prefix; a failure that loses
 values or leaves an arbitrary asynchronous subset is a different
