@@ -1,314 +1,259 @@
-\documentclass[11pt]{article}
-\usepackage[margin=1in]{geometry}
+\documentclass[preprint,12pt,authoryear]{elsarticle}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{booktabs,enumitem,graphicx}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern,microtype}
 \usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
-\setlist{itemsep=2pt,topsep=4pt}
 
 \newtheorem{theorem}{Theorem}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{corollary}[theorem]{Corollary}
-
-\newcommand{\ii}{\mathrm{i}}
-\newcommand{\bbone}{\boldsymbol{1}}
-\newcommand{\bzero}{\boldsymbol{0}}
-\newcommand{\btheta}{\boldsymbol{\theta}}
-\newcommand{\bgamma}{\boldsymbol{\gamma}}
-\newcommand{\bk}{\boldsymbol{k}}
-\newcommand{\bh}{\boldsymbol{h}}
-\newcommand{\bx}{\boldsymbol{x}}
-\newcommand{\bDelta}{\boldsymbol{\Delta}}
-\newcommand{\cD}{\mathcal{D}}
-\newcommand{\rtil}{\widetilde{r}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\ek}{\chi_{\bk}}
-\newcommand{\Qblk}{Q_{\mathrm{block}}}
-\newcommand{\Qtr}{Q_{\mathrm{trunc}}}
-
-\title{Optimal Block Weights for Lattice Sequences\\ Stopped at an Arbitrary Sample Size}
-\author{Megan Millet}
-\date{November 16, 2026}
 
 \begin{document}
-\maketitle
 
-\section{The question}
-A lattice sequence attains its fast convergence when the sample size is a
-power of two. Suppose a computation stops at some other $n$, and let
-$M=\lfloor\log_2n\rfloor$. \emph{Truncation}, which uses only the first
-$2^M$ points, already keeps the fast rate while discarding fewer than half
-of the function values. A rule that uses all $n$ points is therefore worth
-having only if it is never worse than truncation, and the useful question
-is by how much it is better.
+\section{Optimal block weights for arbitrary $n$}\label{sec:bw}
 
-We answer this for the weighted compound rules of Hickernell, Kritzer, Kuo
-and Nuyens~\cite{HKKN12} in base $2$. Write $n$ as a sum of distinct powers
-of two,
-\begin{equation}\label{eq:binary}
- n=N_1+\dots+N_L,\qquad N_r=2^{m_r},\qquad M=m_1>m_2>\dots>m_L\ge0 ,
+When the sample size $n$ is not a power of the base, the sample weights in
+\begin{equation}\label{eq:bw-estimator}
+ \widehat I_n(f)=\frac1n\sum_{i=0}^{n-1}w_{n,i}\,f(\boldsymbol z_i),
+ \qquad \frac1n\sum_{i=0}^{n-1}w_{n,i}=1,
 \end{equation}
-and split the first $n$ points into consecutive blocks of sizes
-$N_1,\dots,N_L$. For $n=13=8+4+1$ these are points $0$--$7$, $8$--$11$ and
-$12$. Let $Q_r(f)$ be the sample mean over block $r$. A \emph{block rule}
-is
+need not all equal one. (In the notation of \citet[Section~5]{MDH26},
+$w_i=w_{n,i}/n$.) Throughout this section $b=2$, $M=\lfloor\log_2n\rfloor$,
+and the error is measured by $P_{\alpha,2}$. The natural benchmark is
+\emph{truncation}: use only the first $2^M$ points with equal weights, so
+that $w_{n,i}=n/2^M$ for $i<2^M$ and $w_{n,i}=0$ otherwise. Truncation keeps
+the convergence rate of the full lattices, because $2^M>n/2$, but it
+discards up to half of the function values. Equal weights on all $n$
+points, by contrast, cannot converge faster than $\mathcal O(n^{-1})$ along
+a sequence \citep[Proposition~1]{HKKN12}. A choice of weights is therefore
+worth using only if it never does worse than truncation.
+
+Following \citet{HKKN12}, we assign one weight to each block of points
+determined by the binary digits of $n$. They gave the optimal weights of
+this kind as the solution of a linear system, but considered computing
+them impractical. We show that in base $2$ the optimal block weights are
+given by a recursion of $\mathcal O(\log n)$ operations, are always
+positive, are strictly better than truncation, and give a value of
+$P_{\alpha,2}$ that decreases with every added point.
+
+\subsection{Block weights}\label{sec:bw-def}
+
+Write $n=2^{m_1}+2^{m_2}+\dots+2^{m_L}$ with $M=m_1>m_2>\dots>m_L\ge0$.
+The first $2^{m_1}$ points form block~$1$, the next $2^{m_2}$ points form
+block~$2$, and so on; for $n=13=8+4+1$ the blocks are points $0$--$7$,
+$8$--$11$ and $12$. Since each block starts at an index divisible by its
+size, it is a shifted copy of the first $2^{m_r}$ points, as in \citet[Eq.~(2)]{MDH26}. A
+\emph{block rule} gives block $r$ a share $\theta_r$ of the total weight,
+split equally among its points:
+\begin{equation}\label{eq:bw-weights}
+ w_{n,i}=\frac{n\,\theta_r}{2^{m_r}}\quad\text{for $i$ in block $r$},
+ \qquad \theta_1+\dots+\theta_L=1 .
+\end{equation}
+Equal weights ($\theta_r\propto2^{m_r}$), truncation
+($\boldsymbol\theta=(1,0,\dots,0)$) and the power weights
+$\theta_r\propto2^{a m_r}$ of \citet{HKKN12} are all block rules.
+
+Write $d_m=P_{2\alpha}(\boldsymbol h,\boldsymbol\gamma,2^m,s)
+=\sum_{\boldsymbol k\in B(\boldsymbol h,m,s)}\widetilde r(\boldsymbol k,
+\boldsymbol\gamma)^{-2\alpha}$ for the squared figure of merit of the first
+$2^m$ points with equal weights. These numbers decrease strictly in $m$
+when some component of $\boldsymbol h$ is odd, and they are the only
+property of the lattice sequence that the results below use. For a block
+rule, $P_{\alpha,2}^2$ is a quadratic form in the shares,
 \[
- Q_{\btheta}(f)=\sum_{r=1}^L\theta_rQ_r(f),\qquad\sum_{r=1}^L\theta_r=1 ,
+ P_{\alpha,2}^2=\sum_{r,q=1}^L\theta_r\theta_qA_{rq},\qquad
+ A_{rq}=\sum_{\boldsymbol k\neq\boldsymbol0}
+ \widetilde r(\boldsymbol k,\boldsymbol\gamma)^{-2\alpha}\,
+ Q_r(\boldsymbol k)\,\overline{Q_q(\boldsymbol k)},
 \]
-so each point of block $r$ has weight $\theta_r/N_r$. Equal weights
-($\theta_r=N_r/n$), truncation ($\btheta=(1,0,\dots,0)$) and the power
-weights $\theta_r\propto N_r^{\,a}$ of~\cite{HKKN12} are block rules. We
-determine the block rule with the smallest worst-case error. The general
-formula for it is in \cite[Section~3.1]{HKKN12}; what is new is that in
-base $2$ it can be solved in closed form, which yields positivity, a
-guaranteed improvement on truncation, and monotonicity in $n$.
+where $Q_r(\boldsymbol k)$ is the average of
+$e^{2\pi\sqrt{-1}\boldsymbol k^T\boldsymbol z_i}$ over block $r$.
 
-\section{Setting}
-Let $\alpha>1/2$ and $\gamma_j>0$. As in~\cite{MDH26}, the Korobov Hilbert
-space has norm
-\[
- \|f\|^2=\sum_{\bk\in\Z^s}\rtil(\bk,\bgamma)^{2\alpha}|\hat f(\bk)|^2,
- \qquad\rtil(\bk,\bgamma)=\prod_{j:\,k_j\ne0}\frac{|k_j|}{\gamma_j}.
-\]
-Put
-$\rho_{\bk}=\rtil(\bk,\bgamma)^{-2\alpha}$ and
-$\ek(\bx)=e^{2\pi\ii\bk^\top\bx}$, $\ii^2=-1$. For a rule
-$Q(f)=\sum_iw_if(\bx_i)$ with $\sum_iw_i=1$, the worst-case error
-$e(Q)=\sup_{\|f\|\le1}|\int f-Q(f)|$ satisfies, by the Cauchy--Schwarz
-inequality with equality attained,
-\begin{equation}\label{eq:wce}
- e(Q)^2=\sum_{\bk\ne\bzero}\rho_{\bk}\,|Q(\ek)|^2 .
-\end{equation}
-This is $P_{\alpha,2}^2$ in the notation of~\cite{MDH26}. Without the
-normalization $\sum_iw_i=1$ the formula acquires the extra term
-$(1-\sum_iw_i)^2$.
+\subsection{The optimal block weights}\label{sec:bw-opt}
 
-The lattice sequence is $\bx_i=\{\bh\,\phi_2(i)+\bDelta\}$, where $\phi_2$
-is the base-$2$ radical inverse and $\bh$ is an integer generating vector
-with $h_1$ odd. Let
-$\cD_m=\{\bk\ne\bzero:\bk^\top\bh\equiv0\pmod{2^m}\}$ be the dual set of
-the $2^m$-point lattice, and let
-\begin{equation}\label{eq:dm}
- d_m=\sum_{\bk\in\cD_m}\rho_{\bk}
- =\frac1{2^m}\sum_{j=0}^{2^m-1}\kappa\Bigl(\frac{j\bh}{2^m}\Bigr)-1,
- \qquad g_m=d_m-d_{m+1}>0,
-\end{equation}
-where $\kappa(\bx)=\sum_{\bk}\rho_{\bk}\ek(\bx)$ is the kernel, a product
-of Bernoulli polynomials when $\alpha$ is an integer. The number $d_m$ is
-the squared worst-case error of the first $2^m$ points with equal weights,
-that is, $P_{2\alpha}(\bh,\bgamma,2^m,s)$. The sequence $(d_m)$ is strictly
-decreasing because $2^m\boldsymbol e_1\in\cD_m\setminus\cD_{m+1}$.
-
-We use one standard fact: any $2^m$ consecutive points starting at an
-index divisible by $2^m$ form a shifted copy of the $2^m$-point lattice.
-Hence for block $r$, which starts at index $a_r=N_1+\dots+N_{r-1}$,
-\begin{equation}\label{eq:Qr}
- Q_r(\ek)=\ek(\bx_{a_r})\ \text{ if }\bk\in\cD_{m_r},\qquad
- Q_r(\ek)=0\ \text{ otherwise }(\bk\ne\bzero).
-\end{equation}
-
-\section{Results}
-By~\eqref{eq:wce}, $e(Q_{\btheta})^2=\btheta^\top A\btheta$ with
-$A_{rq}=\sum_{\bk\ne\bzero}\rho_{\bk}Q_r(\ek)\overline{Q_q(\ek)}$.
-
-\begin{proposition}[Structure of $A$]\label{prop:cov}
+\begin{theorem}\label{thm:bw-structure}
+With the blocks ordered from largest to smallest,
 $A_{rr}=d_{m_r}$, and $A_{rq}=A_{qr}=2d_{m_r+1}-d_{m_r}$ for $r<q$.
-\end{proposition}
-
-\begin{proof}
-The diagonal follows from~\eqref{eq:Qr}. Let $r<q$. By~\eqref{eq:Qr} only
-$\bk\in\cD_{m_r}$ contribute, each with the factor
-$\ek(\bx_{a_r}-\bx_{a_q})$. The index $a_q$ equals $a_r+N_r$ plus a sum of
-smaller powers of two, and $a_r$ is divisible by $2N_r$. Comparing binary
-digits, $\phi_2(a_q)-\phi_2(a_r)=\tfrac1{2N_r}+\tfrac{\ell}{N_r}$ for an
-integer $\ell$. Writing $\bk^\top\bh=uN_r$, the factor is $(-1)^u$, which
-is $+1$ exactly when $\bk\in\cD_{m_r+1}$. Hence
-$A_{rq}=d_{m_r+1}-(d_{m_r}-d_{m_r+1})$.
-\end{proof}
-
-This specializes \cite[Proposition~2]{HKKN12}. In words, every later block
-lies midway between the points of block $r$, so its error adds to that of
-block $r$ on the wavenumbers the next lattice cannot resolve and cancels
-on those it can. Because block $r$ interacts identically with all later
-blocks, the blocks can be combined one at a time, smallest first.
-
-\begin{theorem}[Optimal block rule]\label{thm:main}
-Set $E_L=d_{m_L}$ and, for $r=L-1,\dots,1$,
-\begin{equation}\label{eq:rec}
- \delta_r=E_{r+1}-d_{m_r},\qquad
- q_r=\frac{2g_{m_r}}{\delta_r+4g_{m_r}},\qquad
- E_r=d_{m_r}-2g_{m_r}q_r .
-\end{equation}
-Then $\delta_r>0$ and $0<q_r<\tfrac12$. The minimum of
-$\btheta^\top A\btheta$ subject to $\sum_r\theta_r=1$ is $E_1$, attained
-only at
-\begin{equation}\label{eq:theta}
- \theta_r=(1-q_r)\prod_{p<r}q_p\ \ (r<L),\qquad\theta_L=\prod_{p<L}q_p .
-\end{equation}
 \end{theorem}
 
 \begin{proof}
-We show by backward induction that $E_r$ is the minimum over block rules on
-blocks $r,\dots,L$ and that $E_r>d_{m_r+1}$. Both hold for $r=L$. For
-$r<L$, the induction hypothesis and $m_{r+1}+1\le m_r$ give
-$E_{r+1}>d_{m_{r+1}+1}\ge d_{m_r}$, so $\delta_r>0$ and $0<q_r<\frac12$.
-A rule on blocks $r,\dots,L$ with mass $\tau\ne0$ on the later blocks is
-$(1-\tau)Q_r+\tau R$ for a normalized rule $R$ on those blocks. By
-Proposition~\ref{prop:cov} its squared error is
-\[
- (1-\tau)^2d_{m_r}+2\tau(1-\tau)(2d_{m_r+1}-d_{m_r})+\tau^2e(R)^2
- =d_{m_r}-4g_{m_r}\tau+\bigl(e(R)^2-d_{m_r}+4g_{m_r}\bigr)\tau^2 .
-\]
-This is smallest when $e(R)^2=E_{r+1}$ and then $\tau=q_r$, with value
-$E_r$. If $\tau=0$ the cross term vanishes and the squared error is at
-least $d_{m_r}>E_r$. Finally $E_r-d_{m_r+1}=g_{m_r}(1-2q_r)>0$.
+Block $r$ is a shifted copy of the first $2^{m_r}$ points, so
+$|Q_r(\boldsymbol k)|=1$ for $\boldsymbol k\in B(\boldsymbol h,m_r,s)$ and
+$Q_r(\boldsymbol k)=0$ for other $\boldsymbol k\neq\boldsymbol0$, as in the
+derivation of \citet[Eq.~(5)]{MDH26}. This gives $A_{rr}=d_{m_r}$. For $r<q$, only
+$\boldsymbol k\in B(\boldsymbol h,m_r,s)$ contribute, each with the phase
+$e^{2\pi\sqrt{-1}\boldsymbol k^T(\boldsymbol z_a-\boldsymbol z_c)}$, where
+$a$ and $c$ are the first indices of blocks $r$ and $q$. The index $c$
+equals $a+2^{m_r}$ plus smaller powers of two, and $a$ is divisible by
+$2^{m_r+1}$, so $\phi(c)-\phi(a)=2^{-m_r-1}+\ell\,2^{-m_r}$ for an integer
+$\ell$. Writing $\boldsymbol k^T\boldsymbol h=u\,2^{m_r}$, the phase is
+$(-1)^u$, which equals $+1$ exactly when
+$\boldsymbol k\in B(\boldsymbol h,m_r+1,s)$. Hence
+$A_{rq}=d_{m_r+1}-(d_{m_r}-d_{m_r+1})$.
 \end{proof}
 
-\begin{corollary}\label{cor:all}
-Let $\Qblk$ be the optimal block rule and suppose $n$ is not a power of
-two.
-\begin{enumerate}[label=(\alph*)]
-\item \emph{Positivity.} $\theta_1>\theta_2>\dots>\theta_L>0$ and
-  $\theta_1>\tfrac12$. Every point has a positive weight.
-\item \emph{Never worse than truncation.}
-  $d_{M+1}<e(\Qblk)^2<d_M=e(\Qtr)^2$, so the squared error lies strictly
-  between those of the two neighbouring full lattices.
-\item \emph{Size of the gain.} The fraction of the gap recovered is
-  \[
-   \pi(n):=\frac{d_M-e(\Qblk)^2}{d_M-d_{M+1}}=2q_1,\qquad
-   \frac{4g_M}{d_{m_2}-d_M+4g_M}\le\pi(n)<
-   \frac{4g_M}{d_{m_2+1}-d_M+4g_M}.
-  \]
-\item \emph{Monotonicity.} $e(\Qblk^{(n+1)})<e(\Qblk^{(n)})$ for all
-  $n\ge1$.
-\item \emph{Comparison.} $e(\Qblk)$ is at most the error of equal weights
-  and of power weights for every $a>0$.
-\end{enumerate}
-\end{corollary}
+Every later block sits halfway between the points of block $r$. On the
+wavenumbers that the next larger lattice cannot resolve, the errors of
+the two blocks add; on those it can resolve, they cancel. Because block $r$
+interacts in the same way with every smaller block, the optimal shares can
+be found one block at a time, starting from the smallest.
+
+\begin{theorem}\label{thm:bw-recursion}
+Set $E\leftarrow d_{m_L}$. For $r=L-1,\dots,1$, with $d=d_{m_r}$ and
+$g=d_{m_r}-d_{m_r+1}$, set
+\begin{equation}\label{eq:bw-rec}
+ q_r\leftarrow\frac{2g}{E-d+4g},\qquad E\leftarrow d-2g\,q_r .
+\end{equation}
+Then $0<q_r<\tfrac12$, and the shares
+$\theta_r=(1-q_r)\,q_1\cdots q_{r-1}$ for $r<L$ and
+$\theta_L=q_1\cdots q_{L-1}$ uniquely minimize $P_{\alpha,2}$ among block
+rules. The minimum value of $P_{\alpha,2}^2$ is the final value of $E$.
+\end{theorem}
 
 \begin{proof}
-(a) By~\eqref{eq:theta}, $\theta_r=(1-q_r)P$ and $\theta_{r+1}\le q_rP$
-with $P=\prod_{p<r}q_p$, and $q_r<\frac12$.
-(b) The inequalities are $E_1=d_M-2g_Mq_1$ and $E_1>d_{M+1}$ from the
-proof above.
-(c) Use $E_1=d_M-2g_Mq_1$ and $d_{m_2+1}<E_2\le d_{m_2}$.
-(d) By~\eqref{eq:rec}, $E_r$ is strictly increasing in $E_{r+1}$. Passing
-from $n$ to $n+1$ either appends a block of one point, or merges the
-blocks of levels $j-1,\dots,0$ into one block of level $j$; the optimal
-error on the changed blocks falls from $d_{m_L}$ to less, or from a value
-above $d_j$ to $d_j$.
-(e) Equal weights and power weights are block rules.
+Let $E_r$ be the value of $E$ after block $r$ is added. We show by
+induction from $r=L$ down to $r=1$ that $E_r$ is the minimum over block
+rules on blocks $r,\dots,L$, and that $E_r>d_{m_r+1}$; both hold for $r=L$.
+For $r<L$, a rule giving total share $\tau\neq0$ to the smaller blocks,
+arranged as a rule $R$, has, by Theorem~\ref{thm:bw-structure},
+\[
+ P_{\alpha,2}^2=(1-\tau)^2d+2\tau(1-\tau)(d-2g)+\tau^2P_R^2
+ =d-4g\tau+\bigl(P_R^2-d+4g\bigr)\tau^2 .
+\]
+For fixed $\tau$ this is smallest when $P_R^2=E_{r+1}$. By induction
+$E_{r+1}>d_{m_{r+1}+1}\ge d$, so the parabola in $\tau$ is minimized
+uniquely at $\tau=q_r\in(0,\tfrac12)$ with value $d-2gq_r=E_r$. If $\tau=0$,
+the cross term vanishes and $P_{\alpha,2}^2\ge d>E_r$. Finally
+$E_r-d_{m_r+1}=g(1-2q_r)>0$.
 \end{proof}
 
-Part~(c) shows that the gain is governed by the second block. If
-$d_{m+1}\approx\varrho\,d_m$ with $\varrho\approx2^{-2\alpha}$, then
-$\pi(n)\gtrsim4\varrho/(1+4\varrho)$ when $n\ge1.5\cdot2^M$, and
-$\pi(n)$ is of order $\varrho^{M-m_2}$ otherwise. A small surplus cannot
-help much, and higher smoothness reduces the gain.
+\begin{theorem}\label{thm:bw-guarantees}
+Let $n$ not be a power of two, and let $w^{\rm opt}$ be the optimal block
+weights. Then
+\begin{enumerate}[label=(\alph*)]
+\item every $w^{\rm opt}_{n,i}>0$, and $\theta_1>\theta_2>\dots>\theta_L$
+  with $\theta_1>\tfrac12$;
+\item $d_{M+1}<P_{\alpha,2}(\boldsymbol h,\boldsymbol\gamma,n,s,
+  w^{\rm opt})^2<d_M$, where $d_M$ is the value for truncation;
+\item the fraction of the gap $d_M-d_{M+1}$ that is closed equals $2q_1$;
+\item $P_{\alpha,2}(\boldsymbol h,\boldsymbol\gamma,n,s,w^{\rm opt})$
+  strictly decreases as $n$ increases.
+\end{enumerate}
+\end{theorem}
 
-\paragraph{Computation.}
-The values $d_0,\dots,d_J$ serve every $n<2^J$ and every integrand. Since
-the lattices are nested, they cost $2^J$ kernel evaluations in total, and
-no integrand evaluations. Given them, \eqref{eq:rec} and~\eqref{eq:theta}
-cost $O(\log n)$ operations, compared with $O(L^3)$ for solving
-$A\boldsymbol u=\bbone$ directly. The block
-means $Q_r(f)$ are updated as in \cite[Algorithm~1]{HKKN12}. The form
-\eqref{eq:rec} involves no subtraction of nearly equal quantities, but
-$d_m$ should be accumulated from $\kappa-1$ evaluated directly
-\cite[Section~4.4]{JH19}, because $d_m$ quickly falls below the unit
-roundoff relative to one.
+\begin{proof}
+Parts (a)--(c) follow from $0<q_r<\tfrac12$, $E_1=d_M-2g_Mq_1$ and
+$E_1>d_{M+1}$ in the proof of Theorem~\ref{thm:bw-recursion}. For (d),
+note that the update~\eqref{eq:bw-rec} is increasing in $E$. Passing from
+$n$ to $n+1$ either appends a one-point block or merges the trailing
+blocks of sizes $2^{j-1},\dots,1$ into one block of size $2^j$, leaving
+the larger blocks unchanged. In the first case the optimal value on the
+trailing blocks falls below $d_{m_L}$; in the second it falls from a value
+above $d_j$ to $d_j$. The decrease propagates to $E_1$.
+\end{proof}
 
-\paragraph{Example.}
-For $s=1$, $h=1$, $\alpha=2$ we have $d_m=C\,16^{-m}$ with
-$C=2\gamma^4\zeta(4)$. For $n=13$, \eqref{eq:rec} gives $q_2=1/138$,
-$q_1=69/682$ and
-\[
- \btheta=\Bigl(\tfrac{613}{682},\tfrac{137}{1364},\tfrac1{1364}\Bigr),
- \qquad e(\Qblk)^2=\tfrac{4421}{22347776}\,C,\qquad
- \frac{e(\Qblk)}{e(\Qtr)}=\sqrt{\tfrac{4421}{5456}}\approx0.90 .
-\]
-Equal weights on the same $13$ points have $25$ times the squared error of
-truncation.
+Positivity in part~(a) is not automatic: optimal kernel cubature weights
+need not be positive in general, and \citet{KKS19} study conditions that
+guarantee it. Not doing worse than truncation, on the other hand, is
+automatic, since truncation is a block rule. What Theorem~\ref{thm:bw-guarantees} adds is that the improvement is
+strict for every $n$, that its size is known exactly, and that the error
+never increases as points are added, even when blocks merge. The values
+$d_0,\dots,d_J$ serve all $n<2^J$; computing them takes $2^J$ kernel
+evaluations and no evaluations of $f$.
 
-\paragraph{Two limits.}
-First, optimal block weights do not restore the dyadic law
-$e=\sqrt C\,n^{-2}$ at all $n$: for $n=3$ the optimal block rule has
-$e^2=13C/256>C/81$. Second, the gain is
-specific to the Hilbert space. For the Banach-space figure of merit
-$P_\alpha$ of~\cite{MDH26} with $s=1$, $h=1$, $n=3$, giving mass $t$ to
-the third point yields
-$P_\alpha(t)=2\gamma^\alpha\zeta(\alpha)\bigl[(1-q)|t|+q(1-q)|1-2t|+q^2\bigr]$
-with $q=2^{-\alpha}<\frac12$, which is uniquely minimized at $t=0$, that
-is, by truncation. The results above therefore do not sharpen any bound on
-$P_\alpha$.
+As an example, take $s=1$, $h=1$ and $\alpha=2$, so that
+$d_m=16^{-m}d_0$, and $n=13$. The recursion gives $q_2=1/138$ and
+$q_1=69/682$, hence weights $w_{13,i}=1.46$ on the first eight points,
+$0.33$ on the next four and $0.01$ on the last. The resulting $P_{\alpha,2}$ is $10\%$
+below that of truncation, whereas equal weights give $25$ times the
+squared value of truncation.
 
-\section{Experiments}
-We used the first $s$ components of the QMCPy default generating
-vector~\cite{QMCPy},
-\[\bh=(1,\,182667,\,213731,\,255351,\,96013,\,116671),\]
-coordinate weights $\gamma_j=j^{-2}$, and $50$-digit arithmetic. For every $n\le4096$
-we computed the worst-case errors of truncation, equal weights, power
-weights and the optimal block rule, and verified
-Theorem~\ref{thm:main} and Corollary~\ref{cor:all} at each $n$.
-Figure~\ref{fig:decay} and Table~\ref{tab:results} show the outcome.
 
-\begin{figure}[t]
+\subsection{Numerical results}\label{sec:bw-num}
+
+We used the default generating vector of QMCPy \citep{QMCPy}, with $s=6$
+and
+$\gamma_\ell=\ell^{-2}$, and computed $P_{\alpha,2}$ for every
+$n\le2^{20}$, the range for which this generating vector was constructed.
+The values $d_0,\dots,d_{20}$ were computed in 50-digit arithmetic.\footnote{The
+generating vector is QMCPy's file
+\nolinkurl{kuo.lattice-33002-1024-1048576.9125}.}
+Figure~\ref{fig:bw-disc} compares the block rules for $\alpha=2$. Truncation
+produces a staircase that drops only at powers of two, and the optimal block
+weights stay on or below it at every $n$. Equal weights lose the fast decay
+entirely. The power weights with $a=2$ decay at the right rate but are
+above truncation almost everywhere for large $n$. Table~\ref{tab:bw}
+summarizes the three values of $\alpha$.
+
+\begin{figure}[htb]
 \centering
-\includegraphics[width=0.8\textwidth]{fig_decay.pdf}
-\caption{Worst-case error for $n\le4096$, $\alpha=2$, $s=6$.}
-\label{fig:decay}
+\includegraphics[width=\textwidth]{fig_disc_compare.pdf}
+\caption{Block rules for $\alpha=2$, $s=6$, $\gamma_\ell=\ell^{-2}$. Left:
+$P_{\alpha,2}$ for $1\le n\le2^{20}$. Right: median, over each doubling
+interval $2^M<n<2^{M+1}$, of $P_{\alpha,2}$ divided by its value for
+truncation; values below one are improvements.}
+\label{fig:bw-disc}
 \end{figure}
 
-\begin{table}[t]
-\centering\small
-\caption{Results over the $4083$ sample sizes $n\le4096$ that are not
-powers of two. Left: percentage of sample sizes at which a rule is worse
-than truncation. Right: the ratio $e(\Qblk)/e(\Qtr)$.}\label{tab:results}
-\begin{tabular}{@{}ll rrrr c rrr@{}}
+
+\begin{table}[htb]
+\centering
+\caption{Results over all $n\le2^{20}$ that are not powers of two, $s=6$.
+Left: percentage of $n$ at which $P_{\alpha,2}$ exceeds its value for
+truncation. Right: median of $P_{\alpha,2}$ for the optimal block weights
+divided by its value for truncation.}\label{tab:bw}
+\begin{tabular}{@{}c rrrr c rr@{}}
 \toprule
- & & \multicolumn{4}{c}{\% worse than truncation} & &
- \multicolumn{3}{c}{$e(\Qblk)/e(\Qtr)$}\\
-\cmidrule{3-6}\cmidrule{8-10}
-$\alpha$ & $s$ & equal & power $a=2$ & power $a=4$ & block & &
- min & median & median, $n\ge1.5\cdot2^M$\\
+ & \multicolumn{4}{c}{\% worse than truncation} & &
+ \multicolumn{2}{c}{optimal / truncation}\\
+\cmidrule{2-5}\cmidrule{7-8}
+$\alpha$ & equal & $a=2$ & $a=4$ & optimal & & all $n$ & $n\ge1.5\cdot2^M$\\
 \midrule
-1 & 2 & 67.8 & 0.0 & 0.0 & 0 & & 0.386 & 0.862 & 0.797\\
-1 & 6 & 45.1 & 0.0 & 0.0 & 0 & & 0.376 & 0.847 & 0.747\\
-2 & 2 & 99.8 & 90.4 & 35.3 & 0 & & 0.295 & 0.990 & 0.972\\
-2 & 6 & 99.9 & 88.1 & 26.6 & 0 & & 0.312 & 0.992 & 0.879\\
-3 & 2 & 99.9 & 99.7 & 86.8 & 0 & & 0.224 & 0.999 & 0.997\\
-3 & 6 & 99.9 & 99.7 & 72.1 & 0 & & 0.227 & 0.999 & 0.958\\
+1 & 59.7 & 0.0 & 0.0 & 0 & & 0.81 & 0.74\\
+2 & 100.0 & 99.6 & 0.2 & 0 & & 0.95 & 0.90\\
+3 & 100.0 & 100.0 & 95.6 & 0 & & 0.993 & 0.98\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Two conclusions follow. First, using all $n$ points with weights that
-are not adapted to the kernel is frequently worse than discarding the
-surplus; the optimal block rule is the only rule tested that never is.
-Second, its gain over truncation is substantial for $\alpha=1$ (median
-$14\%$) but small for $\alpha\ge2$ (median $1\%$ or less), where it is
-concentrated in the upper half of each dyadic interval and at levels where
-the generating vector is weak; the largest gains occur for $32<n<64$,
-where $d_5/d_4\approx0.7$.
+A fixed choice of weights that ignores the figure of merit is often worse
+than discarding the surplus points, while the optimal block weights never
+are. Their median improvement over truncation is about $19\%$ for
+$\alpha=1$, $5\%$ for $\alpha=2$ and under $1\%$ for $\alpha=3$. It is
+concentrated where $n\ge1.5\cdot2^M$, as part~(c) of
+Theorem~\ref{thm:bw-guarantees} suggests, and it is largest at levels where
+the lattice sequence is weak: for $\alpha=2$, $d_5/d_4\approx0.7$, and at
+$n=48$ the optimal block weights reduce $P_{\alpha,2}$ by $65\%$. Power
+weights with $a=2\alpha$ come close in typical cases: over this range their
+median $P_{\alpha,2}$ is within $3\%$ of the optimum, and they are worse than
+truncation at fewer than $0.5\%$ of the sample sizes. At particular $n$,
+however, they are up to $1.6$, $2.8$ and $4.3$ times larger than the optimum
+for $\alpha=1,2,3$, and they require $a$ to be matched to $\alpha$. The
+optimal block weights need no such choice.
 
-\begin{thebibliography}{9}
-\bibitem{HKKN12}
-F.~J. Hickernell, P.~Kritzer, F.~Y. Kuo and D.~Nuyens,
-Weighted compound integration rules with higher order convergence for
-all $N$, \emph{Numer.\ Algorithms} \textbf{59} (2012), 161--183.
-\bibitem{MDH26}
-L.~Matiukha, Y.~Ding and F.~J. Hickernell,
-The quality of lattice sequences for arbitrary sample size,
-manuscript (2026).
-\bibitem{JH19}
-R.~Jagadeeswaran and F.~J. Hickernell,
-Fast automatic Bayesian cubature using lattice sampling,
-\emph{Stat.\ Comput.} \textbf{29} (2019), 1215--1229.
-\bibitem{QMCPy}
-S.-C.~T. Choi, F.~J. Hickernell, R.~Jagadeeswaran, A.~Jain and A.~Sorokin,
-QMCPy: A quasi-Monte Carlo Python library (2026),
-\url{https://qmcsoftware.github.io/QMCSoftware/}.
+These results hold for $P_{\alpha,2}$ only. For $P_\alpha$, already for
+$n=3$ in one dimension (with $\gamma\le1$) the best block rule is
+truncation, so block weights need not improve the bounds of \citet[Section~4]{MDH26}.
+
+\begin{thebibliography}{4}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Choi et~al.(2026)}]{QMCPy}
+Choi, S.C.T., Hickernell, F.J., Jagadeeswaran, R., Jain, A., Sorokin, A., 2026.
+{QMCPy}: A quasi-{Monte Carlo} {Python} library (version 2.3).
+\url{https://qmcsoftware.github.io/QMCSoftware/}, doi:10.5281/zenodo.20297697.
+
+\bibitem[{Hickernell et~al.(2012)}]{HKKN12}
+Hickernell, F.J., Kritzer, P., Kuo, F.Y., Nuyens, D., 2012. Weighted compound
+integration rules with higher order convergence for all {$N$}. Numerical
+Algorithms 59, 161--183. doi:10.1007/s11075-011-9482-5.
+
+\bibitem[{Karvonen et~al.(2019)}]{KKS19}
+Karvonen, T., Kanagawa, M., S\"arkk\"a, S., 2019. On the positivity and
+magnitudes of {Bayesian} quadrature weights. Statistics and Computing 29,
+1317--1333. doi:10.1007/s11222-019-09901-0.
+
+\bibitem[{Matiukha et~al.(2026)}]{MDH26}
+Matiukha, L., Ding, Y., Hickernell, F.J., 2026. The quality of lattice
+sequences for arbitrary sample size. Manuscript.
+
 \end{thebibliography}
+
 \end{document}
