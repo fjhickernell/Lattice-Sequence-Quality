@@ -5,206 +5,233 @@
 
 \newtheorem{theorem}{Theorem}
 
-\begin{document}
+\begin{document} 
 
 \section{Optimal block weights for arbitrary $n$}\label{sec:bw}
 
-When the sample size $n$ is not a power of the base, the sample weights in
-\begin{equation}\label{eq:bw-estimator}
- \widehat I_n(f)=\frac1n\sum_{i=0}^{n-1}w_{n,i}\,f(\boldsymbol z_i),
- \qquad \frac1n\sum_{i=0}^{n-1}w_{n,i}=1,
-\end{equation}
-need not all equal one. (In the notation of \citet[Section~5]{MDH26},
-$w_i=w_{n,i}/n$.) Throughout this section $b=2$, $M=\lfloor\log_2n\rfloor$,
-and the error is measured by $P_{\alpha,2}$. The natural benchmark is
-\emph{truncation}: use only the first $2^M$ points with equal weights, so
-that $w_{n,i}=n/2^M$ for $i<2^M$ and $w_{n,i}=0$ otherwise. Truncation keeps
-the convergence rate of the full lattices, because $2^M>n/2$, but it
-discards up to half of the function values. Equal weights on all $n$
-points, by contrast, cannot converge faster than $\mathcal O(n^{-1})$ along
-a sequence \citep[Proposition~1]{HKKN12}. A choice of weights is therefore
-worth using only if it never does worse than truncation.
+When the sample size $n$ is not a power of the base, the weights in the
+weighted rule
+\[
+ \widehat I_n(f)=\sum_{i=0}^{n-1}w_if(\boldsymbol z_i),\qquad
+ \boldsymbol w^T\boldsymbol 1=1,
+\]
+of \citet[Section~5.1]{MDH26} need not all equal $1/n$. Throughout this
+section $b=2$, $m=\lfloor\log_2n\rfloor$, and the error is measured by
+$P_{\alpha,2}(\boldsymbol h,\boldsymbol\gamma,n,s,\boldsymbol w)$. The
+natural benchmark is \emph{truncation}: give weight $2^{-m}$ to each of the
+first $2^m$ points and weight zero to the rest. Truncation keeps
+the convergence rate of the full lattices, because $2^m>n/2$, but it
+discards up to half of the function values. Equal weights
+$\boldsymbol w=n^{-1}\boldsymbol 1$, by contrast, cannot converge faster
+than $\mathcal O(n^{-1})$ along a sequence \citep[Proposition~1]{HKKN12}. A
+choice of weights is therefore worth using only if it never does worse than
+truncation.
 
 Following \citet{HKKN12}, we assign one weight to each block of points
 determined by the binary digits of $n$. They gave the optimal weights of
-this kind as the solution of a linear system, but considered computing
-them impractical. We show that in base $2$ the optimal block weights are
-given by a recursion of $\mathcal O(\log n)$ operations, are always
-positive, are strictly better than truncation, and give a value of
-$P_{\alpha,2}$ that decreases with every added point.
+this kind as the solution of a linear system, but considered computing them
+impractical. We show that in base $2$ the optimal block weights are given by
+a recursion of $\mathcal O(\log n)$ operations, are always positive, are
+strictly better than truncation, and give a value of $P_{\alpha,2}$ that
+decreases with every added point.
 
 \subsection{Block weights}\label{sec:bw-def}
 
-Write $n=2^{m_1}+2^{m_2}+\dots+2^{m_L}$ with $M=m_1>m_2>\dots>m_L\ge0$.
-The first $2^{m_1}$ points form block~$1$, the next $2^{m_2}$ points form
-block~$2$, and so on; for $n=13=8+4+1$ the blocks are points $0$--$7$,
-$8$--$11$ and $12$. Since each block starts at an index divisible by its
-size, it is a shifted copy of the first $2^{m_r}$ points, as in \citet[Eq.~(2)]{MDH26}. A
-\emph{block rule} gives block $r$ a share $\theta_r$ of the total weight,
-split equally among its points:
-\begin{equation}\label{eq:bw-weights}
- w_{n,i}=\frac{n\,\theta_r}{2^{m_r}}\quad\text{for $i$ in block $r$},
- \qquad \theta_1+\dots+\theta_L=1 .
-\end{equation}
-Equal weights ($\theta_r\propto2^{m_r}$), truncation
-($\boldsymbol\theta=(1,0,\dots,0)$) and the power weights
-$\theta_r\propto2^{a m_r}$ of \citet{HKKN12} are all block rules.
-
-Write $d_m=P_{2\alpha}(\boldsymbol h,\boldsymbol\gamma,2^m,s)
-=\sum_{\boldsymbol k\in B(\boldsymbol h,m,s)}\widetilde r(\boldsymbol k,
-\boldsymbol\gamma)^{-2\alpha}$ for the squared figure of merit of the first
-$2^m$ points with equal weights. These numbers decrease strictly in $m$
-when some component of $\boldsymbol h$ is odd, and they are the only
-property of the lattice sequence that the results below use. For a block
-rule, $P_{\alpha,2}^2$ is a quadratic form in the shares,
+As in \citet[Section~4]{MDH26}, write $n=n_0+2n_1+\dots+2^mn_m$ with digits
+$n_\ell\in\{0,1\}$ and $n_m=1$, and let
+$\mathcal L(n)=\{\ell:n_\ell=1\}$. For each $\ell\in\mathcal L(n)$, the
+$2^\ell$ indices $n-\operatorname{trunc}(n,\ell)\le i<n-\operatorname{trunc}(n,\ell-1)$
+form the \emph{block at level $\ell$}. For $n=13=1+4+8$ the blocks are
+$i=0,\dots,7$ (level $3$), $i=8,\dots,11$ (level $2$) and $i=12$ (level
+$0$). Each block starts at an index divisible by $2^\ell$, so by \citet[Eq.~(2)]{MDH26} it is a
+shifted copy of the first $2^\ell$ points. Let
 \[
- P_{\alpha,2}^2=\sum_{r,q=1}^L\theta_r\theta_qA_{rq},\qquad
- A_{rq}=\sum_{\boldsymbol k\neq\boldsymbol0}
- \widetilde r(\boldsymbol k,\boldsymbol\gamma)^{-2\alpha}\,
- Q_r(\boldsymbol k)\,\overline{Q_q(\boldsymbol k)},
+ \widehat I_{n,\ell}(f)=2^{-\ell}\sum_{i=n-\operatorname{trunc}(n,\ell)}
+ ^{n-\operatorname{trunc}(n,\ell-1)-1}f(\boldsymbol z_i)
 \]
-where $Q_r(\boldsymbol k)$ is the average of
-$e^{2\pi\sqrt{-1}\boldsymbol k^T\boldsymbol z_i}$ over block $r$.
+be the sample mean over the block at level $\ell$. A \emph{block rule}
+gives this block a share $\theta_\ell$ of the total weight:
+\begin{equation}\label{eq:bw-weights}
+ \widehat I_n(f)=\sum_{\ell\in\mathcal L(n)}\theta_\ell\,\widehat I_{n,\ell}(f),
+ \qquad w_i=\frac{\theta_\ell}{2^\ell}\ \text{ for $i$ in the block at level $\ell$},
+ \qquad \sum_{\ell\in\mathcal L(n)}\theta_\ell=1 .
+\end{equation}
+Equal weights ($\theta_\ell=2^\ell/n$), truncation ($\theta_m=1$) and the
+power weights $\theta_\ell\propto2^{a\ell}$ of \citet{HKKN12} are all block
+rules.
+
+Write
+\[
+ d_\ell=P_{2\alpha}(\boldsymbol h,\boldsymbol\gamma,2^\ell,s)
+ =P_{\alpha,2}^2(\boldsymbol h,\boldsymbol\gamma,2^\ell,s,2^{-\ell}\boldsymbol 1)
+ =\sum_{\boldsymbol k\in B(\boldsymbol h,\ell,s)}\widetilde r(\boldsymbol k,\boldsymbol\gamma)^{-2\alpha}
+\]
+for the squared figure of merit of the first $2^\ell$ points with equal
+weights. These numbers decrease strictly in $\ell$ when some component of
+$\boldsymbol h$ is odd, and they are the only property of the lattice
+sequence that the results below use. For a block rule, the derivation in
+\citet[Section~5.1]{MDH26} gives a quadratic form in the shares,
+\begin{align*}
+ P_{\alpha,2}^2(\boldsymbol h,\boldsymbol\gamma,n,s,\boldsymbol w)
+ &=\sum_{\ell,\ell'\in\mathcal L(n)}\theta_\ell\theta_{\ell'}A_{\ell\ell'},\qquad\text{where}\\
+ A_{\ell\ell'}&=\sum_{\boldsymbol k\in\mathbb Z^s\setminus\{\boldsymbol 0\}}
+ \widetilde r(\boldsymbol k,\boldsymbol\gamma)^{-2\alpha}\,
+ \widehat I_{n,\ell}\bigl(e^{2\pi\sqrt{-1}\boldsymbol k^T\cdot}\bigr)\,
+ \overline{\widehat I_{n,\ell'}\bigl(e^{2\pi\sqrt{-1}\boldsymbol k^T\cdot}\bigr)} .
+\end{align*}
 
 \subsection{The optimal block weights}\label{sec:bw-opt}
 
 \begin{theorem}\label{thm:bw-structure}
-With the blocks ordered from largest to smallest,
-$A_{rr}=d_{m_r}$, and $A_{rq}=A_{qr}=2d_{m_r+1}-d_{m_r}$ for $r<q$.
+For $\ell,\ell'\in\mathcal L(n)$, $A_{\ell\ell}=d_\ell$, and
+$A_{\ell\ell'}=A_{\ell'\ell}=2d_{\ell+1}-d_\ell$ for $\ell>\ell'$.
 \end{theorem}
 
 \begin{proof}
-Block $r$ is a shifted copy of the first $2^{m_r}$ points, so
-$|Q_r(\boldsymbol k)|=1$ for $\boldsymbol k\in B(\boldsymbol h,m_r,s)$ and
-$Q_r(\boldsymbol k)=0$ for other $\boldsymbol k\neq\boldsymbol0$, as in the
-derivation of \citet[Eq.~(5)]{MDH26}. This gives $A_{rr}=d_{m_r}$. For $r<q$, only
-$\boldsymbol k\in B(\boldsymbol h,m_r,s)$ contribute, each with the phase
-$e^{2\pi\sqrt{-1}\boldsymbol k^T(\boldsymbol z_a-\boldsymbol z_c)}$, where
-$a$ and $c$ are the first indices of blocks $r$ and $q$. The index $c$
-equals $a+2^{m_r}$ plus smaller powers of two, and $a$ is divisible by
-$2^{m_r+1}$, so $\phi(c)-\phi(a)=2^{-m_r-1}+\ell\,2^{-m_r}$ for an integer
-$\ell$. Writing $\boldsymbol k^T\boldsymbol h=u\,2^{m_r}$, the phase is
+As in the derivation of \citet[Eq.~(5)]{MDH26}, the block at level $\ell$ satisfies
+$\widehat I_{n,\ell}(e^{2\pi\sqrt{-1}\boldsymbol k^T\cdot})
+=e^{2\pi\sqrt{-1}\boldsymbol k^T(\boldsymbol h\phi(a_\ell)+\boldsymbol\Delta)}
+1_{B(\boldsymbol h,\ell,s)}(\boldsymbol k)$, where
+$a_\ell=n-\operatorname{trunc}(n,\ell)$ is its first index. This gives
+$A_{\ell\ell}=d_\ell$. For $\ell>\ell'$, only
+$\boldsymbol k\in B(\boldsymbol h,\ell,s)$ contribute, each with the phase
+$e^{2\pi\sqrt{-1}\boldsymbol k^T\boldsymbol h(\phi(a_\ell)-\phi(a_{\ell'}))}$.
+The index $a_{\ell'}$ equals $a_\ell+2^\ell$ plus smaller powers of two, and
+$a_\ell$ is divisible by $2^{\ell+1}$, so
+$\phi(a_{\ell'})-\phi(a_\ell)=2^{-\ell-1}+\lambda\,2^{-\ell}$ for an integer
+$\lambda$. Writing $\boldsymbol k^T\boldsymbol h=u\,2^\ell$, the phase is
 $(-1)^u$, which equals $+1$ exactly when
-$\boldsymbol k\in B(\boldsymbol h,m_r+1,s)$. Hence
-$A_{rq}=d_{m_r+1}-(d_{m_r}-d_{m_r+1})$.
+$\boldsymbol k\in B(\boldsymbol h,\ell+1,s)$. Hence
+$A_{\ell\ell'}=d_{\ell+1}-(d_\ell-d_{\ell+1})$.
 \end{proof}
 
-Every later block sits halfway between the points of block $r$. On the
-wavenumbers that the next larger lattice cannot resolve, the errors of
-the two blocks add; on those it can resolve, they cancel. Because block $r$
-interacts in the same way with every smaller block, the optimal shares can
-be found one block at a time, starting from the smallest.
+Every block at a lower level sits halfway between the points of the block
+at level $\ell$. On the wavenumbers that the next larger lattice cannot
+resolve, the errors of the two blocks add; on those it can resolve, they
+cancel. Because the block at level $\ell$ interacts in the same way with
+every lower-level block, the optimal shares can be found one level at a
+time, starting from the lowest.
 
 \begin{theorem}\label{thm:bw-recursion}
-Set $E\leftarrow d_{m_L}$. For $r=L-1,\dots,1$, with $d=d_{m_r}$ and
-$g=d_{m_r}-d_{m_r+1}$, set
+Let $\ell_{\min}=\min\mathcal L(n)$ and set $E\leftarrow d_{\ell_{\min}}$.
+For the remaining $\ell\in\mathcal L(n)$ in increasing order, with
+$g=d_\ell-d_{\ell+1}$, set
 \begin{equation}\label{eq:bw-rec}
- q_r\leftarrow\frac{2g}{E-d+4g},\qquad E\leftarrow d-2g\,q_r .
+ q_\ell\leftarrow\frac{2g}{E-d_\ell+4g},\qquad E\leftarrow d_\ell-2g\,q_\ell .
 \end{equation}
-Then $0<q_r<\tfrac12$, and the shares
-$\theta_r=(1-q_r)\,q_1\cdots q_{r-1}$ for $r<L$ and
-$\theta_L=q_1\cdots q_{L-1}$ uniquely minimize $P_{\alpha,2}$ among block
-rules. The minimum value of $P_{\alpha,2}^2$ is the final value of $E$.
+Then $0<q_\ell<\tfrac12$, and the shares
+\[
+ \theta_\ell=(1-q_\ell)\prod_{\ell'\in\mathcal L(n),\ \ell'>\ell}q_{\ell'}
+ \quad(\ell>\ell_{\min}),\qquad
+ \theta_{\ell_{\min}}=\prod_{\ell'\in\mathcal L(n),\ \ell'>\ell_{\min}}q_{\ell'}
+\]
+uniquely minimize $P_{\alpha,2}(\boldsymbol h,\boldsymbol\gamma,n,s,\boldsymbol w)$
+among block rules. We write $\boldsymbol w_{\rm blk}$ for the corresponding
+weights; the minimum value of $P_{\alpha,2}^2$ is the final value of $E$.
 \end{theorem}
 
 \begin{proof}
-Let $E_r$ be the value of $E$ after block $r$ is added. We show by
-induction from $r=L$ down to $r=1$ that $E_r$ is the minimum over block
-rules on blocks $r,\dots,L$, and that $E_r>d_{m_r+1}$; both hold for $r=L$.
-For $r<L$, a rule giving total share $\tau\neq0$ to the smaller blocks,
-arranged as a rule $R$, has, by Theorem~\ref{thm:bw-structure},
+For $\ell\in\mathcal L(n)$, let $E_\ell$ be the value of $E$ after level
+$\ell$ is processed. We show by induction on $\ell$ that $E_\ell$ is the
+minimum over block rules on the levels $\ell'\le\ell$ of $\mathcal L(n)$,
+and that $E_\ell>d_{\ell+1}$; both hold for $\ell=\ell_{\min}$. For a larger
+$\ell$, a rule giving total share $\tau\neq0$ to the lower levels, arranged
+as a rule $R$, has, by Theorem~\ref{thm:bw-structure},
 \[
- P_{\alpha,2}^2=(1-\tau)^2d+2\tau(1-\tau)(d-2g)+\tau^2P_R^2
- =d-4g\tau+\bigl(P_R^2-d+4g\bigr)\tau^2 .
+ P_{\alpha,2}^2=(1-\tau)^2d_\ell+2\tau(1-\tau)(d_\ell-2g)+\tau^2P_R^2
+ =d_\ell-4g\tau+\bigl(P_R^2-d_\ell+4g\bigr)\tau^2 .
 \]
-For fixed $\tau$ this is smallest when $P_R^2=E_{r+1}$. By induction
-$E_{r+1}>d_{m_{r+1}+1}\ge d$, so the parabola in $\tau$ is minimized
-uniquely at $\tau=q_r\in(0,\tfrac12)$ with value $d-2gq_r=E_r$. If $\tau=0$,
-the cross term vanishes and $P_{\alpha,2}^2\ge d>E_r$. Finally
-$E_r-d_{m_r+1}=g(1-2q_r)>0$.
+For fixed $\tau$ this is smallest when $P_R^2$ equals the value $E$ from
+the previous level $\ell'<\ell$. By induction that value exceeds
+$d_{\ell'+1}\ge d_\ell$, so the parabola in $\tau$ is minimized uniquely at
+$\tau=q_\ell\in(0,\tfrac12)$ with value $d_\ell-2gq_\ell=E_\ell$. If
+$\tau=0$, the cross term vanishes and $P_{\alpha,2}^2\ge d_\ell>E_\ell$.
+Finally $E_\ell-d_{\ell+1}=g(1-2q_\ell)>0$.
 \end{proof}
 
 \begin{theorem}\label{thm:bw-guarantees}
-Let $n$ not be a power of two, and let $w^{\rm opt}$ be the optimal block
-weights. Then
+Let $n$ not be a power of two. Then
 \begin{enumerate}[label=(\alph*)]
-\item every $w^{\rm opt}_{n,i}>0$, and $\theta_1>\theta_2>\dots>\theta_L$
-  with $\theta_1>\tfrac12$;
-\item $d_{M+1}<P_{\alpha,2}(\boldsymbol h,\boldsymbol\gamma,n,s,
-  w^{\rm opt})^2<d_M$, where $d_M$ is the value for truncation;
-\item the fraction of the gap $d_M-d_{M+1}$ that is closed equals $2q_1$;
-\item $P_{\alpha,2}(\boldsymbol h,\boldsymbol\gamma,n,s,w^{\rm opt})$
+\item every component of $\boldsymbol w_{\rm blk}$ is positive, and the
+  shares increase with the level, with $\theta_m>\tfrac12$;
+\item $d_{m+1}<P_{\alpha,2}^2(\boldsymbol h,\boldsymbol\gamma,n,s,
+  \boldsymbol w_{\rm blk})<d_m$, where $d_m$ is the value for truncation;
+\item the fraction of the gap $d_m-d_{m+1}$ that is closed equals $2q_m$;
+\item $P_{\alpha,2}(\boldsymbol h,\boldsymbol\gamma,n,s,\boldsymbol w_{\rm blk})$
   strictly decreases as $n$ increases.
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-Parts (a)--(c) follow from $0<q_r<\tfrac12$, $E_1=d_M-2g_Mq_1$ and
-$E_1>d_{M+1}$ in the proof of Theorem~\ref{thm:bw-recursion}. For (d),
+Parts (a)--(c) follow from $0<q_\ell<\tfrac12$, $E_m=d_m-2(d_m-d_{m+1})q_m$
+and $E_m>d_{m+1}$ in the proof of Theorem~\ref{thm:bw-recursion}. For (d),
 note that the update~\eqref{eq:bw-rec} is increasing in $E$. Passing from
-$n$ to $n+1$ either appends a one-point block or merges the trailing
-blocks of sizes $2^{j-1},\dots,1$ into one block of size $2^j$, leaving
-the larger blocks unchanged. In the first case the optimal value on the
-trailing blocks falls below $d_{m_L}$; in the second it falls from a value
-above $d_j$ to $d_j$. The decrease propagates to $E_1$.
+$n$ to $n+1$ either adds a block at level $0$ (if $n_0=0$), or merges the
+blocks at levels $0,\dots,j-1$ into one block at level $j$ (if
+$n_0=\dots=n_{j-1}=1$ and $n_j=0$), leaving the higher levels unchanged. In
+the first case the optimal value on the lowest levels falls below
+$d_{\ell_{\min}}$; in the second it falls from a value above $d_j$ to $d_j$.
+The decrease propagates to $E_m$.
 \end{proof}
 
 Positivity in part~(a) is not automatic: optimal kernel cubature weights
 need not be positive in general, and \citet{KKS19} study conditions that
 guarantee it. Not doing worse than truncation, on the other hand, is
-automatic, since truncation is a block rule. What Theorem~\ref{thm:bw-guarantees} adds is that the improvement is
-strict for every $n$, that its size is known exactly, and that the error
-never increases as points are added, even when blocks merge. The values
+automatic, since truncation is a block rule. What
+Theorem~\ref{thm:bw-guarantees} adds is that the improvement is strict for
+every $n$, that its size is known exactly, and that the error never
+increases as points are added, even when blocks merge. The values
 $d_0,\dots,d_J$ serve all $n<2^J$; computing them takes $2^J$ kernel
 evaluations and no evaluations of $f$.
 
 As an example, take $s=1$, $h=1$ and $\alpha=2$, so that
-$d_m=16^{-m}d_0$, and $n=13$. The recursion gives $q_2=1/138$ and
-$q_1=69/682$, hence weights $w_{13,i}=1.46$ on the first eight points,
-$0.33$ on the next four and $0.01$ on the last. The resulting $P_{\alpha,2}$ is $10\%$
-below that of truncation, whereas equal weights give $25$ times the
-squared value of truncation.
-
+$d_\ell=16^{-\ell}d_0$, and $n=13$. The recursion gives $q_2=1/138$ and
+$q_3=69/682$, hence weights $w_i=613/5456\approx0.112$ on the first eight
+points, $137/5456\approx0.025$ on the next four and $4/5456\approx0.0007$ on
+the last, compared with $1/13\approx0.077$ for equal weights. The resulting
+$P_{\alpha,2}$ is $10\%$ below that of truncation, whereas equal weights give
+$25$ times the squared value of truncation.
 
 \subsection{Numerical results}\label{sec:bw-num}
 
-We used the default generating vector of QMCPy \citep{QMCPy}, with $s=6$
-and
-$\gamma_\ell=\ell^{-2}$, and computed $P_{\alpha,2}$ for every
-$n\le2^{20}$, the range for which this generating vector was constructed.
-The values $d_0,\dots,d_{20}$ were computed in 50-digit arithmetic.\footnote{The
-generating vector is QMCPy's file
+We used the default $\boldsymbol h$ in QMCPy \citep{QMCPy} with $s=6$.
+The coordinate weights were $\boldsymbol\gamma=[1,2^{-2},\dots,6^{-2}]$,
+and we computed $P_{\alpha,2}$ for every $n\le2^{20}$, the range for which this generating vector was constructed.
+The values $d_0,\dots,d_{20}$ were computed in 50-digit
+arithmetic.\footnote{The generating vector is QMCPy's file
 \nolinkurl{kuo.lattice-33002-1024-1048576.9125}.}
-Figure~\ref{fig:bw-disc} compares the block rules for $\alpha=2$. Truncation
-produces a staircase that drops only at powers of two, and the optimal block
-weights stay on or below it at every $n$. Equal weights lose the fast decay
-entirely. The power weights with $a=2$ decay at the right rate but are
-above truncation almost everywhere for large $n$. Table~\ref{tab:bw}
-summarizes the three values of $\alpha$.
+Figure~\ref{fig:bw-disc} compares the block rules for $\alpha=2$.
+Truncation produces a staircase that drops only at powers of two, and the
+optimal block weights stay on or below it at every $n$. Equal weights lose
+the fast decay entirely. The power weights with $a=2$ decay at the right
+rate but are above truncation almost everywhere for large $n$.
+Table~\ref{tab:bw} summarizes the three values of $\alpha$.
 
 \begin{figure}[htb]
 \centering
 \includegraphics[width=\textwidth]{fig_disc_compare.pdf}
-\caption{Block rules for $\alpha=2$, $s=6$, $\gamma_\ell=\ell^{-2}$. Left:
-$P_{\alpha,2}$ for $1\le n\le2^{20}$. Right: median, over each doubling
-interval $2^M<n<2^{M+1}$, of $P_{\alpha,2}$ divided by its value for
-truncation; values below one are improvements.}
+\caption{Block rules for $\alpha=2$, $s=6$,
+$\boldsymbol\gamma=[1,2^{-2},\dots,6^{-2}]$. Left:
+$P_{\alpha,2}(\boldsymbol h,\boldsymbol\gamma,n,6,\boldsymbol w)$ for
+$1\le n\le2^{20}$. Right: median, over each doubling interval
+$2^m<n<2^{m+1}$, of $P_{\alpha,2}$ divided by its value for truncation;
+values below one are improvements.}
 \label{fig:bw-disc}
 \end{figure}
-
 
 \begin{table}[htb]
 \centering
 \caption{Results over all $n\le2^{20}$ that are not powers of two, $s=6$.
 Left: percentage of $n$ at which $P_{\alpha,2}$ exceeds its value for
-truncation. Right: median of $P_{\alpha,2}$ for the optimal block weights
+truncation. Right: median of $P_{\alpha,2}$ for $\boldsymbol w_{\rm blk}$
 divided by its value for truncation.}\label{tab:bw}
+\vspace{1mm}
 \begin{tabular}{@{}c rrrr c rr@{}}
 \toprule
  & \multicolumn{4}{c}{\% worse than truncation} & &
- \multicolumn{2}{c}{optimal / truncation}\\
+ \multicolumn{2}{c}{$\boldsymbol w_{\rm blk}$ / truncation}\\
 \cmidrule{2-5}\cmidrule{7-8}
-$\alpha$ & equal & $a=2$ & $a=4$ & optimal & & all $n$ & $n\ge1.5\cdot2^M$\\
+$\alpha$ & equal & $a=2$ & $a=4$ & $\boldsymbol w_{\rm blk}$ & & all $n$ & $n\ge1.5\cdot2^m$\\
 \midrule
 1 & 59.7 & 0.0 & 0.0 & 0 & & 0.81 & 0.74\\
 2 & 100.0 & 99.6 & 0.2 & 0 & & 0.95 & 0.90\\
@@ -217,7 +244,7 @@ A fixed choice of weights that ignores the figure of merit is often worse
 than discarding the surplus points, while the optimal block weights never
 are. Their median improvement over truncation is about $19\%$ for
 $\alpha=1$, $5\%$ for $\alpha=2$ and under $1\%$ for $\alpha=3$. It is
-concentrated where $n\ge1.5\cdot2^M$, as part~(c) of
+concentrated where $n\ge1.5\cdot2^m$, as part~(c) of
 Theorem~\ref{thm:bw-guarantees} suggests, and it is largest at levels where
 the lattice sequence is weak: for $\alpha=2$, $d_5/d_4\approx0.7$, and at
 $n=48$ the optimal block weights reduce $P_{\alpha,2}$ by $65\%$. Power
