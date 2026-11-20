@@ -15,6 +15,17 @@
 *.synctex.gz
 *.toc
 
-# Local manuscript preview; regenerate from the tracked source.
+# Local LaTeX previews; regenerate from the corresponding tracked sources.
 /LatticeSequenceQualityArticle.pdf
+/LatticeSequenceQualityslides.pdf
+/LarysaMatiukha.pdf
+/MCMslides.pdf
+/intro.pdf
 /Path 1/Path_1_Millet.pdf
+/thesis docs/LarysaMSThesis.pdf
+/thesis docs/slides.pdf
+/relevant articles/Ober11.pdf
+/relevant articles/els-cas-templates/cas-dc-template.pdf
+/relevant articles/els-cas-templates/cas-sc-template.pdf
+/relevant articles/els-cas-templates/cas-dc-sample.pdf
+/relevant articles/els-cas-templates/cas-sc-sample.pdf
